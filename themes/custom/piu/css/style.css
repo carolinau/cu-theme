@@ -125,11 +125,11 @@ body {
 	filter: brightness(110%);
 	background: var(--primary-blue);
 }
-.menu--faculty-menu, .menu--main {
+.menu--faculty-menu, .menu--main, .menu--main-menu-pt {
 	float: right;
 }
 @media only screen and (min-width: 767px) {
-.menu--faculty-menu > li, .menu--main > li {
+.menu--faculty-menu > li, .menu--main > li, .menu--main-menu-pt > li {
 	float: left;
 }}
 .navbar-default .navbar-toggle .icon-bar {
@@ -140,7 +140,7 @@ body {
 }
 /* Main Navigation Mobile Styles */
 @media only screen and (min-width: 768px) {
-.menu--faculty-menu > li > a, .menu--main > li > a {
+.menu--faculty-menu > li > a, .menu--main > li > a, .menu--main-menu-pt > li > a {
 	line-height: 40px;
 }}
 @media only screen and (max-width: 767px) {
@@ -162,14 +162,24 @@ body {
 	text-decoration: none !important;
 	line-height: 40px;
 }
-.branding-slogan, .branding-slogan a:hover{
+.branding-slogan, .branding-slogan a:hover, .language-selector, .language-selector a:hover {
 	font-size: 0.9em;
 	color: var(--light-gray) !important;
 	text-transform: uppercase;
 	letter-spacing: .1em;
-	margin: 10px 0 0 8px;
+	margin: 7px 0 0 8px;
 	text-decoration: none !important;
 }
+@media only screen and (min-width: 767px) {
+.language-selector-p {
+	text-align: right;
+	margin: 6px 0;
+}
+@media only screen and (max-width: 767px) {
+.language-selector-p {
+	text-align: center;
+	margin: 0 0 6px;
+}}
 .branding-logo {
 	margin: 5px 0;
 	text-decoration: none !important;
@@ -238,6 +248,54 @@ body {
 	background: var(--accent-maroon);
 	box-shadow: var(--section-box-shadow);
 }
+/* Resources Views */
+.resource-title {
+	font-size: 1.1em;
+	color: #333;
+}
+.resource-author {
+	font-size: 0.9em;
+	text-transform: uppercase;
+	color: var(--dark-gray);
+	letter-spacing: 0.1em;
+}
+.resource-sticky {
+	text-transform: uppercase;
+	color: var(--primary-blue);
+	padding: 0 0 5px;
+	font-size: 0.8em;
+}
+/* Academics Menu View */
+.academics-item {
+	display: block;
+	border: 1px solid var(--light-gray);
+	padding: 6% 3%;
+	margin: 1% 0;
+}
+.academics-item:hover {
+	text-decoration: none;
+	border: 1px solid var(--dark-gray);
+	transition: 200ms;
+}
+.academics-title {
+	font-size: 1.3em;
+	font-weight: 600;
+	color: #333;
+}
+.academics-degree {
+	font-size: 0.9em;
+	text-transform: uppercase;
+	font-weight: 500;
+	letter-spacing: .1em;
+	color: var(--dark-gray);
+}
+.academics-degree:after {
+    content: "";
+    display: block;
+    width: 5%;
+    padding: 5px 0 12px;
+    border-bottom: 3px solid var(--primary-blue);
+}
 /* Horizontal Rule */
 .bottom-divider:after, .bottom-divider-c {
     content: "";
@@ -249,9 +307,30 @@ body {
 .bottom-divider-c:after {
     margin: 0 auto;
 }
+/* Paragraph */
+.video-title {
+	text-align: center;
+	margin: 5% 0 0;
+}
+.video-title:after {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 7%;
+  padding: 10px 0 12px;
+  border-bottom: 3px solid var(--primary-blue);
+}
+.video-embed {
+	box-shadow: var(--section-box-shadow);
+	margin: 2% 0 5%;
+}
 /* File Display */
 .field--name-field-file {
 	margin: 20px 0;
+}
+/* Course Videos */
+.field--name-field-video {
+	margin: 20px 0 0;
 }
 /* Faculty and Staff Display */
 .fs-row {
@@ -285,6 +364,64 @@ body {
 .fs-image {
 	margin: 10px 0 0;
 }}
+/* Program Display */
+.program-degree {
+	margin: -10px 0 0;
+}
+.program-image {
+	box-shadow: var(--section-box-shadow);
+	margin: 2% 0 4%;
+}
+.program-overview {
+	margin: 0 0 3%;
+}
+.bs-region--bottom-left {
+	margin: auto 0;
+}
+.top-right-program {
+	margin: 20px 0 0;
+}
+.program-testimonial-image > .img-responsive {
+	box-shadow: 10px 0 20px 1px rgba(50, 50, 50,.15);
+	margin: 3% 0;
+	float: right;
+}
+@media only screen and (max-width: 575px) {
+.program-testimonial-image > .img-responsive {
+	display: block;
+	margin: 0 auto;
+}}
+/* Course Display */
+.course-title {
+	margin: 5% 0 0 0;
+}
+/* Program Course Display */
+.program-course-list {
+	border-bottom: 1px solid var(--light-gray);
+	margin: 0 0 5px;
+	padding: 0 0 5px;
+}
+/* Collapsable Panel */
+.panel:last-child:
+	margin-bottom: 10px;
+}
+.panel-default > .panel-heading > .panel-title {
+	font-size: 20px !important;
+}
+.panel-default > .panel-heading {
+	background: #fff;
+	border-bottom: 2px solid var(--dark-gray);
+}
+.panel-heading, .panel-default {
+	border: none;
+}
+.panel {
+	box-shadow: none;
+}
+.panel-body {
+	border: 1px solid var(--dark-gray);
+	border-radius: 0 0 3px 3px;
+}
 /* Image Block */
 .block-image > .img-responsive {
 	margin: 0 auto;
