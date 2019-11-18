@@ -2,13 +2,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - block_content.type.basic
-    - field.field.block_content.basic.body
+    - block_content.type.es_test
+    - field.field.block_content.es_test.body
   module:
     - text
-id: block_content.basic.default
+id: block_content.es_test.default
 targetEntityType: block_content
-bundle: basic
+bundle: es_test
 mode: default
 content:
   body:

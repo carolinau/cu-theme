@@ -2,14 +2,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - block_content.type.basic
+    - block_content.type.es_test
     - field.storage.block_content.body
   module:
     - text
-id: block_content.basic.body
+id: block_content.es_test.body
 field_name: body
 entity_type: block_content
-bundle: basic
+bundle: es_test
 label: Body
 description: ''
 required: false

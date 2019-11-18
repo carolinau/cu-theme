@@ -102,6 +102,9 @@ class EntityShareBlockFieldEnhancer extends ResourceFieldEnhancerBase implements
    * {@inheritdoc}
    */
   protected function doTransform($value, Context $context) {
+    if (isset($value['block_content_href'])) {
+      unset($value['block_content_href']);
+    }
     return $value;
   }
 

@@ -125,8 +125,8 @@ class BlockFieldTest extends EntityShareClientFunctionalTestBase {
   protected function populateRequestService() {
     parent::populateRequestService();
 
-    // Request the /jsonapi/block_content/basic/block_content_test URL.
-    $route_name = sprintf('jsonapi.%s--%s.individual', 'block_content', 'basic');
+    // Request the /jsonapi/block_content/es_test/block_content_test URL.
+    $route_name = sprintf('jsonapi.%s--%s.individual', 'block_content', 'es_test');
     $url = Url::fromRoute($route_name, [
       'entity' => 'block_content_test',
     ])

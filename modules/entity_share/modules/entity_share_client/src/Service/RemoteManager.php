@@ -55,7 +55,7 @@ class RemoteManager implements RemoteManagerInterface {
       'allow_redirects' => TRUE,
     ]);
 
-    $http_client->post('/user/login', [
+    $http_client->post('user/login', [
       'form_params' => [
         'name' => $remote->get('basic_auth_username'),
         'pass' => $remote->get('basic_auth_password'),

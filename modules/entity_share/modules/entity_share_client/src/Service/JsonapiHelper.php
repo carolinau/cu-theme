@@ -519,7 +519,8 @@ class JsonapiHelper implements JsonapiHelperInterface {
           else {
             $translation = $entity->toArray();
             $existing_entity->addTranslation($data_langcode, $translation);
-            // Allow other modules to alter the entity translation with an EventSubscriber.
+            // Allow other modules to alter the entity translation with an
+            // EventSubscriber.
             $event = new EntityAlterEvent($existing_entity->getTranslation($data_langcode), $this->remote);
             $this->eventDispatcher->dispatch(EntityAlterEvent::EVENT_NAME, $event);
             $existing_entity->save();

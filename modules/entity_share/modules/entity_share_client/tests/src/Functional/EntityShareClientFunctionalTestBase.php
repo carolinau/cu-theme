@@ -669,7 +669,7 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
   protected function getCompleteBlockInfos(array $block_infos) {
     return array_merge([
       'type' => [
-        'value' => 'basic',
+        'value' => 'es_test',
         'checker_callback' => 'getTargetId',
       ],
       'info' => [

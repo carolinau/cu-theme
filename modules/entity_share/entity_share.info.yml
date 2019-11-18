@@ -5,7 +5,7 @@ core: 8.x
 package: Web services
 configure: entity_share.admin_config_page
 
-# Information added by Drupal.org packaging script on 2019-10-25
-version: '8.x-2.0-alpha8'
+# Information added by Drupal.org packaging script on 2019-11-18
+version: '8.x-2.0-alpha9'
 project: 'entity_share'
-datestamp: 1572015492
+datestamp: 1574095226
