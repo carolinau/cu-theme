@@ -1,0 +1,127 @@
+name: 'Entity share test'
+description: 'Provides config to test Entity share.'
+type: module
+core: 8.x
+package: Testing
+dependencies:
+  - block_field:block_field
+  - drupal:block_content
+  - drupal:comment
+  - drupal:content_translation
+  - drupal:datetime
+  - drupal:datetime_range
+  - drupal:field
+  - drupal:file
+  - drupal:image
+  - drupal:language
+  - drupal:link
+  - drupal:menu_ui
+  - drupal:node
+  - drupal:options
+  - drupal:path
+  - drupal:system
+  - drupal:taxonomy
+  - drupal:telephone
+  - drupal:text
+  - drupal:user
+  - dynamic_entity_reference:dynamic_entity_reference
+  - entity_reference_revisions:entity_reference_revisions
+  - paragraphs:paragraphs
+
+config_devel:
+  install:
+    - block_content.type.basic
+    - comment.type.es_test
+    - core.base_field_override.comment.es_test.changed
+    - core.base_field_override.comment.es_test.created
+    - core.base_field_override.comment.es_test.homepage
+    - core.base_field_override.comment.es_test.hostname
+    - core.base_field_override.comment.es_test.mail
+    - core.base_field_override.comment.es_test.name
+    - core.base_field_override.comment.es_test.status
+    - core.base_field_override.comment.es_test.subject
+    - core.base_field_override.comment.es_test.uid
+    - core.entity_form_display.block_content.basic.default
+    - core.entity_form_display.comment.es_test.default
+    - core.entity_form_display.node.es_test.default
+    - core.entity_form_display.paragraph.es_test.default
+    - core.entity_view_display.block_content.basic.default
+    - core.entity_view_display.comment.es_test.default
+    - core.entity_view_display.node.es_test.default
+    - core.entity_view_display.node.es_test.teaser
+    - core.entity_view_display.paragraph.es_test.default
+    - field.field.block_content.basic.body
+    - field.field.comment.es_test.comment_body
+    - field.field.node.es_test.field_es_test_block
+    - field.field.node.es_test.field_es_test_body
+    - field.field.node.es_test.field_es_test_boolean
+    - field.field.node.es_test.field_es_test_content_reference
+    - field.field.node.es_test.field_es_test_comments
+    - field.field.node.es_test.field_es_test_date
+    - field.field.node.es_test.field_es_test_date_all_day_range
+    - field.field.node.es_test.field_es_test_date_only
+    - field.field.node.es_test.field_es_test_date_only_range
+    - field.field.node.es_test.field_es_test_date_range
+    - field.field.node.es_test.field_es_test_dynamic_reference
+    - field.field.node.es_test.field_es_test_email
+    - field.field.node.es_test.field_es_test_file
+    - field.field.node.es_test.field_es_test_image
+    - field.field.node.es_test.field_es_test_link
+    - field.field.node.es_test.field_es_test_list_float
+    - field.field.node.es_test.field_es_test_list_integer
+    - field.field.node.es_test.field_es_test_list_text
+    - field.field.node.es_test.field_es_test_number_decimal
+    - field.field.node.es_test.field_es_test_number_float
+    - field.field.node.es_test.field_es_test_number_integer
+    - field.field.node.es_test.field_es_test_paragraphs
+    - field.field.node.es_test.field_es_test_taxonomy
+    - field.field.node.es_test.field_es_test_telephone
+    - field.field.node.es_test.field_es_test_text_formatted
+    - field.field.node.es_test.field_es_test_text_formatted_lon
+    - field.field.node.es_test.field_es_test_text_plain
+    - field.field.node.es_test.field_es_test_text_plain_long
+    - field.field.node.es_test.field_es_test_timestamp
+    - field.field.paragraph.es_test.field_es_test_text_plain
+    - field.storage.node.field_es_test_block
+    - field.storage.node.field_es_test_body
+    - field.storage.node.field_es_test_boolean
+    - field.storage.node.field_es_test_comments
+    - field.storage.node.field_es_test_content_reference
+    - field.storage.node.field_es_test_date
+    - field.storage.node.field_es_test_date_all_day_range
+    - field.storage.node.field_es_test_date_only
+    - field.storage.node.field_es_test_date_only_range
+    - field.storage.node.field_es_test_date_range
+    - field.storage.node.field_es_test_dynamic_reference
+    - field.storage.node.field_es_test_email
+    - field.storage.node.field_es_test_file
+    - field.storage.node.field_es_test_image
+    - field.storage.node.field_es_test_link
+    - field.storage.node.field_es_test_list_float
+    - field.storage.node.field_es_test_list_integer
+    - field.storage.node.field_es_test_list_text
+    - field.storage.node.field_es_test_number_decimal
+    - field.storage.node.field_es_test_number_float
+    - field.storage.node.field_es_test_number_integer
+    - field.storage.node.field_es_test_paragraphs
+    - field.storage.node.field_es_test_taxonomy
+    - field.storage.node.field_es_test_telephone
+    - field.storage.node.field_es_test_text_formatted
+    - field.storage.node.field_es_test_text_formatted_lon
+    - field.storage.node.field_es_test_text_plain
+    - field.storage.node.field_es_test_text_plain_long
+    - field.storage.node.field_es_test_timestamp
+    - field.storage.paragraph.field_es_test_text_plain
+    - language.content_settings.comment.es_test
+    - language.content_settings.node.es_test
+    - language.content_settings.paragraph.es_test
+    - language.content_settings.taxonomy_term.es_test
+    - language.entity.fr
+    - node.type.es_test
+    - paragraphs.paragraphs_type.es_test
+    - taxonomy.vocabulary.es_test
+
+# Information added by Drupal.org packaging script on 2019-10-25
+version: '8.x-2.0-alpha8'
+project: 'entity_share'
+datestamp: 1572015491

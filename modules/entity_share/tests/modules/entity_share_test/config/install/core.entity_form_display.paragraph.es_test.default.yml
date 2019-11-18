@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.es_test.field_es_test_text_plain
+    - paragraphs.paragraphs_type.es_test
+id: paragraph.es_test.default
+targetEntityType: paragraph
+bundle: es_test
+mode: default
+content:
+  field_es_test_text_plain:
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  translation:
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  created: true
+  status: true

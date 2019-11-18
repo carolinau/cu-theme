@@ -1,0 +1,13 @@
+{
+    "name": "drupal/entity_share_client",
+    "description": "Provides an UI to share entities.",
+    "type": "drupal-module",
+    "license": "GPL-2.0+",
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9"
+            }
+        }
+    }
+}

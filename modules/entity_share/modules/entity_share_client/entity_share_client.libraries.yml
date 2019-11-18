@@ -1,0 +1,12 @@
+admin:
+  css:
+    theme:
+      css/entity_share_client.admin.css: {}
+
+full-pager:
+  js:
+    js/entity_share_client.full_pager.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once

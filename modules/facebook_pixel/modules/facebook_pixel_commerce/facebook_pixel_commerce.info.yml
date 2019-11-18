@@ -1,0 +1,14 @@
+name: Facebook Pixel Commerce
+type: module
+description: Adds commerce events to Facebook Pixel
+# core: 8.x
+package: Statistics
+dependencies:
+  - facebook_pixel
+  - commerce:commerce_checkout
+
+# Information added by Drupal.org packaging script on 2019-04-10
+version: '8.x-1.0-alpha4'
+core: '8.x'
+project: 'facebook_pixel'
+datestamp: 1554911587

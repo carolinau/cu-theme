@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Module file for facebook_pixel_commerce.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function facebook_pixel_commerce_commerce_product_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'full') {
+    /** @var \Drupal\facebook_pixel\FacebookEvent $facebook_event */
+    $facebook_event = \Drupal::service('facebook_pixel.facebook_event');
+    /** @var \Drupal\commerce_price\Rounder $rounder */
+    $rounder = \Drupal::service('commerce_price.rounder');
+
+    $skus = [];
+    $contents = [];
+    /** @var \Drupal\commerce_product\Entity\ProductInterface $entity */
+    foreach ($entity->getVariations() as $variation) {
+      $contents[] = [
+        'id' => $variation->getSku(),
+        'value' => $rounder->round($variation->getPrice())->getNumber(),
+        'quantity' => 1,
+      ];
+      $skus[] = $variation->getSku();
+    }
+
+    $data = [
+      'content_type' => 'product',
+      'content_name' => $entity->getTitle(),
+      'content_ids' => $skus,
+      'contents' => $contents,
+    ];
+
+    // Append the value and currency for the default variation.
+    if ($entity->getDefaultVariation()) {
+      $data['value'] = $rounder->round($entity->getDefaultVariation()->getPrice())->getNumber();
+      $data['currency'] = $entity->getDefaultVariation()->getPrice()->getCurrencyCode();
+    }
+
+    $facebook_event->addEvent('ViewContent', $data);
+  }
+
+}

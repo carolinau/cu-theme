@@ -1,0 +1,15 @@
+description: 'Pull a channel from a remote website.'
+options:
+    update: 'Pull only new and changed entities from the channel.'
+arguments:
+    remote_id: 'The remote website id to import from.'
+    channel_id: 'The remote channel id to import.'
+messages:
+    success: 'Channel successfully pulled. Execution time @time ms.'
+    no_remote: 'There is no remote website configured with the id: @remote_id.'
+    no_channel: 'There is no channel configured or accessible with the id: @channel_id.'
+    beginning_url_import: 'Beginning to import content from URL: @url'
+    number_imported: '@number entities have been imported.'
+    update_channel_lookup: 'Looking for new content in channel @channel'
+    update_page_lookup: 'Looking for updated content at URL: @url'
+    update_success: 'Channel successfully pulled. Number of updated entities: @count, execution time: @time ms'

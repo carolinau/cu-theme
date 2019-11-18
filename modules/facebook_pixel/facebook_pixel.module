@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * @file
+ * Contains facebook_pixel.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Component\Utility\Xss;
+
+/**
+ * Implements hook_help().
+ */
+function facebook_pixel_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the facebook_pixel module.
+    case 'help.page.facebook_pixel':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Facebook Pixel') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function facebook_pixel_page_attachments(array &$page) {
+  $config = \Drupal::config('facebook_pixel.facebookpixelconfig');
+  $id = $config->get('facebook_id');
+
+  // Facebook Pixel must be configured to proceed.
+  if (empty($id)) {
+    return;
+  }
+
+  $jsString = Xss::filter(json_encode($id));
+  $script = '!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version=\'2.0\';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,\'script\',\'https://connect.facebook.net/en_US/fbevents.js\');fbq(\'init\', ' . $jsString . ');fbq(\'track\', "PageView");';
+
+  // Add registered events to the script execution.
+  /** @var \Drupal\facebook_pixel\FacebookEvent $facebook_event */
+  $facebook_event = \Drupal::service('facebook_pixel.facebook_event');
+
+  foreach ($facebook_event->getEvents() as $event) {
+    $script .= 'fbq("track", "' . Xss::filter($event['event']) . '", ' . Xss::filter(json_encode($event['data'])) . ');';
+  }
+
+  $page['#attached']['html_head'][] = [[
+    '#tag' => 'script',
+    '#value' => $script,
+  ],
+    'facebook_tracking_pixel_script',
+  ];
+}
+
+/**
+ * Implements hook_page_top().
+ */
+function facebook_pixel_page_top(array &$page_bottom) {
+  $config = \Drupal::config('facebook_pixel.facebookpixelconfig');
+  $id = $config->get('facebook_id');
+  $urlParameter = Xss::filter(urlencode($id));
+  $noscript = '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=' . $urlParameter . '&ev=PageView&noscript=1" />';
+  $page_bottom[] = [
+    '#markup' => '<noscript>' . $noscript . '</noscript>',
+    '#allowed_tags' => ['noscript', 'img'],
+  ];
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function facebook_pixel_entity_insert(EntityInterface $entity) {
+  $facebook_event = \Drupal::service('facebook_pixel.facebook_event');
+  // Register new user event.
+  if ($entity->getEntityType()->id() == 'user') {
+    /** @var \Drupal\facebook_pixel\FacebookEvent $facebook_event */
+    $facebook_event->addEvent('CompleteRegistration', $entity->id());
+  }
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function facebook_pixel_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $facebook_event = \Drupal::service('facebook_pixel.facebook_event');
+
+  if ($entity->getEntityType()->id() == 'node' && in_array($view_mode, ['default', 'full'])) {
+    /** @var \Drupal\node\NodeInterface $entity */
+    $data = [
+      'content_name' => $entity->getTitle(),
+      'content_type' => $entity->getType(),
+      'content_ids' => [$entity->id()],
+    ];
+    $facebook_event->addEvent('ViewContent', $data);
+  }
+}

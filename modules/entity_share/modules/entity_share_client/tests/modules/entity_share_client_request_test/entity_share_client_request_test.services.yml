@@ -1,0 +1,3 @@
+services:
+  entity_share_client_request_test.request:
+    class: Drupal\entity_share_client_request_test\Service\TestRequestService

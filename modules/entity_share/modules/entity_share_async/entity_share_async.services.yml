@@ -1,0 +1,6 @@
+services:
+  entity_share_async.queue_helper:
+    class: Drupal\entity_share_async\Service\QueueHelper
+    arguments:
+      - '@queue'
+      - '@state'

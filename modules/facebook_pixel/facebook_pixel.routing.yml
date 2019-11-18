@@ -1,0 +1,9 @@
+facebook_pixel.facebook_pixel_config_form:
+  path: '/admin/config/facebook_pixel'
+  defaults:
+    _form: '\Drupal\facebook_pixel\Form\FacebookPixelConfigForm'
+    _title: 'Facebook Pixel Configuration'
+  requirements:
+    _permission: 'configure facebook_pixel'
+  options:
+    _admin_route: TRUE

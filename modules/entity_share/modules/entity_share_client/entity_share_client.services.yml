@@ -1,0 +1,62 @@
+services:
+  logger.channel.entity_share_client:
+    parent: logger.channel_base
+    arguments: ['entity_share_client']
+
+  entity_share_client.request:
+    class: Drupal\entity_share_client\Service\RequestService
+
+  entity_share_client.remote_manager:
+    class: Drupal\entity_share_client\Service\RemoteManager
+    arguments:
+      - '@http_client_factory'
+      - '@entity_share_client.request'
+
+  entity_share_client.jsonapi_helper:
+    class: Drupal\entity_share_client\Service\JsonapiHelper
+    arguments:
+      - '@jsonapi.serializer'
+      - '@serializer.normalizer.jsonapi_document_toplevel.jsonapi'
+      - '@jsonapi.resource_type.repository'
+      - '@entity_type.bundle.info'
+      - '@entity_type.manager'
+      - '@stream_wrapper_manager'
+      - '@language_manager'
+      - '@entity_share_client.remote_manager'
+      - '@event_dispatcher'
+      - '@entity_share_client.request'
+      - '@messenger'
+      - '@logger.channel.entity_share_client'
+      - '@entity_share_client.state_information'
+      - '@module_handler'
+
+  entity_share_client.state_information:
+    class: Drupal\entity_share_client\Service\StateInformation
+    arguments:
+      - '@entity_type.manager'
+      - '@jsonapi.resource_type.repository'
+
+  entity_share_client.entity_reference_revisions_relationship_subscriber:
+    class: Drupal\entity_share_client\EventSubscriber\EntityReferenceRevisionsRelationshipSubscriber
+    arguments:
+      - '@entity_type.manager'
+    tags:
+      - { name: event_subscriber }
+
+  entity_share_client.block_field_block_content_importer:
+    class: Drupal\entity_share_client\EventSubscriber\BlockFieldBlockContentImporter
+    arguments:
+      - '@entity_share_client.remote_manager'
+      - '@entity_share_client.jsonapi_helper'
+      - '@entity_share_client.request'
+    tags:
+      - { name: event_subscriber }
+
+  entity_share_client.cli:
+    class: Drupal\entity_share_client\Service\EntityShareClientCliService
+    arguments:
+      - '@string_translation'
+      - '@entity_share_client.remote_manager'
+      - '@entity_share_client.jsonapi_helper'
+      - '@entity_type.manager'
+      - '@entity_share_client.request'

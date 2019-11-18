@@ -1,0 +1,16 @@
+name: Entity share server
+type: module
+description: Allows to create channel entities to share content.
+core: 8.x
+package: Web services
+configure: entity.channel.collection
+dependencies:
+  - drupal:basic_auth
+  - entity_share:entity_share
+  # The namespace of this dependency is not provided to be compatible with JSON:API 2.x and Core >= 8.7.x.
+  - jsonapi
+
+# Information added by Drupal.org packaging script on 2019-10-25
+version: '8.x-2.0-alpha8'
+project: 'entity_share'
+datestamp: 1572015491

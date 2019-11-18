@@ -1,0 +1,9 @@
+services:
+  facebook_pixel_commerce.facebook_commerce:
+    class: Drupal\facebook_pixel_commerce\FacebookCommerce
+    arguments: ['@commerce_price.rounder']
+  facebook_pixel_commerce.cart_subscriber:
+    class: Drupal\facebook_pixel_commerce\EventSubscriber\CartSubscriber
+    arguments: ['@commerce_cart.cart_provider', '@facebook_pixel.facebook_event', '@facebook_pixel_commerce.facebook_commerce']
+    tags:
+    - { name: event_subscriber }

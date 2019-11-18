@@ -1,0 +1,48 @@
+<?php
+/**
+ * @file
+ * It is an input filter that allows text to be collapsible.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function collapse_text_theme($existing, $type, $theme, $path) {
+  return array(
+    'collapse_text_details' => array(
+      'render element' => 'element',
+      'function' => 'theme_collapse_text_details',
+    ),
+    'collapse_text_form' => array(
+      'render element' => 'element',
+      'function' => 'theme_collapse_text_form',
+    ),
+  );
+}
+
+/**
+ * Theme the collapse text details.
+ *
+ * Theme a section of collapsible text. By default, this function calls the
+ * default 'theme_details' implementation, but this function can be overridden
+ * to implement a custom theme just for collapsed text.
+ */
+function theme_collapse_text_details($element) {
+  return drupal_render_children($element['element']);
+}
+
+/**
+ * Theme the outer form. This is required for the detail(s) to validate.
+ */
+function theme_collapse_text_form($element) {
+  return drupal_render_children($element['element']);
+}
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * Add the collapse.js file.
+ */
+function collapse_text_preprocess_page(&$variables) {
+  $variables['#attached']['library'][] = 'core/drupal.form';
+}
