@@ -1,0 +1,18 @@
+<div class="container">
+<{{ wrapper }}{{ attributes }}>
+  {{ title_suffix.contextual_links }}
+
+  {% if left.content %}
+  <{{ left.wrapper }}{{ left.attributes }}>
+    {{ left.content }}
+  </{{ left.wrapper }}>
+  {% endif %}
+
+  {% if right.content %}
+  <{{ right.wrapper }}{{ right.attributes }}>
+    {{ right.content }}
+  </{{ right.wrapper }}>
+  {% endif %}
+
+</{{ wrapper }}>
+</div>

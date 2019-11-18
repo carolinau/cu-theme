@@ -1,0 +1,14 @@
+{% extends "block.html.twig" %}
+{% block content %}
+  {% if site_logo %}
+    <a class="branding-logo" href="https://www.piedmontu.edu" title="Piedmont International University Home" rel="external" target="blank">
+      <img src="{{ site_logo }}" alt="Piedmont International University Home}" />
+    </a>
+  {% endif %}
+  {% if site_name %}
+    <a class="branding-name" href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>
+  {% endif %}
+  {% if site_slogan %}
+  	<a class="branding-slogan" href="https://www.piedmontu.edu" title="Piedmont International University Home" rel="external" target="blank">{{ site_slogan }}</a>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,24 @@
+core: 8.x
+type: theme
+base theme: bootstrap
+
+name: 'PIU'
+description: 'A Drupal Bootstrap 3 based sub-theme custom designed by Ian McIlwraith for Piedmont International University.'
+package: 'Bootstrap'
+
+regions:
+  secondary_navigation: 'Secondary Navigation'
+  navigation: 'Navigation'
+  navigation_collapsible: 'Navigation (Collapsible)'
+  content: 'Content'
+  footer_logo: 'Footer Logo'
+  footer_left: 'Footer Left'
+  footer_center: 'Footer Center'
+  footer_right: 'Footer Right'
+  footer_bottom: 'Footer Bottom'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+
+libraries-extend:
+  bootstrap/framework:
+    - piu/framework
