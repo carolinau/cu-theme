@@ -8,6 +8,7 @@ package: 'Bootstrap'
 
 regions:
   secondary_navigation: 'Secondary Navigation'
+  multilingual: 'Multilingual'
   navigation: 'Navigation'
   navigation_collapsible: 'Navigation (Collapsible)'
   content: 'Content'
