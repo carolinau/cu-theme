@@ -282,19 +282,21 @@ body.navbar-is-static-top {
 /* Image CTA */
 .image-cta {
 	box-shadow: var(--section-box-shadow);
-  transition: all 2s ease;
+    transition: all 2s ease;
+	background-color: #0000002e;
+	background-blend-mode: overlay;
 }
 .image-cta:hover {
 	box-shadow: var(--section-box-shadow-h);
 }
 .image-cta-title {
-	padding: 35% 0 0 5%;
+	padding: 13em 0 0 2em;
 	font-weight: 600;
 	color: #fff;
 	text-shadow: var(--text-shadow);
 }
 .image-cta-button {
-	padding: 0 0 3% 5%;
+	padding: 0 0 1.5em 2em;
 }
 .image-cta {
 	margin: 0 0 15px;
