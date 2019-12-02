@@ -467,7 +467,7 @@ body.navbar-is-static-top {
 	padding: 0 0 5px;
 }
 /* Collapsable Panel */
-.panel:last-child:
+.panel:last-child {
 	margin-bottom: 10px;
 }
 .panel-default > .panel-heading > .panel-title {
