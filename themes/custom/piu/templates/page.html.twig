@@ -3,11 +3,19 @@
 <div class="secondary_navigation">
 	<div class="container">
 		<div class="row">
-			<div class="col">
+			<div class="col-md-8">
 			{# Secondary Navigation #}
 			{% if page.secondary_navigation %}
 			{% block secondary_navigation %}
 				{{ page.secondary_navigation }}
+			{% endblock %}
+			{% endif %}
+			</div>
+			<div class="col-md-4">
+			{# Multilingual #}
+			{% if page.multilingual %}
+			{% block multilingual %}
+				{{ page.multilingual }}
 			{% endblock %}
 			{% endif %}
 			</div>
