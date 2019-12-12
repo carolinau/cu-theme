@@ -25,6 +25,9 @@ h4 {
 body {
 	font: 1.6em/1.6em 'Lato', sans-serif;
 }
+* {
+	-webkit-font-smoothing: inherit !important;
+}
 .content-body > li {
 	padding: 5px 0;
 }
