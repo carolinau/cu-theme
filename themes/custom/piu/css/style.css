@@ -182,11 +182,11 @@ body.navbar-is-static-top {
 	filter: brightness(110%);
 	background: var(--primary-blue);
 }
-.menu--faculty-menu, .menu--main, .menu--main-menu-pt {
+.menu--faculty-menu, .menu--main, .menu--main-menu-pt, .menu--main-menu-es {
 	float: right;
 }
 @media only screen and (min-width: 767px) {
-	.menu--faculty-menu > li, .menu--main > li, .menu--main-menu-pt > li {
+	.menu--faculty-menu > li, .menu--main > li, .menu--main-menu-pt > li, .menu--main-menu-es > li {
 		float: left;
 	}
 }
@@ -198,7 +198,7 @@ body.navbar-is-static-top {
 }
 /* Main Navigation Mobile Styles */
 @media only screen and (min-width: 768px) {
-	.menu--faculty-menu > li > a, .menu--main > li > a, .menu--main-menu-pt > li > a {
+	.menu--faculty-menu > li > a, .menu--main > li > a, .menu--main-menu-pt > li > a, .menu--main-menu-es > li > a {
 		line-height: 40px;
 	}
 }
