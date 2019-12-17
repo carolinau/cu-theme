@@ -554,8 +554,14 @@ body.navbar-is-static-top {
 .footer ul.menu {
 	margin: 0 auto;
 }
+.footer .menu > li > a {
+	line-height: 20px;
+}
 .nav > li > a {
 	padding: 5px 10px;
+}
+.footer .menu {
+	text-align: left;
 }
 .footer .nav > li > a:hover, .nav > li > a:focus {
 	filter: brightness(115%);
