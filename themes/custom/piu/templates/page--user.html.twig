@@ -63,33 +63,31 @@
         {% endblock %}
   </div>
 {% endblock %}
-<footer role="contentinfo">
-	<div class="footer">
+<footer class="footer" role="contentinfo">
 	<div class="container">
 		<div class="row">
-		<div class="col-sm-2">
+		<div class="col-lg col-md-6">
 			{% if page.footer_logo %}
 			  {% block footer_logo %}
 			      {{ page.footer_logo }}
 			  {% endblock %}
 			{% endif %}
 		</div>
-		<div class="col-sm-4">
+		<div class="col-lg col-md-6">
 			{% if page.footer_left %}
 			  {% block footer_left %}
 			      {{ page.footer_left }}
 			  {% endblock %}
 			{% endif %}
 		</div>
-		<div class="col-sm">
+		<div class="col-lg col-md-6">
 			{% if page.footer_center %}
 			  {% block footer_center %}
 			      {{ page.footer_center }}
 			  {% endblock %}
 			{% endif %}
 		</div>
-
-		<div class="col-sm">
+		<div class="col-lg col-md-6">
 			{% if page.footer_right %}
 			  {% block footer_right %}
 			      {{ page.footer_right }}
@@ -97,7 +95,6 @@
 			{% endif %}
 		</div>
 		</div>
-	</div>
 	</div>
 {% if page.footer_bottom %}
 	{% block footer_bottom %}
