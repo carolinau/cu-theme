@@ -221,9 +221,8 @@ nav > .navbar-nav > li > a:focus:after, nav > .navbar-nav > .active > a:focus:af
 	background-color: var(--primary-blue);
 }
 .navbar-toggle {
-	position: absolute;
 	right: -5px;
-	top: 65px;
+	top: -6px;
 }
 .menu--main {
 	z-index: 200;
