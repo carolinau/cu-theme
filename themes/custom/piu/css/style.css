@@ -372,6 +372,13 @@ body.navbar-is-static-top {
 .bottom-divider-c:after {
   margin: 0 auto;
 }
+.footer-divider:after {
+	content: "";
+	display: block;
+	width: 100%;
+	padding: 0 0 12px 0;
+	border-bottom: 1px solid white;
+}
 /* Paragraph */
 .video-title {
 	text-align: center;
