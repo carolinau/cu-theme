@@ -1,8 +1,10 @@
 {% extends "block.html.twig" %}
 {% block content %}
+  {% if site_logo %}
     <a class="branding-logo" href="https://piedmontu.edu" title="{{ site_slogan }} Home" rel="external">
-      <img src="/themes/custom/piu/icon_logo.svg" alt="{{ site_slogan }} Home" />
+      <img src="{{ site_logo }}" alt="{{ site_slogan }} Home" />
     </a>
+  {% endif %}
   {% if site_name %}
     <a class="branding-name" href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>
   {% endif %}
