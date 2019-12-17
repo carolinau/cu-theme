@@ -536,27 +536,46 @@ body.navbar-is-static-top {
 	padding: 3% 0 0;
 }
 /* Footer */
-.region-footer-disclaimer {
-	font-size: .8em;
-	padding: 3% 0 0;
-}
 .footer {
-	background: var(--dark-gray);
-	color: #fff;
-	font-size: .9em;
+	background-color: var(--dark-gray);
+	color: white;
+	font-size: 0.9em;
 }
 .footer a {
-	color: #fff;
+	color: white;
+}
+.footer ul.menu {
+	margin: 0 auto;
 }
 .nav > li > a {
 	padding: 5px 10px;
 }
-.nav > li > a:hover, .nav > li > a:focus {
-	filter: brightness(110%);
-	background: var(--dark-gray);
+.footer .nav > li > a:hover, .nav > li > a:focus {
+	filter: brightness(115%);
+	background-color: var(--dark-gray);
+}
+h4.footer-divider {
+	font-weight: 600;
+}
+@media only screen and (max-width: 768px) {
+	.footer-divider {
+		text-align: center;
+	}
+}
+.footer #block-sitebranding-footer {
+	text-align: center;
 }
 .footer #block-address {
 	padding: 5px 10px;
+}
+.menu--websites > li, .menu--footer > li, .menu--schools > li, .menu--other > li{
+	float: none;
+}
+.menu--other {
+	border-top: 1px solid white;
+	padding-top: 5px;
+	margin-top: 8px;
+	width: 100%;
 }
 /* Make the footer stay at the bottom of the screen */
 @media only screen and (max-width: 575px) {
