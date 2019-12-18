@@ -331,6 +331,9 @@ header ul.menu {
 		margin: 0 0 6px;
 	}
 }
+.region-multilingual > section {
+	float: right;
+}
 .branding-logo {
 	margin: 5px 0;
 	text-decoration: none !important;
