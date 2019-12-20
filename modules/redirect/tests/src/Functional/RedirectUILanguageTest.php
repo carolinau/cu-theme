@@ -1,6 +1,7 @@
 <?php
 
-namespace Drupal\redirect\Tests;
+namespace Drupal\Tests\redirect\Functional;
+
 use Drupal\language\Entity\ConfigurableLanguage;
 
 /**
@@ -62,13 +63,13 @@ class RedirectUILanguageTest extends RedirectUITest {
     ], t('Save'));
 
     // Check redirect for english.
-    $this->assertRedirect('langpath', '/user', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('langpath', '/user', 301);
 
     // Check redirect for germany.
-    $this->assertRedirect('de/langpath', '/de', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('de/langpath', '/de', 301);
 
     // Check no redirect for spanish.
-    $this->assertRedirect('es/langpath', NULL, 'HTTP/1.1 404 Not Found');
+    $this->assertRedirect('es/langpath', NULL, 404);
   }
 
   /**
@@ -85,10 +86,10 @@ class RedirectUILanguageTest extends RedirectUITest {
     ], t('Save'));
 
     // Check redirect for english.
-    $this->assertRedirect('langpath', '/user', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('langpath', '/user', 301);
 
     // Check redirect for spanish.
-    $this->assertRedirect('es/langpath', '/es/user', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('es/langpath', '/es/user', 301);
   }
 
   /**
@@ -105,10 +106,10 @@ class RedirectUILanguageTest extends RedirectUITest {
     ], t('Save'));
 
     // Check redirect for english.
-    $this->assertRedirect('langpath', '/user', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('langpath', '/user', 301);
 
     // Check that redirect for Germany is not working.
-    $this->assertRedirect('de/langpath', NULL, 'HTTP/1.1 404 Not Found');
+    $this->assertRedirect('de/langpath', NULL, 404);
 
     // Edit the redirect and change the language.
     $this->drupalGet('admin/config/search/redirect');
@@ -116,10 +117,10 @@ class RedirectUILanguageTest extends RedirectUITest {
     $this->drupalPostForm(NULL, ['language[0][value]' => 'de'], t('Save'));
 
     // Check redirect for english is NOT working now.
-    $this->assertRedirect('langpath', NULL, 'HTTP/1.1 404 Not Found');
+    $this->assertRedirect('langpath', NULL, 404);
 
     // Check that redirect for Germany is now working.
-    $this->assertRedirect('de/langpath', '/de/user', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('de/langpath', '/de/user', 301);
   }
 
 }

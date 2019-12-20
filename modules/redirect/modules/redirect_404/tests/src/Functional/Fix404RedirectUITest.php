@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\redirect_404\Tests;
+namespace Drupal\Tests\redirect_404\Functional;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Url;
@@ -158,10 +158,9 @@ class Fix404RedirectUITest extends Redirect404TestBase {
     $this->clickLink('Ignore');
     $this->assertUrl('admin/config/search/redirect/settings?ignore=' . $path_to_ignore . $destination);
     $this->assertText('Resolved the path ' . $path_to_ignore . ' in the database. Please check the ignored list and save the settings.');
-    $xpath = $this->xpath('//*[@id="edit-ignore-pages"]')[0]->asXML();
-    $this->assertTrue(strpos($xpath, $node_to_ignore), $node_to_ignore . " in 'Path to ignore' found");
-    $this->assertTrue(strpos($xpath, $terms_to_ignore), $terms_to_ignore . " in 'Path to ignore' found");
-    $this->assertTrue(strpos($xpath, $path_to_ignore), $path_to_ignore . " in 'Path to ignore' found");
+    $this->assertSession()->elementContains('css', '#edit-ignore-pages', $node_to_ignore);
+    $this->assertSession()->elementContains('css', '#edit-ignore-pages', $terms_to_ignore);
+    $this->assertSession()->elementContains('css', '#edit-ignore-pages', $path_to_ignore);
 
     // Save the path with wildcard, but omitting the leading slash.
     $nodes_to_ignore = 'node/*';
@@ -175,12 +174,12 @@ class Fix404RedirectUITest extends Redirect404TestBase {
 
     // Go back to the settings to check the 'Path to ignore' configurations.
     $this->drupalGet('admin/config/search/redirect/settings');
-    $xpath = $this->xpath('//*[@id="edit-ignore-pages"]')[0]->asXML();
+    $xpath = $this->xpath('//*[@id="edit-ignore-pages"]')[0]->getHtml();
     // Check that the new page to ignore has been saved with leading slash.
-    $this->assertTrue(strpos($xpath, '/' . $nodes_to_ignore), '/' . $nodes_to_ignore . " in 'Path to ignore' found");
-    $this->assertTrue(strpos($xpath, $terms_to_ignore), $terms_to_ignore . " in 'Path to ignore' found");
-    $this->assertFalse(strpos($xpath, $node_to_ignore), $node_to_ignore . " in 'Path to ignore' found");
-    $this->assertFalse(strpos($xpath, $path_to_ignore), $path_to_ignore . " in 'Path to ignore' found");
+    $this->assertSession()->elementContains('css', '#edit-ignore-pages', '/'. $nodes_to_ignore);
+    $this->assertSession()->elementContains('css', '#edit-ignore-pages', $terms_to_ignore);
+    $this->assertSession()->elementNotContains('css', '#edit-ignore-pages', $node_to_ignore);
+    $this->assertSession()->elementNotContains('css', '#edit-ignore-pages', $path_to_ignore);
   }
 
 }

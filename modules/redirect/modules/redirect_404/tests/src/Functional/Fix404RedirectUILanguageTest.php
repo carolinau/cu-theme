@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\redirect_404\Tests;
+namespace Drupal\Tests\redirect_404\Functional;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\language\Entity\ConfigurableLanguage;
-use Drupal\redirect\Tests\AssertRedirectTrait;
+use Drupal\Tests\redirect\Functional\AssertRedirectTrait;
 
 /**
  * UI tests for redirect_404 module with language and content translation.
@@ -105,7 +105,7 @@ class Fix404RedirectUILanguageTest extends Redirect404TestBase {
     $this->assertUrl('admin/config/search/redirect/404');
     $this->assertText('There are no 404 errors to fix.');
     // Check if the redirect works as expected.
-    $this->assertRedirect('fr/testing', 'fr/node', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('fr/testing', 'fr/node', 301);
 
     // Test removing a redirect assignment, visit again the non existing page.
     $this->drupalGet('admin/config/search/redirect');
@@ -136,7 +136,7 @@ class Fix404RedirectUILanguageTest extends Redirect404TestBase {
     $this->drupalGet('admin/config/search/redirect');
     $this->assertLanguageInTableBody('Spanish');
     // Check if the redirect works as expected.
-    $this->assertRedirect('es/testing', 'es/node', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('es/testing', 'es/node', 301);
 
     // Visit multiple non existing pages to test the Redirect 404 View.
     $this->drupalGet('testing1');
@@ -197,7 +197,7 @@ class Fix404RedirectUILanguageTest extends Redirect404TestBase {
     $this->assertLanguageInTableBody('Spanish');
     $this->assertLanguageInTableBody('English');
     // Check if the redirect works as expected.
-    $this->assertRedirect('/testing1', '/node', 'HTTP/1.1 301 Moved Permanently');
+    $this->assertRedirect('/testing1', '/node', 301);
   }
 
 }
