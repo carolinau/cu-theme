@@ -431,6 +431,10 @@ h3.cta-title {
 	padding-top: 20px;
 	text-align: center;
 }
+/* Paragraph */
+.content-spacer {
+	padding: 3vh;
+}
 /* Featured Image Header */
 .fh-section {
 	margin-top: 3%;
