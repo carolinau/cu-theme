@@ -407,6 +407,34 @@ header ul.menu {
 	background: var(--accent-maroon);
 	box-shadow: var(--section-box-shadow);
 }
+* Featured Image Header */
+.fh-section {
+	margin-top: 3%;
+}
+.paragraph--type-featured-image-header > .fh-right {
+	margin: auto 60px auto -60px;
+	background-color: var(--primary-blue);
+	padding: 40px;
+	color: white;
+}
+.paragraph--type-featured-image-header > .fh-left {
+	margin: auto 0;
+}
+.fh-header {
+	margin-top: 0;
+	line-height: 1.3em;
+}
+.fh-image {
+	box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.15);
+}
+.fh-teaser {
+	font-size: 1.2em;
+}
+@media only screen and (max-width: 991px) {
+.paragraph--type-featured-image-header > .fh-right {
+	margin: 15px 15px 15px 0;
+	padding: 30px;
+}}
 /* Resources Views */
 .resource-title {
 	font-size: 1.1em;
