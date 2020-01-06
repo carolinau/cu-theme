@@ -407,7 +407,31 @@ header ul.menu {
 	background: var(--accent-maroon);
 	box-shadow: var(--section-box-shadow);
 }
-* Featured Image Header */
+/* Colored CTA */
+.colored-cta {
+	box-shadow: 0 0 20px 4px rgba(50, 50, 50, 0.1);
+	border-radius: 3px;
+	border-bottom: 5px solid var(--accent-maroon);
+	padding: 0 15px 25px;
+	margin: 4% 0;
+}
+.cta {
+	margin: 0 0 30px;
+}
+h3.cta-title {
+	margin-top: 0;
+}
+.colored-cta-title {
+	padding-top: 2%;
+}
+.colored-cta-title, .colored-cta-content, .cta-title, .cta-content {
+	text-align: center;
+}
+.colored-cta > .field--name-field-button-link, .cta > .field--name-field-button-link {
+	padding-top: 20px;
+	text-align: center;
+}
+/* Featured Image Header */
 .fh-section {
 	margin-top: 3%;
 }
