@@ -7,10 +7,12 @@ namespace Drupal\Tests\entity_share_client\Functional;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\RevisionableInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\entity_share\EntityShareUtility;
 use Drupal\entity_share_test\EntityFieldHelperTrait;
+use Drupal\node\NodeInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\entity_share_server\Functional\EntityShareServerRequestTestTrait;
 use Drupal\Tests\RandomGeneratorTrait;
@@ -40,6 +42,11 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
     'entity_share_test',
     'basic_auth',
   ];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'classy';
 
   /**
    * The tested entity type.
@@ -598,6 +605,24 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
   /**
    * Helper function.
    *
+   * @param array $media_infos
+   *   The media infos to use.
+   *
+   * @return array
+   *   Return common part to create medias.
+   */
+  protected function getCompleteMediaInfos(array $media_infos) {
+    return array_merge([
+      'status' => [
+        'value' => NodeInterface::PUBLISHED,
+        'checker_callback' => 'getValue',
+      ],
+    ], $media_infos);
+  }
+
+  /**
+   * Helper function.
+   *
    * @param array $node_infos
    *   The node infos to use.
    *
@@ -772,6 +797,53 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
     $prepared_url = $parsed_url['path'] . '?' . $query;
 
     return $prepared_url;
+  }
+
+  /**
+   * Helper function.
+   *
+   * @return array
+   *   An array of data.
+   */
+  protected function preparePhysicalFilesAndFileEntitiesData() {
+    /** @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $stream_wrapper_manager */
+    $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+
+    $files_entities_data = [];
+    foreach (static::$filesData as $file_uuid => $file_data) {
+      $stream_wrapper = $stream_wrapper_manager->getViaUri($file_data['uri']);
+      $directory_uri = $stream_wrapper->dirname($file_data['uri']);
+      $file_system->prepareDirectory($directory_uri, FileSystemInterface::CREATE_DIRECTORY);
+      if (isset($file_data['file_content'])) {
+        file_put_contents($file_data['uri'], $file_data['file_content']);
+        $this->filesSize[$file_uuid] = filesize($file_data['uri']);
+      }
+      elseif (isset($file_data['file_content_callback'])) {
+        $this->{$file_data['file_content_callback']}($file_uuid, $file_data);
+      }
+
+      $files_entities_data[$file_uuid] = [
+        'filename' => [
+          'value' => $file_data['filename'],
+          'checker_callback' => 'getValue',
+        ],
+        'uri' => [
+          'value' => $file_data['uri'],
+          'checker_callback' => 'getValue',
+        ],
+        'filemime' => [
+          'value' => $file_data['filemime'],
+          'checker_callback' => 'getValue',
+        ],
+        'status' => [
+          'value' => FILE_STATUS_PERMANENT,
+          'checker_callback' => 'getValue',
+        ],
+      ];
+    }
+    return $files_entities_data;
   }
 
 }

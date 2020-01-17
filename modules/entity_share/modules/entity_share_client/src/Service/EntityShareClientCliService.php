@@ -11,6 +11,7 @@ use Drupal\entity_share_client\Entity\Remote;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Component\Utility\Timer;
+use Drupal\entity_share_client\Entity\RemoteInterface;
 
 /**
  * Class EntityShareClientCliService.
@@ -106,6 +107,7 @@ class EntityShareClientCliService {
    */
   public function ioPull($remote_id, $channel_id, $io, callable $t) {
     Timer::start('io-pull');
+    /** @var \Drupal\entity_share_client\Entity\RemoteInterface $remotes */
     $remotes = Remote::loadMultiple();
 
     // Check that the remote website exists.
@@ -123,19 +125,27 @@ class EntityShareClientCliService {
       return;
     }
 
+    $this->pull($remote, $channel_infos[$channel_id]['url']);
+    Timer::stop('io-pull');
+    $io->success($t('Channel successfully pulled. Execution time @time ms.', ['@time' => Timer::read('io-pull')]));
+  }
+
+  /**
+   * Pull content.
+   *
+   * @param \Drupal\entity_share_client\Entity\RemoteInterface $remote
+   *   The remote website entity to import from.
+   * @param string $channel_url
+   *   The remote channel URL to import.
+   */
+  public function pull(RemoteInterface $remote, $channel_url) {
     // Import channel content and loop on pagination.
     $this->jsonapiHelper->setRemote($remote);
     $http_client = $this->remoteManager->prepareJsonApiClient($remote);
-    $channel_url = $channel_infos[$channel_id]['url'];
     while ($channel_url) {
-      $io->text($t('Beginning to import content from URL: @url', ['@url' => $channel_url]));
-
       $response = $this->requestService->request($http_client, 'GET', $channel_url);
       $json = Json::decode((string) $response->getBody());
-      $imported_entities = $this->jsonapiHelper->importEntityListData(EntityShareUtility::prepareData($json['data']));
-
-      $io->text($t('@number entities have been imported.', ['@number' => count($imported_entities)]));
-
+      $this->jsonapiHelper->importEntityListData(EntityShareUtility::prepareData($json['data']));
       if (isset($json['links']['next']['href'])) {
         $channel_url = $json['links']['next']['href'];
       }
@@ -143,8 +153,6 @@ class EntityShareClientCliService {
         $channel_url = FALSE;
       }
     }
-    Timer::stop('io-pull');
-    $io->success($t('Channel successfully pulled. Execution time @time ms.', ['@time' => Timer::read('io-pull')]));
   }
 
   /**
@@ -161,6 +169,7 @@ class EntityShareClientCliService {
    */
   public function ioPullUpdates($remote_id, $channel_id, $io, callable $t) {
     Timer::start('io-pull-updates');
+    /** @var \Drupal\entity_share_client\Entity\RemoteInterface $remotes */
     $remotes = Remote::loadMultiple();
 
     // Check that the remote website exists.
@@ -178,24 +187,43 @@ class EntityShareClientCliService {
       return;
     }
 
+    $update_count = $this->pullUpdates($remote, $channel_infos[$channel_id]['url'], $channel_infos[$channel_id]['url_uuid'], $channel_infos[$channel_id]['channel_entity_type']);
+    Timer::stop('io-pull-updates');
+    $io->success($t('Channel successfully pulled. Number of updated entities: @count, execution time: @time ms', ['@count' => $update_count, '@time' => Timer::read('io-pull-updates')]));
+  }
+
+  /**
+   * Pull changed content.
+   *
+   * @param \Drupal\entity_share_client\Entity\RemoteInterface $remote
+   *   The remote website entity to import from.
+   * @param string $channel_url
+   *   The remote channel URL to import.
+   * @param string $channel_url_uuid
+   *   The remote channel URL to import keyed by 'url_uuid' in the channel
+   *   infos.
+   * @param string $entity_type_id
+   *   The entity type ID to import.
+   *
+   * @return int
+   *   The number of updated content.
+   */
+  public function pullUpdates(RemoteInterface $remote, $channel_url, $channel_url_uuid, $entity_type_id) {
     // Import channel content and loop on pagination.
     $this->jsonapiHelper->setRemote($remote);
     $http_client = $this->remoteManager->prepareJsonApiClient($remote);
-    $channel_url = $channel_infos[$channel_id]['url'];
+    $original_channel_url = $channel_url;
 
-    $storage = $this->entityTypeManager->getStorage($channel_infos[$channel_id]['channel_entity_type']);
+    $storage = $this->entityTypeManager->getStorage($entity_type_id);
     $offset = 0;
     $update_count = 0;
 
-    $io->text($t('Looking for new content in channel @channel', ['@channel' => $channel_id]));
-
     while ($channel_url) {
       // Offset pagination.
-      $parsed_url = UrlHelper::parse($channel_infos[$channel_id]['url_uuid']);
+      $parsed_url = UrlHelper::parse($channel_url_uuid);
       $parsed_url['query']['page']['offset'] = $offset;
       $query = UrlHelper::buildQuery($parsed_url['query']);
       $revisions_url = $parsed_url['path'] . '?' . $query;
-      $io->text($t('Looking for updated content at URL: @url', ['@url' => $revisions_url]));
 
       // Get UUIDs and update timestamps from next page in a row.
       $response = $this->requestService->request($http_client, 'GET', $revisions_url);
@@ -218,12 +246,12 @@ class EntityShareClientCliService {
           $changed_datetime_timestamp = $changed_datetime->getTimestamp();
         }
 
-        $entityChanged = $storage->getQuery()
+        $entity_changed = $storage->getQuery()
           ->condition('uuid', $row['id'])
           ->condition('changed', $changed_datetime_timestamp)
           ->count()
           ->execute();
-        if ($entityChanged == 0) {
+        if ($entity_changed == 0) {
           $uuids[] = $row['id'];
         }
       }
@@ -232,23 +260,27 @@ class EntityShareClientCliService {
         // Prepare JSON filter query string.
         $filter = [
           'filter' => [
-            'uuid' => [
-              'path' => 'id',
-              'value' => $uuids,
-              'operator' => 'IN',
+            'uuid-filter' => [
+              'condition' => [
+                'path' => 'id',
+                'operator' => 'IN',
+                'value' => $uuids,
+              ],
             ],
           ],
         ];
 
         // Call remote channel and fetch content of entities which should be
         // updated.
-        $filter_query = UrlHelper::buildQuery($filter);
-        $filtered_url = $channel_infos[$channel_id]['url'] . '?' . $filter_query;
+        $parsed_original_channel_url = UrlHelper::parse($original_channel_url);
+        $filter_query = $parsed_original_channel_url['query'];
+        $filter_query = array_merge_recursive($filter_query, $filter);
+        $filter_query = UrlHelper::buildQuery($filter_query);
+        $filtered_url = $parsed_original_channel_url['path'] . '?' . $filter_query;
 
         $response = $this->requestService->request($http_client, 'GET', $filtered_url);
         $json = Json::decode((string) $response->getBody());
         $imported_entities = $this->jsonapiHelper->importEntityListData(EntityShareUtility::prepareData($json['data']));
-        $io->text($t('@number entities have been imported.', ['@number' => count($imported_entities)]));
         $update_count += count($imported_entities);
       }
 
@@ -262,8 +294,7 @@ class EntityShareClientCliService {
       // Update page number and offset for next API call.
       $offset += 50;
     }
-    Timer::stop('io-pull-updates');
-    $io->success($t('Channel successfully pulled. Number of updated entities: @count, execution time: @time ms', ['@count' => $update_count, '@time' => Timer::read('io-pull-updates')]));
+    return $update_count;
   }
 
   /**

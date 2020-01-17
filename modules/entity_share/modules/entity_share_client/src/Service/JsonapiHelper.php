@@ -26,6 +26,7 @@ use Drupal\entity_share_client\Entity\RemoteInterface;
 use Drupal\entity_share_client\Event\RelationshipFieldValueEvent;
 use Drupal\file\FileInterface;
 use Drupal\jsonapi\Normalizer\JsonApiDocumentTopLevelNormalizer;
+use Drupal\jsonapi\ResourceType\ResourceType;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
@@ -453,11 +454,6 @@ class JsonapiHelper implements JsonapiHelperInterface {
       /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
       $entity = $this->extractEntity($entity_data);
 
-      $changed_public_name = FALSE;
-      if ($resource_type->hasField('changed')) {
-        $changed_public_name = $resource_type->getPublicName('changed');
-      }
-
       // New entity.
       if (empty($existing_entities)) {
         // Allow other modules to alter the entity with an EventSubscriber.
@@ -470,20 +466,7 @@ class JsonapiHelper implements JsonapiHelperInterface {
         $this->importedEntities[$entity->language()->getId()][$entity->uuid()] = $entity->uuid();
         $this->updateRelationships($entity, $entity_data);
         $this->handlePhysicalFiles($entity, $entity_data);
-        // Change the entity "changed" time because it could have been altered
-        // with relationship save by example.
-        if (!empty($entity_data['attributes'][$changed_public_name]) && method_exists($entity, 'setChangedTime')) {
-          // If the website is using backward compatible timestamps output.
-          // @see https://www.drupal.org/node/2859657.
-          if (is_numeric($entity_data['attributes'][$changed_public_name])) {
-            // The value is casted in integer for
-            // https://www.drupal.org/node/2837696.
-            $entity->setChangedTime((int) $entity_data['attributes'][$changed_public_name]);
-          }
-          elseif ($changed_datetime = \DateTime::createFromFormat(\DateTime::RFC3339, $entity_data['attributes'][$changed_public_name])) {
-            $entity->setChangedTime($changed_datetime->getTimestamp());
-          }
-        }
+        $this->setChangedTime($entity, $resource_type, $entity_data);
         $entity->save();
       }
       // Update the existing entity.
@@ -528,20 +511,7 @@ class JsonapiHelper implements JsonapiHelperInterface {
           }
           $this->updateRelationships($existing_translation, $entity_data);
           $this->handlePhysicalFiles($existing_translation, $entity_data);
-          // Change the entity "changed" time because it could have been altered
-          // with relationship save by example.
-          if (!empty($entity_data['attributes'][$changed_public_name]) && method_exists($existing_translation, 'setChangedTime')) {
-            // If the website is using backward compatible timestamps output.
-            // @see https://www.drupal.org/node/2859657.
-            if (is_numeric($entity_data['attributes'][$changed_public_name])) {
-              // The value is casted in integer for
-              // https://www.drupal.org/node/2837696.
-              $entity->setChangedTime((int) $entity_data['attributes'][$changed_public_name]);
-            }
-            elseif ($changed_datetime = \DateTime::createFromFormat(\DateTime::RFC3339, $entity_data['attributes'][$changed_public_name])) {
-              $entity->setChangedTime($changed_datetime->getTimestamp());
-            }
-          }
+          $this->setChangedTime($existing_translation, $resource_type, $entity_data);
           $existing_translation->save();
         }
       }
@@ -918,6 +888,42 @@ class JsonapiHelper implements JsonapiHelperInterface {
     }
 
     return FALSE;
+  }
+
+  /**
+   * Change the entity "changed" time.
+   *
+   * Because it could have been altered with relationship saved by example.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity to update.
+   * @param \Drupal\jsonapi\ResourceType\ResourceType $resource_type
+   *   The resource type related to the entity.
+   * @param array $entity_data
+   *   The JSON data.
+   */
+  protected function setChangedTime(ContentEntityInterface $entity, ResourceType $resource_type, array $entity_data) {
+    $changed_public_name = FALSE;
+    if ($resource_type->hasField('changed')) {
+      $changed_public_name = $resource_type->getPublicName('changed');
+    }
+
+    if (
+      $changed_public_name &&
+      !empty($entity_data['attributes'][$changed_public_name]) &&
+      method_exists($entity, 'setChangedTime')
+    ) {
+      // If the website is using backward compatible timestamps output.
+      // @see https://www.drupal.org/node/2859657.
+      if (is_numeric($entity_data['attributes'][$changed_public_name])) {
+        // The value is casted in integer for
+        // https://www.drupal.org/node/2837696.
+        $entity->setChangedTime((int) $entity_data['attributes'][$changed_public_name]);
+      }
+      elseif ($changed_datetime = \DateTime::createFromFormat(\DateTime::RFC3339, $entity_data['attributes'][$changed_public_name])) {
+        $entity->setChangedTime($changed_datetime->getTimestamp());
+      }
+    }
   }
 
 }

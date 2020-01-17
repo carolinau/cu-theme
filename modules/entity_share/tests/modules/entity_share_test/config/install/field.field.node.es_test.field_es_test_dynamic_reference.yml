@@ -152,4 +152,13 @@ settings:
   base_field_override:
     handler: 'default:base_field_override'
     handler_settings: {  }
+  jsonapi_resource_config:
+    handler: 'default:jsonapi_resource_config'
+    handler_settings: {  }
+  path_alias:
+    handler: 'default:path_alias'
+    handler_settings: {  }
+  metatag_defaults:
+    handler: 'default:metatag_defaults'
+    handler_settings: {  }
 field_type: dynamic_entity_reference

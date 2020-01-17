@@ -112,8 +112,8 @@ Supported:
   - date all day
   - date and time
  * Email
- * File (currently not tested automatically)
- * Image (currently not tested automatically)
+ * File
+ * Image
  * Link:
   - internal (with JSON:API Extras, see troubleshooting section)
   - external
@@ -121,14 +121,13 @@ Supported:
   - float
   - integer
   - text
- * Media: (currently not tested automatically)
+ * Media:
   - audio
   - image
   - file
   - remote video
   - video
- * Metatags (with JSON:API Extras, see troubleshooting section) (currently not
-   tested automatically)
+ * Metatags (with JSON:API Extras, see troubleshooting section)
  * Number:
   - decimal
   - float

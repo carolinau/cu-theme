@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.es_test.field_es_test_block
     - field.field.node.es_test.field_es_test_body
     - field.field.node.es_test.field_es_test_boolean
     - field.field.node.es_test.field_es_test_comments
@@ -20,6 +21,8 @@ dependencies:
     - field.field.node.es_test.field_es_test_list_float
     - field.field.node.es_test.field_es_test_list_integer
     - field.field.node.es_test.field_es_test_list_text
+    - field.field.node.es_test.field_es_test_media
+    - field.field.node.es_test.field_es_test_metatag
     - field.field.node.es_test.field_es_test_number_decimal
     - field.field.node.es_test.field_es_test_number_float
     - field.field.node.es_test.field_es_test_number_integer
@@ -45,6 +48,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_es_test_block: true
   field_es_test_body: true
   field_es_test_boolean: true
   field_es_test_comments: true
@@ -62,6 +66,8 @@ hidden:
   field_es_test_list_float: true
   field_es_test_list_integer: true
   field_es_test_list_text: true
+  field_es_test_media: true
+  field_es_test_metatag: true
   field_es_test_number_decimal: true
   field_es_test_number_float: true
   field_es_test_number_integer: true

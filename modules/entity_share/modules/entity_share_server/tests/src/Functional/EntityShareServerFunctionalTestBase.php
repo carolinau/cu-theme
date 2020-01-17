@@ -25,6 +25,11 @@ abstract class EntityShareServerFunctionalTestBase extends BrowserTestBase {
   ];
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'classy';
+
+  /**
    * A test user with administrative privileges.
    *
    * @var \Drupal\user\UserInterface

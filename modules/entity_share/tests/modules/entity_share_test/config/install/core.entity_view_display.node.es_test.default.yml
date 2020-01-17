@@ -21,6 +21,8 @@ dependencies:
     - field.field.node.es_test.field_es_test_list_float
     - field.field.node.es_test.field_es_test_list_integer
     - field.field.node.es_test.field_es_test_list_text
+    - field.field.node.es_test.field_es_test_media
+    - field.field.node.es_test.field_es_test_metatag
     - field.field.node.es_test.field_es_test_number_decimal
     - field.field.node.es_test.field_es_test_number_float
     - field.field.node.es_test.field_es_test_number_integer
@@ -43,6 +45,7 @@ dependencies:
     - file
     - image
     - link
+    - metatag
     - options
     - telephone
     - text
@@ -205,6 +208,22 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: list_default
+    region: content
+  field_es_test_media:
+    type: entity_reference_entity_view
+    weight: 31
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  field_es_test_metatag:
+    weight: 15
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
     region: content
   field_es_test_number_decimal:
     weight: 19

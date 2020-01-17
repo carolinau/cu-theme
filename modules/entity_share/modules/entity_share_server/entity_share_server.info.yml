@@ -10,7 +10,7 @@ dependencies:
   # The namespace of this dependency is not provided to be compatible with JSON:API 2.x and Core >= 8.7.x.
   - jsonapi
 
-# Information added by Drupal.org packaging script on 2019-11-18
-version: '8.x-2.0-alpha9'
+# Information added by Drupal.org packaging script on 2020-01-17
+version: '8.x-2.0-alpha10'
 project: 'entity_share'
-datestamp: 1574095226
+datestamp: 1579265890

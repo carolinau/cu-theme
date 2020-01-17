@@ -129,16 +129,16 @@ class PullForm extends FormBase {
    *   The module handler service.
    */
   public function __construct(
-      EntityTypeManagerInterface $entity_type_manager,
-      EntityDefinitionUpdateManagerInterface $entity_definition_update_manager,
-      RemoteManagerInterface $remote_manager,
-      JsonapiHelperInterface $jsonapi_helper,
-      RequestStack $request_stack,
-      LanguageManagerInterface $language_manager,
-      RequestServiceInterface $request_service,
-      RendererInterface $renderer,
-      ModuleHandlerInterface $module_handler
-    ) {
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityDefinitionUpdateManagerInterface $entity_definition_update_manager,
+    RemoteManagerInterface $remote_manager,
+    JsonapiHelperInterface $jsonapi_helper,
+    RequestStack $request_stack,
+    LanguageManagerInterface $language_manager,
+    RequestServiceInterface $request_service,
+    RendererInterface $renderer,
+    ModuleHandlerInterface $module_handler
+  ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityDefinitionUpdateManager = $entity_definition_update_manager;
     $this->remoteWebsites = $entity_type_manager
@@ -181,14 +181,25 @@ class PullForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $remote_options = $this->prepareRemoteOptions();
+    $remote_disabled = FALSE;
+    $remote_default_value = $this->query->get('remote');
+
+    // If only one option. Pre-select it and disable the select.
+    if (count($remote_options) == 1) {
+      $remote_disabled = TRUE;
+      $remote_default_value = key($remote_options);
+      $form_state->setValue('remote', $remote_default_value);
+    }
 
     $form['remote'] = [
       '#type' => 'select',
       '#title' => $this->t('Remote website'),
-      '#options' => $this->prepareRemoteOptions(),
-      '#default_value' => $this->query->get('remote'),
+      '#options' => $remote_options,
+      '#default_value' => $remote_default_value,
       '#empty_value' => '',
       '#required' => TRUE,
+      '#disabled' => $remote_disabled,
       '#ajax' => [
         'callback' => [get_class($this), 'buildAjaxChannelSelect'],
         'effect' => 'fade',
@@ -404,13 +415,25 @@ class PullForm extends FormBase {
     $selected_remote = $this->remoteWebsites[$selected_remote];
     $this->channelsInfos = $this->remoteManager->getChannelsInfos($selected_remote);
 
+    $channel_options = $this->getChannelOptions();
+    $channel_disabled = FALSE;
+    $channel_default_value = $this->query->get('channel');
+
+    // If only one channel. Pre-select it and disable the select.
+    if (count($channel_options) == 1) {
+      $channel_disabled = TRUE;
+      $channel_default_value = key($channel_options);
+      $form_state->setValue('channel', $channel_default_value);
+    }
+
     $form['channel_wrapper']['channel'] = [
       '#type' => 'select',
       '#title' => $this->t('Channel'),
-      '#options' => $this->getChannelOptions(),
-      '#default_value' => $this->query->get('channel'),
+      '#options' => $channel_options,
+      '#default_value' => $channel_default_value,
       '#empty_value' => '',
       '#required' => TRUE,
+      '#disabled' => $channel_disabled,
       '#ajax' => [
         'callback' => [get_class($this), 'buildAjaxEntitiesSelectTable'],
         'effect' => 'fade',
