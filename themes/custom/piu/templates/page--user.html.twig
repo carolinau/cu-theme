@@ -1,18 +1,28 @@
 {% set container = theme.settings.fluid_container ? 'container-fluid' : 'container' %}
+<header role="banner">
 <div class="secondary_navigation">
-<div class="container">
-	<div class="row">
-		<div class="col">
-		{# Secondary Navigation #}
-		{% if page.secondary_navigation %}
-		{% block secondary_navigation %}
-			{{ page.secondary_navigation }}
-		{% endblock %}
-		{% endif %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+			{# Secondary Navigation #}
+			{% if page.secondary_navigation %}
+			{% block secondary_navigation %}
+				{{ page.secondary_navigation }}
+			{% endblock %}
+			{% endif %}
+			</div>
+			<div class="col-md-4">
+			{# Multilingual #}
+			{% if page.multilingual %}
+			{% block multilingual %}
+				{{ page.multilingual }}
+			{% endblock %}
+			{% endif %}
+			</div>
 		</div>
 	</div>
 </div>
-</div>
+<div class="navbar-default" id="navbar">
 {# Navbar #}
 {% if page.navigation or page.navigation_collapsible %}
   {% block navbar %}
@@ -23,7 +33,6 @@
         theme.settings.navbar_position ? 'navbar-' ~ theme.settings.navbar_position|clean_class : container,
       ]
     %}
-    <header{{ navbar_attributes.addClass(navbar_classes) }} id="navbar" role="banner">
       {% if not navbar_attributes.hasClass(container) %}
         <div class="{{ container }}">
       {% endif %}
@@ -43,12 +52,13 @@
       {# Navigation (collapsible) #}
       {% if page.navigation_collapsible %}
         <div id="navbar-collapse" class="navbar-collapse collapse">
-          {{ page.navigation_collapsible }}
+        	{{ page.navigation_collapsible }}
+        </div>
+      		{% endif %}
+    		{% if not navbar_attributes.hasClass(container) %}
         </div>
       {% endif %}
-      {% if not navbar_attributes.hasClass(container) %}
-        </div>
-      {% endif %}
+      </div>
     </header>
   {% endblock %}
 {% endif %}
@@ -62,8 +72,7 @@
         {% endblock %}
   </div>
 {% endblock %}
-<footer role="contentinfo">
-	<div class="footer">
+<footer class="footer" role="contentinfo">
 	<div class="container">
 		<div class="row">
 		<div class="col-lg col-md-6">
@@ -87,7 +96,6 @@
 			  {% endblock %}
 			{% endif %}
 		</div>
-
 		<div class="col-lg col-md-6">
 			{% if page.footer_right %}
 			  {% block footer_right %}
@@ -96,15 +104,6 @@
 			{% endif %}
 		</div>
 		</div>
-		<div class="row">
-    <div class="col-lg footer-disclaimer">
-    {% if page.footer_disclaimer %}
-      {% block footer_disclaimer %}
-          {{ page.footer_disclaimer }}
-      {% endblock %}
-    {% endif %}
-    </div>
-    </div>
 	</div>
 </footer>
 {% if page.footer_bottom %}
@@ -114,7 +113,6 @@
 				<div class="row">
 				<div class="col-sm">
 					{{ page.footer_bottom }}
-<!-- Designed and developed by Ian K. McIlwraith, WSNC, 2019. -->
 				</div>
 				</div>
 			</div>
