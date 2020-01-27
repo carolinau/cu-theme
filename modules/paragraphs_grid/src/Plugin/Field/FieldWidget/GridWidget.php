@@ -116,8 +116,8 @@ class GridWidget extends WidgetBase implements ContainerFactoryPluginInterface {
    */
   public static function defaultSettings() {
     return [
-        'excluded_view_modes' => ['preview'],
-      ] + parent::defaultSettings();
+      'excluded_view_modes' => ['preview'],
+    ] + parent::defaultSettings();
   }
 
   /**

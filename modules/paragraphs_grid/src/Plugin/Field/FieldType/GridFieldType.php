@@ -72,7 +72,7 @@ class GridFieldType extends FieldItemBase {
    */
   protected function cellPropsOptions() {
     $options = [];
-    foreach ($this->gridConfig->get('cell-properties') as $key => $def) {
+    foreach ($this->gridConfig->get('cell-properties') as $def) {
       if ($def['optional']) {
         $options[$def['name']] = $def['label'];
       }

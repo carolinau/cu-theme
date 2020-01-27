@@ -5,9 +5,33 @@
  * Contains paragraphs_grid.module.
  */
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function paragraphs_grid_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.paragraphs_grid':
+      $text = file_get_contents(__DIR__ . '/README.md');
+      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
+        return '<pre>' . Html::escape($text) . '</pre>';
+      }
+      else {
+        // Use the Markdown filter to render the README.
+        $filter_manager = \Drupal::service('plugin.manager.filter');
+        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
+        $config = ['settings' => $settings];
+        $filter = $filter_manager->createInstance('markdown', $config);
+        return $filter->process($text, 'en');
+      }
+  }
+  return NULL;
+}
 
 /**
  * Implements hook_theme().
@@ -78,7 +102,7 @@ function paragraphs_grid_preprocess_field(&$variables) {
       $variables['row_attributes']->addClass($wrap_row['options']);
 
       // Set grid cell classes.
-      foreach ($variables['items'] as $key => &$item) {
+      foreach ($variables['items'] as &$item) {
         // Get cell fallback class.
         $fallback = $grid_config->get('cell-fallback') ?: '';
 
@@ -105,7 +129,7 @@ function paragraphs_grid_page_attachments(array &$page) {
   // Get module configuration.
   $module_config = \Drupal::config('paragraphs_grid.settings');
 
-  if($module_config->get('use_lib_admin_pages') || !\Drupal::service('router.admin_context')->isAdminRoute()) {
+  if ($module_config->get('use_lib_admin_pages') || !\Drupal::service('router.admin_context')->isAdminRoute()) {
 
     // Get configured grid-type-definition.
     $grid_type = $module_config->get('gridtype');

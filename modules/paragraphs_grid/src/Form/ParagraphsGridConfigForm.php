@@ -155,7 +155,7 @@ class ParagraphsGridConfigForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Load grid-CSS even on administration pages.'),
       '#description' => $this->t('Enable if grids are displayed on admin pages. Has no effect if the Option "%above" is disabled', [
-        '%above' => $use_css
+        '%above' => $use_css,
       ]),
       '#default_value' => $config->get('use_lib_admin_pages'),
     ];

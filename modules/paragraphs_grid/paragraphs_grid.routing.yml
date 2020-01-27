@@ -8,4 +8,3 @@ paragraphs_grid.paragraphs_grid_config_form:
     _permission: 'use paragraphs_grid config form'
   options:
     _admin_route: TRUE
-
