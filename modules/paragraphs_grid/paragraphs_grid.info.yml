@@ -7,7 +7,7 @@ package: Paragraphs
 dependencies:
 - paragraphs:paragraphs
 
-# Information added by Drupal.org packaging script on 2020-01-25
-version: '8.x-1.0-rc3'
+# Information added by Drupal.org packaging script on 2020-02-07
+version: '8.x-1.0'
 project: 'paragraphs_grid'
-datestamp: 1579966993
+datestamp: 1581088573

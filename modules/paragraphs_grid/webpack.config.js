@@ -22,12 +22,15 @@ module.exports = [{
               name: '../css/[name].css'
             }
           },
-          { loader: 'extract-loader' },
-          { loader: 'css-loader' },
+          {loader: 'extract-loader'},
+          {loader: 'css-loader'},
           {
             loader: 'postcss-loader',
             options: {
-              plugins: () => [autoprefixer()]
+              plugins: () => {
+                'use strict';
+                return [autoprefixer()];
+              }
             }
           },
           {
@@ -42,7 +45,7 @@ module.exports = [{
         test: /\.js$/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015'],
+          presets: ['env'],
           plugins: ['transform-object-assign']
         }
       }

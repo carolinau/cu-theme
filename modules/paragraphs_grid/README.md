@@ -1,5 +1,7 @@
-# Paragraphs Grid
+INTRODUCTION
+------------
 
+## Paragraphs Grid
 > With Paragraphs Grid, you can display multiple paragraph entities in a grid.
 Supports Out-Of-The-Box Bootstrap 3.0 and 4.0 and CSS grid from MDC (Material
 Design).
@@ -23,8 +25,13 @@ display port.
 * The configuration of the grid (breakpoints, number of columns, additional CSS
 classes, ...) can be adjusted via YAML files.
 
-## Installation and Configuration
-1. Download and install Paragraphs Grid
+INSTALLATION
+------------
+* Just download and install Paragraphs Grid as [described here](
+https://www.drupal.org/docs/8/extending-drupal-8/installing-drupal-8-modules).
+
+CONFIGURATION
+-------------
 2. In the menu you go to „Configuration > Content authoring > Paragraphs grid“
    (/admin/config/content/paragraphs_grid) and choose your grid system.
 3. Add a "Paragraphs Grid" field to all your paragraph types (Optional).
@@ -37,14 +44,17 @@ classes, ...) can be adjusted via YAML files.
 
 > [Drupal 8: Einführung in das Modul "Paragraphs Grid"][youtube]
 
-## Requirements
+REQUIREMENTS
+------------
 * [Paragraphs][paragraphs]
 
 
-## Recommended modules
+RECOMMENDED MODULES
+-------------------
 * [Media (in Core)][media]
 
-## MAINTAINERS
+MAINTAINERS
+-----------
 
 Current maintainer:
  * [Joachim Feltkamp (JFeltkamp)][jfeltkamp]

@@ -1,11 +1,12 @@
 paragraphs_grid.grid_widget:
   dependencies:
     - core/drupal
+    - core/jquery
   css:
     theme:
       css/grid_widget.css: {}
   js:
-    js/grid_widget.min.js: {}
+    js/grid_widget.js: {}
 
 paragraphs_grid.bootstrap3:
   css:
