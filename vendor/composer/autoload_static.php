@@ -4,11 +4,7 @@
 
 namespace Composer\Autoload;
 
-<<<<<<< HEAD
-class ComposerStaticInitf58dd9d2e64a825de7df7497c1354a33
-=======
 class ComposerStaticInitf0a76219c246ec6fe5f87782734a67c8
->>>>>>> pantheon-drops-8/master
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
