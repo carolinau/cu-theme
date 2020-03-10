@@ -15,7 +15,8 @@
 {% endif %}
 <div class="container">
 {% if node.field_hero.value == 0 %}
-<{{ attributes.removeClass('row') }}>
+<div {{ attributes.removeClass('row') }}>
+  {{ title_suffix.contextual_links }}
 
   {% if content.field_featured_image.0 is empty %}
   <div class="row">
