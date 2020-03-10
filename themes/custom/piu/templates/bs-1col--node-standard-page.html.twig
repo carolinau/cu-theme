@@ -1,3 +1,17 @@
+{% if node.field_hero.value == '1' %}
+<div{{ attributes.addClass(classes) }}>
+   <div class="hero-background" {% if content.field_featured_image['#items'].entity.uri.value %} style="background-image: url({{file_url(content.field_featured_image['#items'].entity.uri.value) }}); background-size: cover; background-position: top"{% endif %} >
+      <div class="container">
+           {% if content.field_teaser %}
+             <div class="hero-title">{{ content.field_teaser }}</div>
+           {% endif %}
+           {% if content.field_featured_button[0]['#url'] %}
+             <div><a href="{{ content.field_featured_button[0]['#url'] }}" class="btn btn-primary hero-button">{{ content.field_featured_button[0]['#title'] }}</a></div>
+            {% endif %}
+      </div>
+    </div>
+</div>
+{% elseif node.field_hero.value == '0' %}
 <div class="container">
 <{{ wrapper }}{{ attributes.removeClass('row') }}>
   {{ title_suffix.contextual_links }}
