@@ -11,8 +11,9 @@
       </div>
     </div>
 </div>
-{% elseif content.field_hero == 0 %}
+{% endif %}
 <div class="container">
+{% if content.field_hero == 0 %}
 <{{ attributes.removeClass('row') }}>
   {{ title_suffix.contextual_links }}
 
@@ -75,4 +76,4 @@
   </div>
   {% endif %}
 
-</div>
+  </div>
