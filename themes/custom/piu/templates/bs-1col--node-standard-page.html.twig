@@ -1,3 +1,4 @@
+<{{ wrapper }}>
 {% if content.field_hero == 1 %}
 <div{{ attributes.addClass(classes) }}>
    <div class="hero-background" {% if content.field_featured_image['#items'].entity.uri.value %} style="background-image: url({{file_url(content.field_featured_image['#items'].entity.uri.value) }}); background-size: cover; background-position: top"{% endif %} >
@@ -13,7 +14,7 @@
 </div>
 {% elseif content.field_hero == 0 %}
 <div class="container">
-<{{ wrapper }}{{ attributes.removeClass('row') }}>
+<{{ attributes.removeClass('row') }}>
   {{ title_suffix.contextual_links }}
 
   {% if content.field_featured_image.0 is empty %}
@@ -75,5 +76,5 @@
   </div>
   {% endif %}
 
-</{{ wrapper }}>
 </div>
+</{{ wrapper }}>
