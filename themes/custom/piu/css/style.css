@@ -427,7 +427,7 @@ h3.cta-title {
 .colored-cta-title, .colored-cta-content, .cta-title, .cta-content {
 	text-align: center;
 }
-.colored-cta > .field--name-field-button-link, .cta > .field--name-field-button-link {
+.colored-cta > .field--type-link, .cta > .field--name-field-button-link, .colored-cta-button {
 	padding-top: 20px;
 	text-align: center;
 }
@@ -435,17 +435,16 @@ h3.cta-title {
 .content-spacer {
 	padding: 3vh;
 }
-/* Featured Image Header */
 .fh-section {
-	margin-top: 3%;
+	margin: 3% 0;
 }
-.paragraph--type-featured-image-header > .fh-right {
+.fh-right {
 	margin: auto 60px auto -60px;
 	background-color: var(--primary-blue);
 	padding: 40px;
 	color: white;
 }
-.paragraph--type-featured-image-header > .fh-left {
+.fh-left {
 	margin: auto 0;
 }
 .fh-header {
@@ -459,10 +458,11 @@ h3.cta-title {
 	font-size: 1.2em;
 }
 @media only screen and (max-width: 991px) {
-.paragraph--type-featured-image-header > .fh-right {
-	margin: 15px 15px 15px 0;
-	padding: 30px;
-}}
+	.fh-right {
+		margin: 15px 15px 15px 0;
+		padding: 30px;
+	}
+}
 /* Resources Views */
 .resource-title {
 	font-size: 1.1em;
@@ -512,15 +512,20 @@ h3.cta-title {
   border-bottom: 3px solid var(--primary-blue);
 }
 /* Horizontal Rule */
-.bottom-divider:after, .bottom-divider-c {
+.bottom-divider:after {
   content: "";
   display: block;
   width: 7%;
-	padding: 10px 0 12px;
-  border-bottom: 3px solid var(--primary-blue);
+  padding: 10px 0 12px 0;
+  border-bottom: 3px solid var(--accent-maroon);
 }
 .bottom-divider-c:after {
+  content: "";
+  display: block;
   margin: 0 auto;
+  width: 7%;
+  padding: 10px 0 12px 0;
+  border-bottom: 3px solid var(--accent-maroon);
 }
 .footer-divider:after {
 	content: "";

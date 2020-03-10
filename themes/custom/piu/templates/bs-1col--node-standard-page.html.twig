@@ -1,0 +1,65 @@
+<div class="container">
+<{{ wrapper }}{{ attributes.removeClass('row') }}>
+  {{ title_suffix.contextual_links }}
+
+  {% if content.field_featured_image.0 is empty %}
+  <div class="row">
+    <div class="col-sm">
+      <h1 class="bottom-divider">{{ node.label }}</h1>
+    </div>
+  </div>
+  {% else %}
+  <div class="fh-section">
+  <div class="row">
+    <div class="col-md-12 col-lg-8 fh-left">
+      <div class="fh-image">{{ content.field_featured_image }}</div>
+    </div>
+
+    <div class="col-md-12 col-lg fh-right">
+      <h1 class="fh-header">{{ node.label }}</h1>
+    {% if content.field_teaser %}
+      <div class="fh-teaser">{{ content.field_teaser }}</div>
+    {% endif %}
+    {% if content.field_featured_button[0]['#url'] %}
+      <div><a href="{{ content.field_featured_button[0]['#url'] }}" class="btn btn-bw btn-margin">{{ content.field_featured_button[0]['#title'] }}</a></div>
+    {% endif %}
+    </div>
+  </div>
+  </div>
+
+  {% endif %}
+
+  {% if content.body %}
+    <div class="row">
+      <div class="col-sm">
+        {{ content.body }}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if content.field_block %}
+    {{ content.field_block }}
+  {% endif %}
+
+  {% if content.field_file %}
+    {{ content.field_file }}
+  {% endif %}
+
+  {% if content.field_colored_cta_title.0|length > 1 %}
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="colored-cta">
+   		  <h3 class="colored-cta-title">{{ content.field_colored_cta_title }}</h3>
+  		  <div class="colored-cta-content">{{ content.field_colored_cta_content }}</div>
+        {% if content.field_colored_cta_button[0]['#title']|length > 1 %}
+          <div class="colored-cta-button">
+            <a href="{{ content.field_colored_cta_button[0]['#url'] }}" class="btn btn-primary btn-clear">{{ content.field_colored_cta_button[0]['#title'] }}</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</{{ wrapper }}>
+</div>
