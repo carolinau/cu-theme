@@ -55,6 +55,31 @@
     </div>
   {% endif %}
 
+{% if content.field_image_cta_title_1.0|length > 1 and content.field_image_cta_title_2.0|length > 1 %}
+  {% set columns = 'col-md-6' %}
+  {% set row = 'row' %}
+  {% else %}
+  {% set columns = 'col-md-12' %}
+{% endif %}
+<div{{ attributes.addClass(row) }}>
+  {% if content.field_image_cta_title_1.0|length > 1 %}
+  <div{{ attributes.addClass(classes, columns) }}>
+    <div class="image-cta" style="background-image: url({{file_url(content.field_image_cta_background_1['#items'].entity.uri.value) }}); background-size: cover; background-position: center">
+      <div class="image-cta-title">{{ content.field_image_cta_title_1 }}</div>
+      <div class="image-cta-button"><a href="{{ content.field_image_cta_button_1[0]['#url'] }}" class="btn btn-primary">{{ content.field_image_cta_button_1[0]['#title'] }}</a></div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if content.field_image_cta_title_2.0|length > 1 %}
+  <div{{ attributes.addClass(classes, columns) }}>
+    <div class="image-cta" style="background-image: url({{file_url(content.field_image_cta_background_2['#items'].entity.uri.value) }}); background-size: cover; background-position: center">
+      <div class="image-cta-title">{{ content.field_image_cta_title_2 }}</div>
+      <div class="image-cta-button"><a href="{{ content.field_image_cta_button_2[0]['#url'] }}" class="btn btn-primary">{{ content.field_image_cta_button_2[0]['#title'] }}</a></div>
+    </div>
+  </div>
+  {% endif %}
+</div>
   {% if content.field_block %}
     {{ content.field_block }}
   {% endif %}
