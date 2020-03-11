@@ -80,6 +80,14 @@
   </div>
   {% endif %}
 </div>
+
+  {% if content.field_video_url %}
+    <div{{ attributes.addClass(classes) }}>
+	   <h2 class="video-title bottom-divider-c">{{ content.field_title }}</h2>
+	   <div class="video-embed">{{ content.field_video_url }}</div>
+    </div>
+  {% endif %}
+
   {% if content.field_block %}
     {{ content.field_block }}
   {% endif %}
