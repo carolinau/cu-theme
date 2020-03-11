@@ -387,13 +387,16 @@ header ul.menu {
 	box-shadow: var(--section-box-shadow-h);
 }
 .image-cta-title {
-	padding: 13em 0 0 2em;
+	padding: 13em 2em 0;
 	font-weight: 600;
 	color: #fff;
 	text-shadow: var(--text-shadow);
 }
+.image-cta-title h4 {
+	line-height: 1.4em;
+}
 .image-cta-button {
-	padding: 0 0 1.5em 2em;
+	padding: 0.6em 0 1.5em 2em;
 }
 .image-cta {
 	margin: 0 0 15px;
