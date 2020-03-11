@@ -1,7 +1,7 @@
 <{{ wrapper }}>
 {% if node.field_hero.value == 1 %}
 <div{{ attributes.addClass(classes) }}>
-   <div class="hero-background" {% if content.field_featured_image['#items'].entity.uri.value %} style="background-image: url({{file_url(content.field_featured_image['#items'].entity.uri.value) }}); background-size: cover; background-position: top; width: 100%"{% endif %} >
+   <div class="hero-background" {% if content.field_featured_image['#items'].entity.uri.value %} style="background-image: url({{file_url(content.field_featured_image['#items'].entity.uri.value) }}); background-size: cover; background-position: center; width: 100%"{% endif %} >
       <div class="container">
            <h1 class="hero-title">{{ node.label }}</h1>
            {% if content.field_teaser %}
@@ -81,8 +81,8 @@
   {% endif %}
 </div>
 
-  {% if content.field_video_url|length > 1 %}
-    <div{{ attributes.addClass(classes) }}>
+  {% if content.field_video_title|length > 1 %}
+    <div{{ attributes.addClass(classes, 'row') }}>
 	   <h2 class="video-title bottom-divider-c">{{ content.field_video_title }}</h2>
 	   <div class="video-embed">{{ content.field_video_url }}</div>
     </div>
