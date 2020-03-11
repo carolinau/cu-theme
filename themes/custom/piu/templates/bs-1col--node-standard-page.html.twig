@@ -81,9 +81,9 @@
   {% endif %}
 </div>
 
-  {% if content.field_video_url %}
+  {% if content.field_video_url|length > 1 %}
     <div{{ attributes.addClass(classes) }}>
-	   <h2 class="video-title bottom-divider-c">{{ content.field_title }}</h2>
+	   <h2 class="video-title bottom-divider-c">{{ content.field_video_title }}</h2>
 	   <div class="video-embed">{{ content.field_video_url }}</div>
     </div>
   {% endif %}
