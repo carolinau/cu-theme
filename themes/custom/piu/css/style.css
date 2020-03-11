@@ -351,12 +351,6 @@ header ul.menu {
 		text-align: center;
 	}
 }
-/* Home Hero Image */
-.hero-home-title {
-	text-align: right;
-	color: #fff;
-	text-shadow: var(--text-shadow);
-}
 /* Hero Image */
 .hero-background {
 	padding: 20% 0 3% 0;
@@ -366,11 +360,10 @@ header ul.menu {
 .hero-title {
 	color: #fff;
 	text-shadow: var(--text-shadow);
-	padding:
 }
 @media only screen and (max-width: 575px) {
 	.hero-title {
-		padding: 16px 0 0;
+		padding: 0 15px;
 	}
 }
 /* Content */
