@@ -82,10 +82,11 @@
 </div>
 
   {% if content.field_video_title|length > 1 %}
-    <div{{ attributes.addClass(classes, 'row') }}>
+    <div{{ attributes.addClass('row') }}>
+    <div{{ attributes.addClass('col-md-12') }}>
 	   <h2 class="video-title bottom-divider-c">{{ content.field_video_title }}</h2>
 	   <div class="video-embed">{{ content.field_video_url }}</div>
-    </div>
+   </div></div>
   {% endif %}
 
   {% if content.field_block %}
