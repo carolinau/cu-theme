@@ -338,7 +338,7 @@ header ul.menu {
 	margin: 5px 0;
 	text-decoration: none !important;
 }
-.block-system-branding-block {
+.block-system-branding-block, .branding-name-p {
 	padding: 5px 0;
 }
 @media only screen and (max-width: 389px) {
@@ -347,7 +347,7 @@ header ul.menu {
 	}
 }
 @media only screen and (max-width: 767px) {
-	.region-secondary-navigation > .block-system-branding-block, .region-navigation > .block-system-branding-block {
+	.region-secondary-navigation > .block-system-branding-block, .region-navigation > .block-system-branding-block, .branding-name-p {
 		text-align: center;
 	}
 }
@@ -366,9 +366,10 @@ header ul.menu {
 .hero-title {
 	color: #fff;
 	text-shadow: var(--text-shadow);
+	padding:
 }
-@media only screen and (max-width: 388px) {
-	.hero-title, .hero-home-title {
+@media only screen and (max-width: 575px) {
+	.hero-title {
 		padding: 16px 0 0;
 	}
 }
