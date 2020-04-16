@@ -17,6 +17,7 @@ regions:
   footer_center: 'Footer Center'
   footer_right: 'Footer Right'
   footer_bottom: 'Footer Bottom'
+  social_media_links: 'Social Media Links'
   page_top: 'Page top'
   page_bottom: 'Page bottom'
 

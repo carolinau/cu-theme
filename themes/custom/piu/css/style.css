@@ -73,6 +73,42 @@ body.navbar-is-static-top {
 	padding: 0 0 0 20px;
 	font-size: 1.1em;
 }
+.facebook-icon {
+	border: none;
+	background-image: url('/sites/default/files/icons/facebook.svg');
+	background-size: 0.7em;
+	background-repeat: no-repeat;
+	background-position: left;
+	padding: 11px;
+	font-size: 1.2em;
+}
+.instagram-icon {
+	border: none;
+	background-image: url('/sites/default/files/icons/instagram.svg');
+	background-size: 1.2em;
+	background-repeat: no-repeat;
+	background-position: left;
+	padding: 11px;
+	font-size: 1.2em;
+}
+.twitter-icon {
+	border: none;
+	background-image: url('/sites/default/files/icons/twitter.svg');
+	background-size: 1.2em;
+	background-repeat: no-repeat;
+	background-position: left;
+	padding: 11px;
+	font-size: 1.2em;
+}
+.facebook-icon:hover, .instagram-icon:hover, .twitter-icon:hover {
+	filter: brightness(120%);
+	transition: all 0.5s;
+}
+.social-media-network {
+	display: inline-block;
+	float: right;
+	margin: 0 10px;
+}
 /* Buttons */
 .btn {
 	font-family: 'Lato', sans-serif;
