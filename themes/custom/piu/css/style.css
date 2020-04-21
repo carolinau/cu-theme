@@ -597,36 +597,43 @@ h3.cta-title {
 	margin: 20px 0 0;
 }
 /* Faculty and Staff Display */
-.fs-row {
+.fs-row:not(:last-child) {
 	padding: 15px 0;
 	border-bottom: 1px solid var(--dark-gray);
 }
+.fs-row:last-child {
+	padding: 15px 0;
+}
 .fs-position {
 	font-size: 1.1em;
-	margin: -5px 0 10px;
+	margin: -5px 0 10px 0;
 }
 .fsd-position, .fs-school {
 	font-size: 1.1em;
 }
-.fsd-email, .fs-body {
-	margin: 20px 0 0;
+.fsd-email {
+	margin-top: 20px;
 }
-.fs-image > a > .img-responsive {
+.fs-image > a > .img-responsive, .fsd-image > .img-responsive {
 	border-radius: 3px;
+	float: right;
+}
+.fs-body {
+	margin-top: 20px;
 }
 .fsd-image {
-	margin: 25px 0 0;
-}
-.fsd-image > .img-responsive {
-	border-radius: 3px;
+	margin-top: 25px;
 }
 @media only screen and (max-width: 767px) {
+	.fs-image {
+		margin-top: 10px;
+	}
 	.fsd-image > .img-responsive {
 		display: block;
 		margin: 0 auto;
 	}
-	.fs-image {
-		margin: 10px 0 0;
+	.fs-image > a > .img-responsive, .fsd-image > .img-responsive {
+		float: left;
 	}
 }
 /* Program Display */
