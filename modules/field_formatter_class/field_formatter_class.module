@@ -4,9 +4,13 @@
  * @file
  * Provides custom HTML class settings for field formatters.
  */
+
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Component\Utility\Xss;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Field\FormatterInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_field_formatter_settings_summary_alter().
@@ -16,7 +20,7 @@ function field_formatter_class_field_formatter_settings_summary_alter(&$summary,
   $setting = $context['formatter']->getThirdPartySetting('field_formatter_class', 'class');
 
   if (!empty($setting)) {
-    $summary[] = t('Class: @class', array('@class' => Xss::filter($setting, array())));
+    $summary[] = t('Class: @class', ['@class' => Xss::filter($setting, [])]);
   }
 }
 
@@ -25,13 +29,16 @@ function field_formatter_class_field_formatter_settings_summary_alter(&$summary,
  *
  * Adds a 'class' textfield to all formatters.
  */
-function field_formatter_class_field_formatter_third_party_settings_form(\Drupal\Core\Field\FormatterInterface $plugin, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, $view_mode, $form, \Drupal\Core\Form\FormStateInterface $form_state) {
-
-  $element['class'] = array(
+function field_formatter_class_field_formatter_third_party_settings_form(FormatterInterface $plugin, FieldDefinitionInterface $field_definition, $view_mode, $form, FormStateInterface $form_state) {
+  $element['class'] = [
     '#type' => 'textfield',
     '#title' => t('Field Formatter Class'),
     '#default_value' => $plugin->getThirdPartySetting('field_formatter_class', 'class'),
-  );
+  ];
+  $element['token_help'] = [
+    '#theme' => 'token_tree_link',
+    '#token_types' => [$field_definition->getTargetEntityTypeId()],
+  ];
   return $element;
 }
 
@@ -44,9 +51,9 @@ function field_formatter_class_field_formatter_third_party_settings_form(\Drupal
 function field_formatter_class_preprocess_field(&$variables) {
 
   // Get a few convenient handles.
-  $entity      = $variables['element']['#object'];
-  $field_name  = $variables['element']['#field_name'];
-  $view_mode   = $variables['element']['#view_mode'];
+  $entity = $variables['element']['#object'];
+  $field_name = $variables['element']['#field_name'];
+  $view_mode = $variables['element']['#view_mode'];
 
   // Drill down to field formatter settings.
   $render_display = EntityViewDisplay::collectRenderDisplay($entity, $view_mode);
@@ -54,6 +61,15 @@ function field_formatter_class_preprocess_field(&$variables) {
 
   // Add class for whole field.
   if (isset($field_display['third_party_settings']['field_formatter_class'])) {
-    $variables['attributes']['class'][] = Html::escape($field_display['third_party_settings']['field_formatter_class']['class']);
+    $class = $field_display['third_party_settings']['field_formatter_class']['class'];
+    /** @var \Drupal\Core\Utility\Token $token */
+    $token = \Drupal::service('token');
+    /** @var \Drupal\Core\Entity\EntityInterface $object */
+    $object = $variables['element']['#object'];
+    $class = $token->replace($class, [$object->getEntityTypeId() => $object], ['clear' => true]);
+    $class = explode(' ', $class);
+    foreach ($class as $thisClass) {
+      $variables['attributes']['class'][] = Html::cleanCssIdentifier($thisClass);
+    }
   }
 }
