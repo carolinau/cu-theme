@@ -16,7 +16,7 @@
             "role": "maintainer"
         }
     ],
-    "support": [
+    "support": {
         "issues": "https://www.drupal.org/project/issues/field_formatter_class"
-    ]
+    }
 }
