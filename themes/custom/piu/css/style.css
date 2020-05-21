@@ -5,7 +5,7 @@
 	--dark-gray: #70747c;
 	--light-gray: #dfe3eb;
 	--accent-maroon: #4F0923;
-	--section-box-shadow: 0 0 50px 20px rgba(50, 50, 50,.15);
+	--section-box-shadow: 0 0 40px 20px rgba(50, 50, 50,.15);
 	--section-box-shadow-h: 0 0 50px 20px rgba(50, 50, 50,.2);
 	--button-box-shadow: 5px 5px 10px 1px rgba(50, 50, 50,.08);
 	--button-box-shadow-h: 5px 5px 10px 1px rgba(50, 50, 50,.12);
@@ -586,7 +586,6 @@ h3.cta-title {
 }
 .video-embed {
 	box-shadow: var(--section-box-shadow);
-	margin: 2% 0 5%;
 }
 /* File Display */
 .field--name-field-file {
@@ -594,7 +593,7 @@ h3.cta-title {
 }
 /* Course Videos */
 .field--name-field-video {
-	margin: 20px 0 0;
+	margin: 2% 0 5%;
 }
 /* Faculty and Staff Display */
 .fs-row:not(:last-child) {
