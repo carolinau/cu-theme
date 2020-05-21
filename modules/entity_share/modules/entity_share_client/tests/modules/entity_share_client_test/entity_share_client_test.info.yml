@@ -1,12 +1,11 @@
 name: 'Entity share client test'
 description: 'Provides code example to test custom development.'
 type: module
-core: 8.x
 package: Testing
 dependencies:
   - entity_share:entity_share_client
 
-# Information added by Drupal.org packaging script on 2020-01-17
-version: '8.x-2.0-alpha10'
+# Information added by Drupal.org packaging script on 2020-05-20
+version: '8.x-2.0-alpha11'
 project: 'entity_share'
-datestamp: 1579265890
+datestamp: 1589988223

@@ -23,11 +23,9 @@ function entity_share_async_form_entity_share_client_pull_form_alter(&$form, For
   // Add buttons.
   if (isset($form['channel_wrapper']['entities_wrapper']['actions_top'])) {
     $form['channel_wrapper']['entities_wrapper']['actions_top']['async'] = $async_button;
-    $form['channel_wrapper']['entities_wrapper']['actions_top']['synchronize']['#submit'][] = '_entity_share_async_sync_form_submit';
   }
   if (isset($form['channel_wrapper']['entities_wrapper']['actions_bottom'])) {
     $form['channel_wrapper']['entities_wrapper']['actions_bottom']['async'] = $async_button;
-    $form['channel_wrapper']['entities_wrapper']['actions_bottom']['synchronize']['#submit'][] = '_entity_share_async_sync_form_submit';
   }
 
   // Alter the entities table select.

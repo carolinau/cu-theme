@@ -17,10 +17,6 @@ build:
       phpstan:
         halt-on-fail: false
     testing:
-      container_command:
-        commands:
-          - "cd ${SOURCE_DIR}/modules/contrib/jsonapi_extras && sudo -u www-data curl https://www.drupal.org/files/issues/2019-12-16/3101345-3_1.patch --output '3101345-3_1.patch' && sudo -u www-data patch -p1 < 3101345-3_1.patch"
-        halt-on-fail: true
       # run_tests task is executed several times in order of performance speeds.
       # halt-on-fail can be set on the run_tests tasks in order to fail fast.
       # suppress-deprecations is false in order to be alerted to usages of

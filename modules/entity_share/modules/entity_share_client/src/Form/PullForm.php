@@ -15,6 +15,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\entity_share\EntityShareUtility;
@@ -107,6 +108,13 @@ class PullForm extends FormBase {
   protected $moduleHandler;
 
   /**
+   * The pager manager service.
+   *
+   * @var \Drupal\Core\Pager\PagerManagerInterface
+   */
+  protected $pagerManager;
+
+  /**
    * Constructs a ContentEntityForm object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -127,6 +135,8 @@ class PullForm extends FormBase {
    *   The renderer service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
+   * @param \Drupal\Core\Pager\PagerManagerInterface $pager_manager
+   *   The pager manager service.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -137,7 +147,8 @@ class PullForm extends FormBase {
     LanguageManagerInterface $language_manager,
     RequestServiceInterface $request_service,
     RendererInterface $renderer,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    PagerManagerInterface $pager_manager
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityDefinitionUpdateManager = $entity_definition_update_manager;
@@ -151,6 +162,7 @@ class PullForm extends FormBase {
     $this->requestService = $request_service;
     $this->renderer = $renderer;
     $this->moduleHandler = $module_handler;
+    $this->pagerManager = $pager_manager;
   }
 
   /**
@@ -166,7 +178,8 @@ class PullForm extends FormBase {
       $container->get('language_manager'),
       $container->get('entity_share_client.request'),
       $container->get('renderer'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('pager.manager')
     );
   }
 
@@ -591,7 +604,7 @@ class PullForm extends FormBase {
 
     // Full pager.
     if (isset($json['meta']['count'])) {
-      pager_default_initialize($json['meta']['count'], 50);
+      $this->pagerManager->createPager($json['meta']['count'], 50);
       $form['channel_wrapper']['entities_wrapper']['pager'] = [
         '#type' => 'pager',
         '#route_name' => 'entity_share_client.admin_content_pull_form',

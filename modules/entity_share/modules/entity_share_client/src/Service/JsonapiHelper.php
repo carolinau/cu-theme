@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -179,6 +180,13 @@ class JsonapiHelper implements JsonapiHelperInterface {
   protected $importedEntities;
 
   /**
+   * The file system.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * JsonapiHelper constructor.
    *
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
@@ -209,6 +217,8 @@ class JsonapiHelper implements JsonapiHelperInterface {
    *   The state information service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The file system.
    */
   public function __construct(
     SerializerInterface $serializer,
@@ -224,7 +234,8 @@ class JsonapiHelper implements JsonapiHelperInterface {
     MessengerInterface $messenger,
     LoggerInterface $logger,
     StateInformationInterface $state_information,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    FileSystemInterface $fileSystem
   ) {
     $this->jsonapiDocumentTopLevelNormalizer = $jsonapi_document_top_level_normalizer;
     $this->jsonapiDocumentTopLevelNormalizer->setSerializer($serializer);
@@ -241,6 +252,7 @@ class JsonapiHelper implements JsonapiHelperInterface {
     $this->logger = $logger;
     $this->stateInformation = $state_information;
     $this->moduleHandler = $module_handler;
+    $this->fileSystem = $fileSystem;
     $this->importedEntities = [];
   }
 
@@ -369,7 +381,7 @@ class JsonapiHelper implements JsonapiHelperInterface {
       ];
 
       // Create the destination folder.
-      if (file_prepare_directory($directory_uri, FILE_CREATE_DIRECTORY)) {
+      if ($this->fileSystem->prepareDirectory($directory_uri, FileSystemInterface::CREATE_DIRECTORY)) {
         try {
           $response = $this->requestService->request($this->getFileHttpClient(), 'GET', $remote_url);
           $file_content = (string) $response->getBody();
@@ -581,10 +593,14 @@ class JsonapiHelper implements JsonapiHelperInterface {
       if (!empty($data['attributes'][$changed_public_name])) {
         if (is_numeric($data['attributes'][$changed_public_name])) {
           $remote_changed_date = DrupalDateTime::createFromTimestamp($data['attributes'][$changed_public_name]);
-          $remote_changed_info = $remote_changed_date->format(self::CHANGED_FORMAT);
+          $remote_changed_info = $remote_changed_date->format(self::CHANGED_FORMAT, [
+            'timezone' => date_default_timezone_get(),
+          ]);
         }
         elseif ($remote_changed_date = DrupalDateTime::createFromFormat(\DateTime::RFC3339, $data['attributes'][$changed_public_name])) {
-          $remote_changed_info = $remote_changed_date->format(self::CHANGED_FORMAT);
+          $remote_changed_info = $remote_changed_date->format(self::CHANGED_FORMAT, [
+            'timezone' => date_default_timezone_get(),
+          ]);
         }
       }
     }
