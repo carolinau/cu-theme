@@ -89,18 +89,7 @@ bs_2col_bricked:
       label: 'Bottom'
       classes:
         - col-sm-12
-    end_left:
-      label: 'End Left'
-      classes:
-        - col-md-4
-    end_center:
-      label: 'End Center'
-      classes:
-        - col-md-4
-    end_right:
-      label: 'End Right'
-      classes:
-        - col-md-4
+
 # Two column stacked.
 bs_2col_stacked:
   label: 'Two column stacked'
