@@ -216,13 +216,12 @@ class CdnProvider extends CdnProviderBase {
    * @todo Import functionality is deprecated, remove in a future release.
    */
   protected function importProviderData(Element $group, FormStateInterface $form_state) {
-    $fileSystem = Bootstrap::fileSystem();
     if ($form_state->getValue('clicked_button') === t('Save provider data')->render()) {
       $provider_path = ProviderManager::FILE_PATH;
 
       // FILE_CREATE_DIRECTORY = 1 | FILE_MODIFY_PERMISSIONS = 2.
       $options = 1 | 2;
-      if ($fileSystem) {
+      if ($fileSystem = Bootstrap::fileSystem('prepareDirectory')) {
         $fileSystem->prepareDirectory($provider_path, $options);
       }
       else {
@@ -235,7 +234,7 @@ class CdnProvider extends CdnProviderBase {
       if ($import_data = $form_state->getValue('cdn_provider_import_data', FALSE)) {
         // FILE_EXISTS_REPLACE = 1.
         $replace = 1;
-        if ($fileSystem) {
+        if ($fileSystem = Bootstrap::fileSystem('saveData')) {
           $fileSystem->saveData($import_data, $file, $replace);
         }
         else {
@@ -243,7 +242,7 @@ class CdnProvider extends CdnProviderBase {
         }
       }
       elseif ($file && file_exists($file)) {
-        if ($fileSystem) {
+        if ($fileSystem = Bootstrap::fileSystem('delete')) {
           $fileSystem->delete($file);
         }
         else {

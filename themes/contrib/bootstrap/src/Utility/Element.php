@@ -19,15 +19,6 @@ use Drupal\Core\Render\Element as CoreElement;
 class Element extends DrupalAttributes {
 
   /**
-   * A list of property names whose values should be treated as strings.
-   *
-   * @var array
-   *
-   * @see \Drupal\bootstrap\Utility\Element::isStringProperty
-   */
-  protected static $propertyStrings;
-
-  /**
    * The current state of the form.
    *
    * @var \Drupal\Core\Form\FormStateInterface
@@ -162,34 +153,24 @@ class Element extends DrupalAttributes {
    *   The name of the property to set.
    * @param mixed $value
    *   The value of the property to set.
-   * @param bool $forceString
-   *   Optional. Forces the value to be appended as a string. By default, this
-   *   is automatically determined based on the property name provided. Manually
-   *   passing TRUE or FALSE will override any automatic determination.
    *
    * @return static
-   *
-   * @see \Drupal\bootstrap\Utility\Element::isStringProperty
    */
-  public function appendProperty($name, $value, $forceString = NULL) {
+  public function appendProperty($name, $value) {
     $property = &$this->getProperty($name);
-    $element = Element::create($value);
-
-    if (!isset($forceString)) {
-      $forceString = static::isStringProperty($name);
-    }
+    $value = $value instanceof Element ? $value->getArray() : $value;
 
     // If property isn't set, just set it.
     if (!isset($property)) {
-      $property = $forceString ? (string) $element->renderPlain() : $element->getArray();
+      $property = $value;
       return $this;
     }
 
-    if (!$forceString && is_array($property)) {
-      $property[] = $element->getArray();
+    if (is_array($property)) {
+      $property[] = Element::create($value)->getArray();
     }
     else {
-      $property = Element::create($property)->renderPlain() . $element->renderPlain();
+      $property .= (string) $value;
     }
 
     return $this;
@@ -502,40 +483,6 @@ class Element extends DrupalAttributes {
   }
 
   /**
-   * Checks whether a property's value should always be treated as a string.
-   *
-   * This is primarily used in cases where the value of the property in
-   * question is only supported as an already rendered string and not a render
-   * array (i.e. prefix/suffix) due to the limitations of upstream (core) code.
-   * It should not be relied on as a way to "easily convert" properties to
-   * strings to circumvent supporting OOP code.
-   *
-   * @param string $name
-   *   The property name to check.
-   *
-   * @return bool
-   *   TRUE or FALSE
-   *
-   * @see hook_element_string_properties_alter
-   * @see \Drupal\bootstrap\Utility\Element::appendProperty
-   * @see \Drupal\bootstrap\Utility\Element::prependProperty
-   */
-  public static function isStringProperty($name) {
-    if (!isset(static::$propertyStrings)) {
-      $cache = Bootstrap::getTheme()->getCache('element_string_properties');
-      if (!(static::$propertyStrings = $cache->getAll())) {
-        $properties = ['field_prefix', 'field_suffix', 'prefix', 'suffix'];
-        \Drupal::theme()->alter('bootstrap_element_string_properties', $properties);
-        static::$propertyStrings = array_map(function ($property) {
-          return $property[0] === '#' ? substr($property, 1) : $property;
-        }, $properties);
-        $cache->setMultiple(static::$propertyStrings);
-      }
-    }
-    return in_array($name[0] === '#' ? substr($name, 1) : $name, static::$propertyStrings, TRUE);
-  }
-
-  /**
    * Checks if the element is a specific type of element.
    *
    * @param string|array $type
@@ -583,34 +530,24 @@ class Element extends DrupalAttributes {
    *   The name of the property to set.
    * @param mixed $value
    *   The value of the property to set.
-   * @param bool $forceString
-   *   Optional. Forces the value to be appended as a string. By default, this
-   *   is automatically determined based on the property name provided. Manually
-   *   passing TRUE or FALSE will override any automatic determination.
    *
    * @return static
-   *
-   * @see \Drupal\bootstrap\Utility\Element::isStringProperty
    */
-  public function prependProperty($name, $value, $forceString = NULL) {
+  public function prependProperty($name, $value) {
     $property = &$this->getProperty($name);
-    $element = Element::create($value);
-
-    if (!isset($forceString)) {
-      $forceString = static::isStringProperty($name);
-    }
+    $value = $value instanceof Element ? $value->getArray() : $value;
 
     // If property isn't set, just set it.
     if (!isset($property)) {
-      $property = $forceString ? (string) $element->renderPlain() : $element->getArray();
+      $property = $value;
       return $this;
     }
 
-    if (!$forceString && is_array($property)) {
-      array_unshift($property, $element->getArray());
+    if (is_array($property)) {
+      array_unshift($property, Element::create($value)->getArray());
     }
     else {
-      $property = $element->renderPlain() . Element::create($property)->renderPlain();
+      $property = (string) $value . (string) $property;
     }
 
     return $this;
@@ -793,26 +730,11 @@ class Element extends DrupalAttributes {
    *   The value of the property to set.
    * @param bool $recurse
    *   Flag indicating wither to set the same property on child elements.
-   * @param bool $forceString
-   *   Optional. Forces the value to be appended as a string. By default, this
-   *   is automatically determined based on the property name provided. Manually
-   *   passing TRUE or FALSE will override any automatic determination.
    *
    * @return static
-   *
-   * @see \Drupal\bootstrap\Utility\Element::isStringProperty
    */
-  public function setProperty($name, $value, $recurse = FALSE, $forceString = NULL) {
-    if (!isset($forceString)) {
-      $forceString = static::isStringProperty($name);
-    }
-
-    if ($forceString) {
-      $this->array["#$name"] = (string) Element::create($value)->renderPlain();
-    }
-    else {
-      $this->array["#$name"] = $value instanceof Element ? $value->getArray() : $value;
-    }
+  public function setProperty($name, $value, $recurse = FALSE) {
+    $this->array["#$name"] = $value instanceof Element ? $value->getArray() : $value;
     if ($recurse) {
       foreach ($this->children() as $child) {
         $child->setProperty($name, $value, $recurse);

@@ -633,16 +633,24 @@ class Bootstrap {
   /**
    * Retrieves the File System service, if it exists.
    *
+   * @param string $method
+   *   Optional. A specific method on the file system service to check for
+   *   its existance.
+   *
    * @return \Drupal\Core\File\FileSystemInterface
-   *   The File System service, if it exists.
+   *   The File System service, if it exists and if $method exists if it was
+   *   passed.
    *
    * @deprecated in bootstrap:8.x-3.22 and is removed from bootstrap:5.0.0.
    *   Use the "file_system" service instead.
    * @see https://www.drupal.org/project/bootstrap/issues/3096963
    */
-  public static function fileSystem() {
+  public static function fileSystem($method = NULL) {
     if (!isset(static::$fileSystem)) {
       static::$fileSystem = \Drupal::hasService('file_system') ? \Drupal::service('file_system') : FALSE;
+    }
+    if ($method) {
+      return static::$fileSystem && method_exists(static::$fileSystem, $method) ? static::$fileSystem : FALSE;
     }
     return static::$fileSystem;
   }

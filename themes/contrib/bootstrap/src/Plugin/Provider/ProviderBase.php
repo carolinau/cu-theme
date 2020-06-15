@@ -640,7 +640,6 @@ class ProviderBase extends PluginBase implements ProviderInterface {
     // Due to code recursion and the need to keep this code in place for BC
     // reasons, this deprecated message should only be logged and not shown.
     Bootstrap::deprecated(FALSE);
-    $fileSystem = Bootstrap::fileSystem();
 
     // Process API data.
     if ($api = $this->getApi()) {
@@ -648,7 +647,7 @@ class ProviderBase extends PluginBase implements ProviderInterface {
 
       // FILE_CREATE_DIRECTORY = 1 | FILE_MODIFY_PERMISSIONS = 2.
       $options = 1 | 2;
-      if ($fileSystem) {
+      if ($fileSystem = Bootstrap::fileSystem('prepareDirectory')) {
         $fileSystem->prepareDirectory($provider_path, $options);
       }
       else {

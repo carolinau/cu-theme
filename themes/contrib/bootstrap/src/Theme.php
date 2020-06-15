@@ -351,7 +351,7 @@ class Theme {
     $hash = Crypt::generateBase64HashIdentifier($options, [$mask, $path]);
 
     if (!$cache->has($hash)) {
-      if ($fileSystem = Bootstrap::fileSystem()) {
+      if ($fileSystem = Bootstrap::fileSystem('scanDirectory')) {
         $files = $fileSystem->scanDirectory($path, $mask, $options);
       }
       else {
