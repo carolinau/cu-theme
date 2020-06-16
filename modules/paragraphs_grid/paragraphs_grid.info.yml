@@ -3,11 +3,12 @@ type: module
 description: Provides a flexible grid system for paragraphs entities.
 core: 8.x
 package: Paragraphs
-
+configure: paragraphs_grid.paragraphs_grid_config_form
+core_version_requirement: ^8 || ^9
 dependencies:
-- paragraphs:paragraphs
+  - paragraphs:paragraphs
 
-# Information added by Drupal.org packaging script on 2020-02-07
-version: '8.x-1.0'
+# Information added by Drupal.org packaging script on 2020-06-16
+version: '8.x-1.1'
 project: 'paragraphs_grid'
-datestamp: 1581088573
+datestamp: 1592302808
