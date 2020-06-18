@@ -69,7 +69,7 @@ function field_formatter_class_preprocess_field(&$variables) {
     $class = $token->replace($class, [$object->getEntityTypeId() => $object], ['clear' => true]);
     $class = explode(' ', $class);
     foreach ($class as $thisClass) {
-      $variables['attributes']['class'][] = Html::cleanCssIdentifier($thisClass);
+      $variables['attributes']['class'][] = Html::escape($thisClass);
     }
   }
 }
