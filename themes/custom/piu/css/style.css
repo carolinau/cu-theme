@@ -603,6 +603,9 @@ h3.cta-title {
 .fs-row:last-child {
 	padding: 15px 0;
 }
+.field--name-field-credentials {
+    margin: 15px 0;
+}
 .fs-position {
 	font-size: 1.1em;
 	margin: -5px 0 10px 0;
