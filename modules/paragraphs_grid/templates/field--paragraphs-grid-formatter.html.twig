@@ -58,7 +58,7 @@
   <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
 {% endif %}
 
-{% if container_attributes %}
+{% if container_attributes is not empty %}
   <div{{ container_attributes }}>
 {% endif %}
 
@@ -68,7 +68,7 @@
     {% endfor %}
   </div>
 
-{% if container_attributes %}
+{% if container_attributes is not empty %}
   </div>
 {% endif %}
 </div>

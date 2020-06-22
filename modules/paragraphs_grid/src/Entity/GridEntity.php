@@ -22,7 +22,12 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   },
  *   config_export = {
  *     "id",
- *     "label"
+ *     "label",
+ *     "breakpoints",
+ *     "library",
+ *     "wrapper",
+ *     "cell-fallback",
+ *     "cell-properties"
  *   }
  * )
  */

@@ -127,9 +127,11 @@ class ParagraphsGridFormatter extends EntityReferenceRevisionsEntityFormatter im
    */
   public function view(FieldItemListInterface $items, $langcode = NULL) {
     $elements = parent::view($items, $langcode);
-    $elements['#container_attributes'] = new Attribute([
-      'class' => [$this->getSetting('container')],
-    ]);
+    if ($this->getSetting('container') !== 'none') {
+      $elements['#container_attributes'] = new Attribute([
+        'class' => [$this->getSetting('container')],
+      ]);
+    }
     return $elements;
   }
 
