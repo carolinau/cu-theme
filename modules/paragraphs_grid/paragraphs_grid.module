@@ -93,7 +93,7 @@ function paragraphs_grid_preprocess_field(&$variables) {
     $grid_config = ($grid_type) ? \Drupal::config($grid_type) : NULL;
 
     // Set the grid wrapper classes.
-    $variables['container_attributes'] = $variables['element']['#container_attributes'] ?: new Attribute([]);
+    $variables['container_attributes'] = isset($variables['element']['#container_attributes']) ? $variables['element']['#container_attributes'] : new Attribute([]);
     $variables['row_attributes'] = new Attribute([]);
 
     if ($grid_config) {
