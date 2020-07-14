@@ -170,8 +170,8 @@ body.navbar-is-static-top {
 	text-decoration: none;
 }
 .btn-bw:hover {
-	color: var(--accent-yellow);
-	border-color: var(--accent-yellow);
+	color: var(--off-black);
+	border-color: var(--off-black);
 }
 .btn-clear {
 	color: #fff;
