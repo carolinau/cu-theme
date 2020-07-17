@@ -381,11 +381,6 @@ header ul.menu {
 .block-system-branding-block, .branding-name-p {
 	padding: 5px 0;
 }
-@media only screen and (max-width: 389px) {
-	.branding-logo {
-		display: none;
-	}
-}
 @media only screen and (max-width: 767px) {
 	.region-secondary-navigation > .block-system-branding-block, .region-navigation > .block-system-branding-block, .branding-name-p {
 		text-align: center;
@@ -776,7 +771,7 @@ h4.footer-divider {
 		text-align: center;
 	}
 }
-.footer #block-sitebranding-footer {
+.footer .block-system-branding-block {
 	text-align: center;
 }
 .region-footer-logo img.branding-logo-svg {
@@ -817,7 +812,7 @@ h4.footer-divider {
 	padding: 10px 0;
 	font-size: 0.9em;
 }
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 767px) {
 	.footer-bottom {
 		text-align: center;
 	}
