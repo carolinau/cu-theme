@@ -1,7 +1,7 @@
 {% extends "block.html.twig" %}
 {% block content %}
   {% if site_logo %}
-    <a class="branding-logo" href="https://piedmontu.edu" title="{{ site_slogan }} Home" rel="external">
+    <a class="branding-logo" href="https://carolinau.edu" title="{{ site_slogan }} Home" rel="external">
       <img class="branding-logo-svg" src="{{ site_logo }}" alt="{{ site_slogan }} Home" />
     </a>
   {% endif %}
@@ -9,6 +9,6 @@
     <a class="branding-name" href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">{{ site_name }}</a>
   {% endif %}
   {% if site_slogan %}
-  	<a class="branding-slogan" href="https://piedmontu.edu" title="{{ site_slogan }} Home" rel="external">{{ site_slogan }}</a>
+  	<a class="branding-slogan" href="https://carolinau.edu" title="{{ site_slogan }} Home" rel="external">{{ site_slogan }}</a>
   {% endif %}
 {% endblock %}
