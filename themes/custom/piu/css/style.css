@@ -779,6 +779,9 @@ h4.footer-divider {
 .footer #block-sitebranding-footer {
 	text-align: center;
 }
+.region-footer-logo img.branding-logo-svg {
+    max-width: 255px;
+}
 .footer #block-address {
 	padding: 5px 10px;
 }
