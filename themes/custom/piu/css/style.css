@@ -516,32 +516,34 @@ h3.cta-title {
 .academics-item {
 	display: block;
 	border: 1px solid var(--light-gray);
-	padding: 6% 3%;
-	margin: 1% 0;
+	padding: 30px 20px;
+	height: 130px;
 }
 .academics-item:hover {
 	text-decoration: none;
-	border: 1px solid var(--off-black);
+	border: 1px solid var(--light-gray);
+	background-color: var(--light-gray);
 	transition: 200ms;
 }
 .academics-title {
-	font-size: 1.3em;
+	font-size: 1.1em;
 	font-weight: 600;
 	color: #333;
 }
 .academics-degree {
-	font-size: 0.9em;
+	font-size: 0.8em;
 	text-transform: uppercase;
 	font-weight: 500;
-	letter-spacing: .1em;
+	letter-spacing: .08em;
+	line-height: 1.5em;
 	color: var(--off-black);
 }
 .academics-degree:after {
-  content: "";
-  display: block;
-  width: 5%;
-  padding: 5px 0 12px;
-  border-bottom: 3px solid var(--primary-blue);
+    content: "";
+    display: block;
+    width: 36px;
+    padding: 2px 0 5px;
+    border-bottom: 3px solid var(--primary-blue);
 }
 /* Horizontal Rule */
 .bottom-divider:after {
