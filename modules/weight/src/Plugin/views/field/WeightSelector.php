@@ -7,6 +7,8 @@ use Drupal\weight\Plugin\Field\FieldWidget\WeightSelectorWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\ResultRow;
 use Drupal\views\Render\ViewsRenderPipelineMarkup;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Field handler to present a weight selector element.
@@ -16,6 +18,32 @@ use Drupal\views\Render\ViewsRenderPipelineMarkup;
  * @ViewsField("weight_selector")
  */
 class WeightSelector extends FieldPluginBase {
+  /**
+   * Symfony\Component\HttpFoundation\RequestStack definition.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request_stack) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->requestStack = $request_stack;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('request_stack')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -86,7 +114,7 @@ class WeightSelector extends FieldPluginBase {
 
       $form[$this->options['id']][$row_index]['langcode'] = [
         '#type' => 'value',
-        '#value' => $row->{$field_langcode},
+        '#value' => isset($row->{$field_langcode}) ? $row->{$field_langcode} : NULL,
       ];
     }
 
@@ -95,7 +123,7 @@ class WeightSelector extends FieldPluginBase {
       '#value' => $this->field,
     ];
 
-    $form['#action'] = \Drupal::request()->getRequestUri();
+    $form['#action'] = $this->requestStack->getCurrentRequest()->getRequestUri();
   }
 
   /**

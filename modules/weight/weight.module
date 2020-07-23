@@ -25,6 +25,10 @@ function weight_preprocess_views_view_table(&$variables) {
           $weight_selector = $variables['rows'][$key]['columns'][$field->field];
           unset($variables['rows'][$key]['columns'][$field->field]);
           $variables['rows'][$key]['columns'][$field->field] = $weight_selector;
+
+          $header_weight_selector = $variables['header'][$field->field];
+          unset($variables['header'][$field->field]);
+          $variables['header'][$field->field] = $header_weight_selector;
         }
         // Add draggable attribute.
         $variables['rows'][$key]['attributes']->addClass('draggable');

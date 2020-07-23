@@ -4,7 +4,7 @@ namespace Drupal\Tests\weight\FunctionalJavascript;
 
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
-use Drupal\field_ui\Tests\FieldUiTestTrait;
+use Drupal\Tests\field_ui\Traits\FieldUiTestTrait;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\views\Tests\ViewTestData;
@@ -31,6 +31,12 @@ class WeightTest extends WebDriverTestBase {
     'field_ui',
     'weight_test_views',
   ];
+  /**
+   * The default theme.
+   *
+   * @var string
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * Name of the field.
