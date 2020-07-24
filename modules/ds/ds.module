@@ -1074,8 +1074,8 @@ function template_preprocess_field__ds_field_expert(&$variables) {
 
   // In order to allow HTML we need to filter XSS the output of the
   // prefix/suffix.
-  $variables['settings']['prefix'] = XSS::filterAdmin($variables['settings']['prefix']);
-  $variables['settings']['suffix'] = XSS::filterAdmin($variables['settings']['suffix']);
+  $variables['settings']['prefix'] = Xss::filterAdmin($variables['settings']['prefix']);
+  $variables['settings']['suffix'] = Xss::filterAdmin($variables['settings']['suffix']);
 }
 
 /**
