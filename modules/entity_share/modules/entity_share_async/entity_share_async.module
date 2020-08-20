@@ -33,13 +33,8 @@ function entity_share_async_form_entity_share_client_pull_form_alter(&$form, For
     $state_storage = \Drupal::state();
     $request = \Drupal::request();
     $async_states = $state_storage->get('entity_share_async.states', []);
-    $remote_id = $form_state->getValue('remote');
-    $channel_id = $form_state->getValue('channel');
-
-    if (empty($remote_id) || empty($channel_id)) {
-      $remote_id = $request->get('remote');
-      $channel_id = $request->get('channel');
-    }
+    $remote_id = $form_state->getValue('remote', $request->get('remote'));
+    $channel_id = $form_state->getValue('channel', $request->get('channel'));
 
     foreach ($form['channel_wrapper']['entities_wrapper']['entities']['#options'] as $uuid => $values) {
       if (isset($async_states[$remote_id][$channel_id][$uuid])) {

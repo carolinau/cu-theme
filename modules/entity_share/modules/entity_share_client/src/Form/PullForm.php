@@ -410,19 +410,10 @@ class PullForm extends FormBase {
    *   The form state object.
    */
   protected function buildChannelSelect(array &$form, FormStateInterface $form_state) {
-    $selected_remote = $form_state->getValue('remote');
-
+    $selected_remote = $form_state->getValue('remote', $this->query->get('remote'));
     // No remote selected.
-    if (empty($selected_remote)) {
-      $triggering_element = $form_state->getTriggeringElement();
-      $get_remote = $this->query->get('remote');
-      // If it is not an ajax trigger, check if it is in the GET parameters.
-      if (!is_array($triggering_element) && !is_null($get_remote) && isset($this->remoteWebsites[$get_remote])) {
-        $selected_remote = $get_remote;
-      }
-      else {
-        return;
-      }
+    if (empty($this->remoteWebsites[$selected_remote])) {
+      return;
     }
 
     $selected_remote = $this->remoteWebsites[$selected_remote];
@@ -474,37 +465,21 @@ class PullForm extends FormBase {
    *   The form state object.
    */
   protected function buildEntitiesSelectTable(array &$form, FormStateInterface $form_state) {
-    $selected_remote = $form_state->getValue('remote');
-    $selected_channel = $form_state->getValue('channel');
-    $offset = '0';
+    $triggering_element = $form_state->getTriggeringElement();
+    // Form state by default, else from query.
+    $selected_remote = $form_state->getValue('remote', $this->query->get('remote'));
+    $selected_channel = $form_state->getValue('channel', $this->query->get('channel'));
+    // If Ajax was triggered set offset to default value: 0.
+    $offset = !is_array($triggering_element) ? $this->query->get('offset', 0) : 0;
+    if (!is_array($triggering_element) && is_numeric($this->query->get('page'))) {
+      $offset = $this->query->get('page') * 50;
+    }
 
-    // No remote selected.
-    if (empty($selected_remote) || empty($selected_channel) || !isset($this->channelsInfos[$selected_channel])) {
-      $triggering_element = $form_state->getTriggeringElement();
-      $get_remote = $this->query->get('remote');
-      $get_channel = $this->query->get('channel');
-      $get_offset = $this->query->get('offset');
-      $get_page = $this->query->get('page');
-      // If it is not an ajax trigger, check if it is in the GET parameters.
-      if (
-        !is_array($triggering_element) &&
-        !is_null($get_remote) &&
-        isset($this->remoteWebsites[$get_remote]) &&
-        !is_null($get_channel) &&
-        isset($this->channelsInfos[$get_channel])
-      ) {
-        $selected_remote = $get_remote;
-        $selected_channel = $get_channel;
-        if (!is_null($get_offset) && is_numeric($get_offset)) {
-          $offset = $get_offset;
-        }
-        if (!is_null($get_page) && is_numeric($get_page)) {
-          $offset = $get_page * 50;
-        }
-      }
-      else {
-        return;
-      }
+    if (
+      empty($this->remoteWebsites[$selected_remote]) ||
+      empty($this->channelsInfos[$selected_channel])
+    ) {
+      return;
     }
 
     $selected_remote_id = $selected_remote;
