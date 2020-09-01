@@ -7,7 +7,7 @@ dependencies:
   - ds:ds
   - devel:devel
 
-# Information added by Drupal.org packaging script on 2020-07-24
-version: '8.x-3.8'
+# Information added by Drupal.org packaging script on 2020-08-31
+version: '8.x-3.9'
 project: 'ds'
-datestamp: 1595604982
+datestamp: 1598898823
