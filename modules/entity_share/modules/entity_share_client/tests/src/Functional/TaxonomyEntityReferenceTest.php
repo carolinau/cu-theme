@@ -4,9 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\entity_share_client\Functional;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\entity_share\EntityShareUtility;
+use Drupal\entity_share_client\ImportContext;
 use Drupal\user\UserInterface;
 
 /**
@@ -98,12 +97,11 @@ class TaxonomyEntityReferenceTest extends EntityShareClientFunctionalTestBase {
       'es_test_taxonomy_reference',
     ];
     $prepared_url = $this->prepareUrlFilteredOnUuids($selected_entities, 'node_es_test_en');
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-
-    $response = $this->requestService->request($http_client, 'GET', $prepared_url);
-    $json = Json::decode((string) $response->getBody());
-    $this->jsonapiHelper->importEntityListData(EntityShareUtility::prepareData($json['data']));
+    // Prepare import context.
+    $import_context = new ImportContext($this->remote->id(), 'node_es_test_en', $this::IMPORT_CONFIG_ID);
+    $this->importService->prepareImport($import_context);
+    // Imports data from the remote URL.
+    $this->importService->importFromUrl($prepared_url);
 
     $this->checkCreatedEntities();
   }
@@ -113,17 +111,13 @@ class TaxonomyEntityReferenceTest extends EntityShareClientFunctionalTestBase {
    */
   protected function populateRequestService() {
     parent::populateRequestService();
-
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-
     // Needs to make the requests when only the referencing content will be
     // required.
     $selected_entities = [
       'es_test_taxonomy_reference',
     ];
     $prepared_url = $this->prepareUrlFilteredOnUuids($selected_entities, 'node_es_test_en');
-    $this->discoverJsonApiEndpoints($http_client, $prepared_url);
+    $this->discoverJsonApiEndpoints($prepared_url);
   }
 
   /**

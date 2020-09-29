@@ -79,7 +79,7 @@ class EntityShareAsyncFunctionalTest extends EntityShareClientFunctionalTestBase
 
     /** @var \Drupal\entity_share_async\Service\QueueHelperInterface $queue_helper */
     $queue_helper = $this->container->get('entity_share_async.queue_helper');
-    $queue_helper->enqueue($this->remote->id(), $channel_id, ['es_test']);
+    $queue_helper->enqueue($this->remote->id(), $channel_id, $this::IMPORT_CONFIG_ID, ['es_test']);
 
     // Test that the entity had been enqueued and is present in the state.
     $queue = $queue_factory->get('entity_share_async_import');
@@ -113,17 +113,13 @@ class EntityShareAsyncFunctionalTest extends EntityShareClientFunctionalTestBase
    */
   protected function populateRequestService() {
     parent::populateRequestService();
-
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-
     // Needs to make the requests when only the referencing content will be
     // required.
     $selected_entities = [
       'es_test',
     ];
     $prepared_url = $this->prepareUrlFilteredOnUuids($selected_entities, 'node_es_test_en');
-    $this->discoverJsonApiEndpoints($http_client, $prepared_url);
+    $this->discoverJsonApiEndpoints($prepared_url);
   }
 
 }

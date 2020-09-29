@@ -10,3 +10,11 @@ full-pager:
     - core/drupal
     - core/jquery
     - core/jquery.once
+
+import-processors:
+  js:
+    js/entity_share_client.import_processors.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once

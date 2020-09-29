@@ -4,8 +4,10 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\entity_share_client\Functional;
 
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\node\NodeInterface;
+use Drupal\user\UserInterface;
 
 /**
  * General functional test class.
@@ -14,6 +16,14 @@ use Drupal\node\NodeInterface;
  * @group entity_share_client
  */
 class BasicFieldsTest extends EntityShareClientFunctionalTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static $modules = [
+    'entity_share_entity_test',
+    'jsonapi_extras',
+  ];
 
   /**
    * {@inheritdoc}
@@ -35,7 +45,42 @@ class BasicFieldsTest extends EntityShareClientFunctionalTestBase {
    */
   protected function setUp() {
     parent::setUp();
+
+    $this->entityTypeManager->getStorage('jsonapi_resource_config')->create([
+      'id' => 'node--es_test',
+      'disabled' => FALSE,
+      'path' => 'node/es_test',
+      'resourceType' => 'node--es_test',
+      'resourceFields' => [
+        'title' => [
+          'fieldName' => 'title',
+          'publicName' => $this->randomMachineName(),
+          'enhancer' => [
+            'id' => '',
+          ],
+          'disabled' => FALSE,
+        ],
+        'langcode' => [
+          'fieldName' => 'langcode',
+          'publicName' => $this->randomMachineName(),
+          'enhancer' => [
+            'id' => '',
+          ],
+          'disabled' => FALSE,
+        ],
+      ],
+    ])->save();
+
     $this->postSetupFixture();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getChannelUserPermissions() {
+    $permissions = parent::getChannelUserPermissions();
+    $permissions[] = 'view test entity';
+    return $permissions;
   }
 
   /**
@@ -262,7 +307,66 @@ class BasicFieldsTest extends EntityShareClientFunctionalTestBase {
           ]),
         ],
       ],
+      // Untranslatable entity.
+      'entity_test_not_translatable' => [
+        LanguageInterface::LANGCODE_NOT_SPECIFIED => [
+          'entity_test_not_translatable' => [
+            'name' => [
+              'value' => $this->randomString(),
+              'checker_callback' => 'getValue',
+            ],
+          ],
+        ],
+      ],
+      // Untranslatable entity with empty langcode.
+      'entity_test_not_translatable_el' => [
+        LanguageInterface::LANGCODE_NOT_SPECIFIED => [
+          'entity_test_not_translatable_el' => [
+            'name' => [
+              'value' => $this->randomString(),
+              'checker_callback' => 'getValue',
+            ],
+          ],
+        ],
+      ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function createChannel(UserInterface $user) {
+    parent::createChannel($user);
+
+    $channel_storage = $this->entityTypeManager->getStorage('channel');
+
+    // Add a channel for untranslatable entities.
+    $channel = $channel_storage->create([
+      'id' => 'entity_test_not_translatable_entity_test_not_translatable_' . LanguageInterface::LANGCODE_NOT_SPECIFIED,
+      'label' => $this->randomString(),
+      'channel_entity_type' => 'entity_test_not_translatable',
+      'channel_bundle' => 'entity_test_not_translatable',
+      'channel_langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
+      'authorized_users' => [
+        $user->uuid(),
+      ],
+    ]);
+    $channel->save();
+    $this->channels[$channel->id()] = $channel;
+
+    // Add a channel for untranslatable entities with empty langcode.
+    $channel = $channel_storage->create([
+      'id' => 'entity_test_not_translatable_el_entity_test_not_translatable_el_' . LanguageInterface::LANGCODE_NOT_SPECIFIED,
+      'label' => $this->randomString(),
+      'channel_entity_type' => 'entity_test_not_translatable_el',
+      'channel_bundle' => 'entity_test_not_translatable_el',
+      'channel_langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
+      'authorized_users' => [
+        $user->uuid(),
+      ],
+    ]);
+    $channel->save();
+    $this->channels[$channel->id()] = $channel;
   }
 
   /**

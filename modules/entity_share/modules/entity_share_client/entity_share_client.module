@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Entity Share Client module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_delete().
+ *
+ * Delete "Entity import status" when its entity is deleted.
+ */
+function entity_share_client_entity_delete(EntityInterface $entity) {
+  /** @var \Drupal\entity_share_client\Service\StateInformationInterface $state_information_service */
+  $state_information_service = \Drupal::service('entity_share_client.state_information');
+  // This will delete "Entity import status" for all languages.
+  $state_information_service->deleteImportStatusOfEntity($entity);
+}
+
+/**
+ * Implements hook_entity_translation_delete().
+ *
+ * Delete "Entity import status" when translation of an entity is deleted.
+ */
+function entity_share_client_entity_translation_delete(EntityInterface $translation) {
+  /** @var \Drupal\entity_share_client\Service\StateInformationInterface $state_information_service */
+  $state_information_service = \Drupal::service('entity_share_client.state_information');
+  // This deletes "Entity import status" only for translation being deleted.
+  $state_information_service->deleteImportStatusOfEntity($translation, $translation->language()->getId());
+}

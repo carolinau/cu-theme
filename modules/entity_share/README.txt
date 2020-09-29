@@ -45,7 +45,7 @@ you must share the entities by yourself.
 Note about path and Pathauto:
 
 To expose the information if a content entity has its path managed by Pathauto,
-Entity share provides a field enhancer plugin to enable on the server website.
+Entity Share provides a field enhancer plugin to enable on the server website.
 
 Note about multilingual content:
 
@@ -63,12 +63,10 @@ Note about CRON usage:
 If you want to synchronize entities automatically using CRON:
  * the Entity Share Cron (https://www.drupal.org/project/entity_share_cron)
    module provides an UI to import channels using Cron.
- * there is a test module 'entity_share_client_test' in Entity share that
-   provides example code.
 
-Note about Entity share client module:
+Note about Entity Share Client module:
 
-As the Entity share client sub-module has a dependency on the JSON:API module,
+As the Entity Share Client sub-module has a dependency on the JSON:API module,
 on your client website, content and configuration will be exposed in JSON:API
 endpoints, by default on /jsonapi. As the JSON:API use the Drupal access API to
 check access to entities, if you have used the access API and permission system
@@ -169,16 +167,16 @@ RECOMMENDED MODULES
 SIMILAR MODULES
 ---------------
 
- * Entity pilot (https://www.drupal.org/project/entity_pilot): Entity share does
+ * Entity pilot (https://www.drupal.org/project/entity_pilot): Entity Share does
    not require any subscription to a service.
 
 
 INSTALLATION
 ------------
 
- * Install and enable the Entity share server on the site you want to get
+ * Install and enable the Entity Share Server on the site you want to get
    content from.
- * Install and enable the Entity share client on the site you want to put
+ * Install and enable the Entity Share Client on the site you want to put
    content on.
 
 
@@ -186,20 +184,20 @@ CONFIGURATION
 -------------
 
 On the server website:
- * Enable the Entity share server module.
+ * Enable the Entity Share Server module.
  * Optional: Prepare an user with the permission "Access channels list" if you
    do not want to use the admin user.
- * Go to the configuration page, Configuration > Web services > Entity share >
+ * Go to the configuration page, Configuration > Web services > Entity Share >
    Channels (admin/config/services/entity_share/channel) and add at least one
    channel.
 
 On the client website:
- * Enable the Entity share client module.
- * Go to the configuration page, Configuration > Web services > Entity share >
+ * Enable the Entity Share Client module.
+ * Go to the configuration page, Configuration > Web services > Entity Share >
    Remote websites (admin/config/services/entity_share/remote) and create a
    remote website corresponding to your server website with the user name and
    password configured on the server website.
- * Go to the pull form, Content > Entity share > Pull entities
+ * Go to the pull form, Content > Entity Share > Pull entities
    (admin/content/entity_share/pull), and select your remote website, the
    available channels will be listed and when selecting a channel, the entities
    exposed on this channel will be available to synchronize.
@@ -208,7 +206,7 @@ On the client website:
 TROUBLESHOOTING
 ---------------
 
- * Block fields: To support Block fields, Entity share provides a field
+ * Block fields: To support Block fields, Entity Share provides a field
    enhancer plugin to enable on the server website. It will allow to import
    block content automatically.
  * Internal link fields: As Drupal stores the id of entities for internal link
@@ -223,7 +221,7 @@ TROUBLESHOOTING
    Note 2: If the target entity of a link field value has not been imported yet,
    the value of the link field will be unset. So an update will be required to
    update the link field value.
- * Metatag fields: To support Metatag fields, Entity share provides a field
+ * Metatag fields: To support Metatag fields, Entity Share provides a field
    enhancer plugin to enable on the server website.
 
 MAINTAINERS

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the entity share async module.
+ * Hook implementations for the Entity Share Async module.
  */
 
 declare(strict_types = 1);
@@ -17,7 +17,11 @@ function entity_share_async_form_entity_share_client_pull_form_alter(&$form, For
     '#type' => 'submit',
     '#value' => t('Import asynchronously'),
     '#button_type' => 'primary',
-    '#submit' => ['_entity_share_async_form_submit'],
+    '#validate' => ['::validateSelectedEntities'],
+    '#submit' => [
+      '::submitForm',
+      '_entity_share_async_form_submit',
+    ],
   ];
 
   // Add buttons.
@@ -33,15 +37,27 @@ function entity_share_async_form_entity_share_client_pull_form_alter(&$form, For
     $state_storage = \Drupal::state();
     $request = \Drupal::request();
     $async_states = $state_storage->get('entity_share_async.states', []);
+
     $remote_id = $form_state->getValue('remote', $request->get('remote'));
     $channel_id = $form_state->getValue('channel', $request->get('channel'));
+    $import_configs = \Drupal::entityTypeManager()
+      ->getStorage('import_config')
+      ->loadMultiple();
 
-    foreach ($form['channel_wrapper']['entities_wrapper']['entities']['#options'] as $uuid => $values) {
+    foreach (array_keys($form['channel_wrapper']['entities_wrapper']['entities']['#options']) as $uuid) {
       if (isset($async_states[$remote_id][$channel_id][$uuid])) {
+        $import_config_label = t('Undefined');
+        $import_config_id = $async_states[$remote_id][$channel_id][$uuid];
+        if (isset($import_configs[$import_config_id])) {
+          $import_config_label = $import_configs[$import_config_id]->label();
+        }
+
         $form['channel_wrapper']['entities_wrapper']['entities']['#options'][$uuid]['#attributes']['class'] = [
           'entity-share-waiting-sync',
         ];
-        $form['channel_wrapper']['entities_wrapper']['entities']['#options'][$uuid]['status'] = t('Waiting for synchronization');
+        $form['channel_wrapper']['entities_wrapper']['entities']['#options'][$uuid]['status'] = t('Waiting for synchronization (import config %import_config)', [
+          '%import_config' => $import_config_label,
+        ]);
       }
     }
   }
@@ -56,46 +72,13 @@ function entity_share_async_form_entity_share_client_pull_form_alter(&$form, For
  *   The form state.
  */
 function _entity_share_async_form_submit(array &$form, FormStateInterface $form_state) {
+  $selected_entities = $form_state->getValue('entities');
+  $selected_entities = array_filter($selected_entities);
   $remote_id = $form_state->getValue('remote');
   $channel_id = $form_state->getValue('channel');
+  $import_config_id = $form_state->getValue('import_config');
 
-  if (!empty($remote_id) && !empty($channel_id)) {
-    $searched_text = $form_state->getValue('search', '');
-    $selected_entities = $form_state->getValue('entities');
-    $selected_entities = array_filter($selected_entities);
-    $query = \Drupal::request()->query;
-
-    $redirect_parameters = [
-      'query' => [
-        'remote' => $remote_id,
-        'channel' => $channel_id,
-        'search' => $searched_text,
-      ],
-    ];
-    $get_offset = $query->get('offset');
-    if (!is_null($get_offset) && is_numeric($get_offset)) {
-      $redirect_parameters['query']['offset'] = $get_offset;
-    }
-    $get_page = $query->get('page');
-    if (!is_null($get_page) && is_numeric($get_page)) {
-      $redirect_parameters['query']['page'] = $get_page;
-    }
-    $get_sort = $query->get('sort', '');
-    if (!empty($get_sort)) {
-      $redirect_parameters['query']['sort'] = $get_sort;
-    }
-    $get_order = $query->get('order', '');
-    if (!empty($get_order)) {
-      $redirect_parameters['query']['order'] = $get_order;
-    }
-
-    // Redirect back to prefiltered pull form.
-    $form_state->setRedirect('entity_share_client.admin_content_pull_form', [], $redirect_parameters);
-
-    if (!empty($selected_entities)) {
-      /** @var \Drupal\entity_share_async\Service\QueueHelperInterface $queue_helper */
-      $queue_helper = \Drupal::service('entity_share_async.queue_helper');
-      $queue_helper->enqueue($remote_id, $channel_id, $selected_entities);
-    }
-  }
+  /** @var \Drupal\entity_share_async\Service\QueueHelperInterface $queue_helper */
+  $queue_helper = \Drupal::service('entity_share_async.queue_helper');
+  $queue_helper->enqueue($remote_id, $channel_id, $import_config_id, $selected_entities);
 }

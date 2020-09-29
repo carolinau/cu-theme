@@ -53,19 +53,18 @@ class RemoteForm extends EntityForm {
     $form['basic_auth'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Basic Auth'),
+      '#description' => $this->t('Leave empty to request the server website as the anonymous user.'),
     ];
 
     $form['basic_auth']['basic_auth_username'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Username'),
       '#default_value' => $remote->get('basic_auth_username'),
-      '#required' => TRUE,
     ];
 
     $form['basic_auth']['basic_auth_password'] = [
       '#type' => 'password',
       '#title' => $this->t('Password'),
-      '#required' => TRUE,
     ];
 
     return $form;

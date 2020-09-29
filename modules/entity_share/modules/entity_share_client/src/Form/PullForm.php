@@ -8,7 +8,6 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
@@ -18,10 +17,10 @@ use Drupal\Core\Link;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\entity_share\EntityShareUtility;
-use Drupal\entity_share_client\Service\JsonapiHelperInterface;
+use Drupal\entity_share_client\ImportContext;
+use Drupal\entity_share_client\Service\FormHelperInterface;
+use Drupal\entity_share_client\Service\ImportServiceInterface;
 use Drupal\entity_share_client\Service\RemoteManagerInterface;
-use Drupal\entity_share_client\Service\RequestServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -38,11 +37,18 @@ class PullForm extends FormBase {
   protected $remoteWebsites;
 
   /**
-   * An array of channel infos as returned by entity_share_server entry point.
+   * Channel infos as returned by entity_share_server entry point.
    *
    * @var array
    */
   protected $channelsInfos;
+
+  /**
+   * Field mappings as returned by entity_share_server entry point.
+   *
+   * @var array
+   */
+  protected $fieldMappings;
 
   /**
    * The entity type manager.
@@ -52,13 +58,6 @@ class PullForm extends FormBase {
   protected $entityTypeManager;
 
   /**
-   * The entity definition update manager.
-   *
-   * @var \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface
-   */
-  protected $entityDefinitionUpdateManager;
-
-  /**
    * The remote manager.
    *
    * @var \Drupal\entity_share_client\Service\RemoteManagerInterface
@@ -66,11 +65,11 @@ class PullForm extends FormBase {
   protected $remoteManager;
 
   /**
-   * The jsonapi helper.
+   * The form helper.
    *
-   * @var \Drupal\entity_share_client\Service\JsonapiHelperInterface
+   * @var \Drupal\entity_share_client\Service\FormHelperInterface
    */
-  protected $jsonapiHelper;
+  protected $formHelper;
 
   /**
    * Query string parameters ($_GET).
@@ -87,13 +86,6 @@ class PullForm extends FormBase {
   protected $languageManager;
 
   /**
-   * The request service.
-   *
-   * @var \Drupal\entity_share_client\Service\RequestServiceInterface
-   */
-  protected $requestService;
-
-  /**
    * The renderer service.
    *
    * @var \Drupal\Core\Render\RendererInterface
@@ -108,6 +100,13 @@ class PullForm extends FormBase {
   protected $moduleHandler;
 
   /**
+   * The import service.
+   *
+   * @var \Drupal\entity_share_client\Service\ImportServiceInterface
+   */
+  protected $importService;
+
+  /**
    * The pager manager service.
    *
    * @var \Drupal\Core\Pager\PagerManagerInterface
@@ -119,49 +118,45 @@ class PullForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface $entity_definition_update_manager
-   *   The entity definition update manager.
    * @param \Drupal\entity_share_client\Service\RemoteManagerInterface $remote_manager
    *   The remote manager service.
-   * @param \Drupal\entity_share_client\Service\JsonapiHelperInterface $jsonapi_helper
-   *   The jsonapi helper service.
+   * @param \Drupal\entity_share_client\Service\FormHelperInterface $form_helper
+   *   The form helper service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\entity_share_client\Service\RequestServiceInterface $request_service
-   *   The request service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
+   * @param \Drupal\entity_share_client\Service\ImportServiceInterface $import_service
+   *   The import service.
    * @param \Drupal\Core\Pager\PagerManagerInterface $pager_manager
    *   The pager manager service.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
-    EntityDefinitionUpdateManagerInterface $entity_definition_update_manager,
     RemoteManagerInterface $remote_manager,
-    JsonapiHelperInterface $jsonapi_helper,
+    FormHelperInterface $form_helper,
     RequestStack $request_stack,
     LanguageManagerInterface $language_manager,
-    RequestServiceInterface $request_service,
     RendererInterface $renderer,
     ModuleHandlerInterface $module_handler,
+    ImportServiceInterface $import_service,
     PagerManagerInterface $pager_manager
   ) {
     $this->entityTypeManager = $entity_type_manager;
-    $this->entityDefinitionUpdateManager = $entity_definition_update_manager;
     $this->remoteWebsites = $entity_type_manager
       ->getStorage('remote')
       ->loadMultiple();
     $this->remoteManager = $remote_manager;
-    $this->jsonapiHelper = $jsonapi_helper;
+    $this->formHelper = $form_helper;
     $this->query = $request_stack->getCurrentRequest()->query;
     $this->languageManager = $language_manager;
-    $this->requestService = $request_service;
     $this->renderer = $renderer;
     $this->moduleHandler = $module_handler;
+    $this->importService = $import_service;
     $this->pagerManager = $pager_manager;
   }
 
@@ -171,14 +166,13 @@ class PullForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('entity.definition_update_manager'),
       $container->get('entity_share_client.remote_manager'),
-      $container->get('entity_share_client.jsonapi_helper'),
+      $container->get('entity_share_client.form_helper'),
       $container->get('request_stack'),
       $container->get('language_manager'),
-      $container->get('entity_share_client.request'),
       $container->get('renderer'),
       $container->get('module_handler'),
+      $container->get('entity_share_client.import_service'),
       $container->get('pager.manager')
     );
   }
@@ -194,32 +188,25 @@ class PullForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $remote_options = $this->prepareRemoteOptions();
-    $remote_disabled = FALSE;
-    $remote_default_value = $this->query->get('remote');
-
-    // If only one option. Pre-select it and disable the select.
-    if (count($remote_options) == 1) {
-      $remote_disabled = TRUE;
-      $remote_default_value = key($remote_options);
-      $form_state->setValue('remote', $remote_default_value);
+    // Build the Import configuration selector.
+    $select_element = $this->buildSelectElement($form_state, 'import_config');
+    if ($select_element) {
+      $select_element['#title'] = $this->t('Import configuration');
+      $form['import_config'] = $select_element;
     }
 
-    $form['remote'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Remote website'),
-      '#options' => $remote_options,
-      '#default_value' => $remote_default_value,
-      '#empty_value' => '',
-      '#required' => TRUE,
-      '#disabled' => $remote_disabled,
-      '#ajax' => [
+    // Build the Remote selector.
+    $select_element = $this->buildSelectElement($form_state, 'remote');
+    if ($select_element) {
+      $select_element['#title'] = $this->t('Remote website');
+      $select_element['#ajax'] = [
         'callback' => [get_class($this), 'buildAjaxChannelSelect'],
         'effect' => 'fade',
         'method' => 'replace',
         'wrapper' => 'channel-wrapper',
-      ],
-    ];
+      ];
+      $form['remote'] = $select_element;
+    }
 
     // Container for the AJAX.
     $form['channel_wrapper'] = [
@@ -244,6 +231,24 @@ class PullForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $additional_query_parameters = [];
+    $get_offset = $this->query->get('offset');
+    if (is_numeric($get_offset)) {
+      $additional_query_parameters['offset'] = $get_offset;
+    }
+    $get_page = $this->query->get('page');
+    if (is_numeric($get_page)) {
+      $additional_query_parameters['page'] = $get_page;
+    }
+    $get_sort = $this->query->get('sort', '');
+    if (!empty($get_sort)) {
+      $additional_query_parameters['sort'] = $get_sort;
+    }
+    $get_order = $this->query->get('order', '');
+    if (!empty($get_order)) {
+      $additional_query_parameters['order'] = $get_order;
+    }
+    $this->setFormRedirect($form_state, $additional_query_parameters);
   }
 
   /**
@@ -275,98 +280,106 @@ class PullForm extends FormBase {
   public function synchronizeSelectedEntities(array &$form, FormStateInterface $form_state) {
     $selected_entities = $form_state->getValue('entities');
     $selected_entities = array_filter($selected_entities);
-    $selected_remote = $form_state->getValue('remote');
-    $selected_channel = $form_state->getValue('channel');
-    $searched_text = $form_state->getValue('search', '');
+    $remote_id = $form_state->getValue('remote');
+    $channel_id = $form_state->getValue('channel');
+    $import_config_id = $form_state->getValue('import_config');
+    $import_context = new ImportContext($remote_id, $channel_id, $import_config_id);
+    $this->importService->importEntities($import_context, array_values($selected_entities));
+  }
 
-    $redirect_parameters = [
-      'query' => [
-        'remote' => $selected_remote,
-        'channel' => $selected_channel,
-        'search' => $searched_text,
-      ],
-    ];
-    $get_offset = $this->query->get('offset');
-    if (!is_null($get_offset) && is_numeric($get_offset)) {
-      $redirect_parameters['query']['offset'] = $get_offset;
-    }
-    $get_page = $this->query->get('page');
-    if (!is_null($get_page) && is_numeric($get_page)) {
-      $redirect_parameters['query']['page'] = $get_page;
-    }
-    $get_sort = $this->query->get('sort', '');
-    if (!empty($get_sort)) {
-      $redirect_parameters['query']['sort'] = $get_sort;
-    }
-    $get_order = $this->query->get('order', '');
-    if (!empty($get_order)) {
-      $redirect_parameters['query']['order'] = $get_order;
-    }
-
-    $form_state->setRedirect('entity_share_client.admin_content_pull_form', [], $redirect_parameters);
-
-    // Add the selected UUIDs to the URL.
-    // We do not handle offset or limit as we provide a maximum of 50 UUIDs.
-    $url = $this->channelsInfos[$selected_channel]['url'];
-    $parsed_url = UrlHelper::parse($url);
-    $query = $parsed_url['query'];
-    $query['filter']['uuid-filter'] = [
-      'condition' => [
-        'path' => 'id',
-        'operator' => 'IN',
-        'value' => array_values($selected_entities),
-      ],
-    ];
-    $query = UrlHelper::buildQuery($query);
-    $prepared_url = $parsed_url['path'] . '?' . $query;
-
-    $selected_remote = $this->remoteWebsites[$selected_remote];
-    $http_client = $this->remoteManager->prepareJsonApiClient($selected_remote);
-    $response = $this->requestService->request($http_client, 'GET', $prepared_url);
-    $json = Json::decode((string) $response->getBody());
-
-    if (!isset($json['errors'])) {
-      $batch = [
-        'title' => $this->t('Synchronize entities'),
-        'operations' => [
-          [
-            '\Drupal\entity_share_client\JsonapiBatchHelper::importEntityListBatch',
-            [$selected_remote, EntityShareUtility::prepareData($json['data'])],
-          ],
-        ],
-        'finished' => '\Drupal\entity_share_client\JsonapiBatchHelper::importEntityListBatchBatchFinished',
-      ];
-
-      batch_set($batch);
+  /**
+   * Form submission handler for the 'Import the whole channel' action.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function importChannel(array &$form, FormStateInterface $form_state) {
+    $storage = $form_state->getStorage();
+    if (isset($storage['remote_channel_count'])) {
+      $remote_id = $form_state->getValue('remote');
+      $channel_id = $form_state->getValue('channel');
+      $import_config_id = $form_state->getValue('import_config');
+      $import_context = new ImportContext($remote_id, $channel_id, $import_config_id);
+      $import_context->setRemoteChannelCount($storage['remote_channel_count']);
+      $this->importService->importChannel($import_context);
     }
   }
 
   /**
    * Helper function.
    *
+   * @param string $field
+   *   The form field key.
+   *
    * @return string[]
-   *   An array of remote websites.
+   *   An array of options for a given select list.
    */
-  protected function prepareRemoteOptions() {
+  protected function getSelectOptions(string $field) {
     $options = [];
-    foreach ($this->remoteWebsites as $id => $remote_website) {
-      $options[$id] = $remote_website->label();
+    switch ($field) {
+      case 'remote':
+        // An array of remote websites.
+        foreach ($this->remoteWebsites as $id => $remote_website) {
+          $options[$id] = $remote_website->label();
+        }
+        break;
+
+      case 'channel':
+        // An array of remote channels.
+        foreach ($this->channelsInfos as $channel_id => $channel_infos) {
+          $options[$channel_id] = $channel_infos['label'];
+        }
+        break;
+
+      case 'import_config':
+        // An array of import configs.
+        $import_configs = $this->entityTypeManager->getStorage('import_config')
+          ->loadMultiple();
+        foreach ($import_configs as $import_config) {
+          $options[$import_config->id()] = $import_config->label();
+        }
+        break;
     }
     return $options;
   }
 
   /**
-   * Helper function.
+   * Builds a required select element, disabled if only one option exists.
    *
-   * @return string[]
-   *   An array of remote channels.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   * @param string $field
+   *   The form field key.
+   *
+   * @return array
+   *   The Drupal form element array, or an empty array if field is invalid.
    */
-  protected function getChannelOptions() {
-    $options = [];
-    foreach ($this->channelsInfos as $channel_id => $channel_infos) {
-      $options[$channel_id] = $channel_infos['label'];
+  protected function buildSelectElement(FormStateInterface $form_state, string $field) {
+    // Get all available options for this field.
+    $options = $this->getSelectOptions($field);
+    // Sanity check for a valid $field parameter.
+    if (!$options) {
+      return [];
     }
-    return $options;
+    $disabled = FALSE;
+    $default_value = $this->query->get($field);
+
+    // If only one option, pre-select it and disable the select.
+    if (count($options) == 1) {
+      $disabled = TRUE;
+      $default_value = key($options);
+      $form_state->setValue($field, $default_value);
+    }
+    return [
+      '#type' => 'select',
+      '#options' => $options,
+      '#default_value' => $default_value,
+      '#empty_value' => '',
+      '#required' => TRUE,
+      '#disabled' => $disabled,
+    ];
   }
 
   /**
@@ -410,41 +423,27 @@ class PullForm extends FormBase {
    *   The form state object.
    */
   protected function buildChannelSelect(array &$form, FormStateInterface $form_state) {
-    $selected_remote = $form_state->getValue('remote', $this->query->get('remote'));
+    $selected_remote_id = $form_state->getValue('remote', $this->query->get('remote'));
     // No remote selected.
-    if (empty($this->remoteWebsites[$selected_remote])) {
+    if (empty($this->remoteWebsites[$selected_remote_id])) {
       return;
     }
 
-    $selected_remote = $this->remoteWebsites[$selected_remote];
+    $selected_remote = $this->remoteWebsites[$selected_remote_id];
     $this->channelsInfos = $this->remoteManager->getChannelsInfos($selected_remote);
 
-    $channel_options = $this->getChannelOptions();
-    $channel_disabled = FALSE;
-    $channel_default_value = $this->query->get('channel');
-
-    // If only one channel. Pre-select it and disable the select.
-    if (count($channel_options) == 1) {
-      $channel_disabled = TRUE;
-      $channel_default_value = key($channel_options);
-      $form_state->setValue('channel', $channel_default_value);
-    }
-
-    $form['channel_wrapper']['channel'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Channel'),
-      '#options' => $channel_options,
-      '#default_value' => $channel_default_value,
-      '#empty_value' => '',
-      '#required' => TRUE,
-      '#disabled' => $channel_disabled,
-      '#ajax' => [
+    $select_element = $this->buildSelectElement($form_state, 'channel');
+    if ($select_element) {
+      $select_element['#title'] = $this->t('Channel');
+      $select_element['#ajax'] = [
         'callback' => [get_class($this), 'buildAjaxEntitiesSelectTable'],
         'effect' => 'fade',
         'method' => 'replace',
         'wrapper' => 'entities-wrapper',
-      ],
-    ];
+      ];
+      $form['channel_wrapper']['channel'] = $select_element;
+    }
+
     // Container for the AJAX.
     $form['channel_wrapper']['entities_wrapper'] = [
       '#type' => 'container',
@@ -467,7 +466,8 @@ class PullForm extends FormBase {
   protected function buildEntitiesSelectTable(array &$form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
     // Form state by default, else from query.
-    $selected_remote = $form_state->getValue('remote', $this->query->get('remote'));
+    $selected_import_config = $form_state->getValue('import_config', $this->query->get('import_config'));
+    $selected_remote_id = $form_state->getValue('remote', $this->query->get('remote'));
     $selected_channel = $form_state->getValue('channel', $this->query->get('channel'));
     // If Ajax was triggered set offset to default value: 0.
     $offset = !is_array($triggering_element) ? $this->query->get('offset', 0) : 0;
@@ -476,15 +476,18 @@ class PullForm extends FormBase {
     }
 
     if (
-      empty($this->remoteWebsites[$selected_remote]) ||
+      empty($this->remoteWebsites[$selected_remote_id]) ||
       empty($this->channelsInfos[$selected_channel])
     ) {
       return;
     }
 
-    $selected_remote_id = $selected_remote;
-    $selected_remote = $this->remoteWebsites[$selected_remote];
-    $http_client = $this->remoteManager->prepareJsonApiClient($selected_remote);
+    $channel_entity_type = $this->channelsInfos[$selected_channel]['channel_entity_type'];
+    $channel_bundle = $this->channelsInfos[$selected_channel]['channel_bundle'];
+    $selected_remote = $this->remoteWebsites[$selected_remote_id];
+    $this->fieldMappings = $this->remoteManager->getfieldMappings($selected_remote);
+    $entity_storage = $this->entityTypeManager->getStorage($channel_entity_type);
+    $entity_keys = $entity_storage->getEntityType()->getKeys();
 
     $parsed_url = UrlHelper::parse($this->channelsInfos[$selected_channel]['url']);
     // Add offset to the selected channel.
@@ -492,7 +495,6 @@ class PullForm extends FormBase {
     // Handle search.
     $searched_text = $form_state->getValue('search', '');
     if (empty($searched_text)) {
-      $triggering_element = $form_state->getTriggeringElement();
       $get_searched_text = $this->query->get('search', '');
       // If it is not an ajax trigger, check if it is in the GET parameters.
       if (!is_array($triggering_element) && !empty($get_searched_text)) {
@@ -528,14 +530,15 @@ class PullForm extends FormBase {
       'query' => [
         'remote' => $selected_remote_id,
         'channel' => $selected_channel,
+        'import_config' => $selected_import_config,
         'search' => $searched_text,
       ],
     ];
 
-    if (!empty($sort_field) && !empty($sort_direction) && isset($this->channelsInfos[$selected_channel]['field_mapping'][$sort_field])) {
+    if (!empty($sort_field) && !empty($sort_direction) && isset($this->fieldMappings[$channel_entity_type][$channel_bundle][$sort_field])) {
       $parsed_url['query']['sort'] = [
         $sort_field => [
-          'path' => $this->channelsInfos[$selected_channel]['field_mapping'][$sort_field],
+          'path' => $this->fieldMappings[$channel_entity_type][$channel_bundle][$sort_field],
           'direction' => strtoupper($sort_direction),
         ],
       ];
@@ -543,7 +546,7 @@ class PullForm extends FormBase {
     $query = UrlHelper::buildQuery($parsed_url['query']);
     $prepared_url = $parsed_url['path'] . '?' . $query;
 
-    $response = $this->requestService->request($http_client, 'GET', $prepared_url);
+    $response = $this->remoteManager->jsonApiRequest($selected_remote, 'GET', $prepared_url);
     $json = Json::decode((string) $response->getBody());
 
     // Search.
@@ -586,6 +589,7 @@ class PullForm extends FormBase {
         '#parameters' => [
           'remote' => $selected_remote_id,
           'channel' => $selected_channel,
+          'import_config' => $selected_import_config,
           'search' => $searched_text,
           'order' => $sort_field,
           'sort' => $sort_direction,
@@ -609,33 +613,15 @@ class PullForm extends FormBase {
         '#type' => 'actions',
         '#weight' => -10,
       ];
-      if (isset($json['links']['first']['href'])) {
-        $form['channel_wrapper']['entities_wrapper']['pager']['first'] = [
-          '#type' => 'submit',
-          '#value' => $this->t('First'),
-          '#submit' => ['::firstPage'],
-        ];
-      }
-      if (isset($json['links']['prev']['href'])) {
-        $form['channel_wrapper']['entities_wrapper']['pager']['prev'] = [
-          '#type' => 'submit',
-          '#value' => $this->t('Previous'),
-          '#submit' => ['::prevPage'],
-        ];
-      }
-      if (isset($json['links']['next']['href'])) {
-        $form['channel_wrapper']['entities_wrapper']['pager']['next'] = [
-          '#type' => 'submit',
-          '#value' => $this->t('Next'),
-          '#submit' => ['::nextPage'],
-        ];
-      }
-      if (isset($json['links']['last']['href'])) {
-        $form['channel_wrapper']['entities_wrapper']['pager']['last'] = [
-          '#type' => 'submit',
-          '#value' => $this->t('Last'),
-          '#submit' => ['::lastPage'],
-        ];
+      $pager_links = $this->getBasicPagerLinks();
+      foreach ($pager_links as $key => $label) {
+        if (isset($json['links'][$key]['href'])) {
+          $form['channel_wrapper']['entities_wrapper']['pager'][$key] = [
+            '#type' => 'submit',
+            '#value' => $label,
+            '#submit' => ['::goToPage'],
+          ];
+        }
       }
     }
 
@@ -651,19 +637,11 @@ class PullForm extends FormBase {
       ];
     }
 
-    $form['channel_wrapper']['entities_wrapper']['actions_top']['#type'] = 'actions';
-    $form['channel_wrapper']['entities_wrapper']['actions_top']['#weight'] = -1;
-    $form['channel_wrapper']['entities_wrapper']['actions_top']['synchronize'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Synchronize entities'),
-      '#button_type' => 'primary',
-      '#validate' => ['::validateSelectedEntities'],
-      '#submit' => ['::synchronizeSelectedEntities'],
-    ];
+    $label_header_machine_name = isset($entity_keys['label']) ? $entity_keys['label'] : 'label';
 
     // Table to select entities.
     $header = [
-      'label' => $this->getHeader($this->t('Label'), 'label', $sort_context),
+      'label' => $this->getHeader($this->t('Label'), $label_header_machine_name, $sort_context),
       'type' => $this->t('Type'),
       'bundle' => $this->t('Bundle'),
       'language' => $this->t('Language'),
@@ -674,7 +652,7 @@ class PullForm extends FormBase {
     $form['channel_wrapper']['entities_wrapper']['entities'] = [
       '#type' => 'tableselect',
       '#header' => $header,
-      '#options' => $this->jsonapiHelper->buildEntitiesOptions($json['data'], $selected_remote, $selected_channel),
+      '#options' => $this->formHelper->buildEntitiesOptions($json['data'], $selected_remote, $selected_channel),
       '#empty' => $this->t('No entities to be pulled have been found.'),
       '#attached' => [
         'library' => [
@@ -686,14 +664,42 @@ class PullForm extends FormBase {
       $form['channel_wrapper']['entities_wrapper']['entities']['#attached']['library'][] = 'core/drupal.dialog.ajax';
     }
 
+    // Actions bottom.
     $form['channel_wrapper']['entities_wrapper']['actions_bottom']['#type'] = 'actions';
-    $form['channel_wrapper']['entities_wrapper']['actions_bottom']['synchronize'] = [
+    // The button for importing selected entities always appears.
+    $synchronize_button = [
       '#type' => 'submit',
       '#value' => $this->t('Synchronize entities'),
       '#button_type' => 'primary',
       '#validate' => ['::validateSelectedEntities'],
-      '#submit' => ['::synchronizeSelectedEntities'],
+      '#submit' => [
+        '::submitForm',
+        '::synchronizeSelectedEntities',
+      ],
     ];
+    $form['channel_wrapper']['entities_wrapper']['actions_bottom']['synchronize'] = $synchronize_button;
+    // The button for importing the whole channel appears only if JSON:API
+    // option "Include count in collection queries" is activated on remote.
+    if (isset($json['meta']['count'])) {
+      $import_channel_button = [
+        '#type' => 'submit',
+        '#value' => $this->t('Import the whole channel'),
+        '#button_type' => 'primary',
+        '#submit' => [
+          '::submitForm',
+          '::importChannel',
+        ],
+      ];
+      $form['channel_wrapper']['entities_wrapper']['actions_bottom']['import_channel'] = $import_channel_button;
+      // Remember the remote channel count.
+      $storage = $form_state->getStorage();
+      $storage['remote_channel_count'] = $json['meta']['count'];
+      $form_state->setStorage($storage);
+    }
+
+    // Actions on top are the same as the actions at the bottom.
+    $form['channel_wrapper']['entities_wrapper']['actions_top'] = $form['channel_wrapper']['entities_wrapper']['actions_bottom'];
+    $form['channel_wrapper']['entities_wrapper']['actions_top']['#weight'] = -1;
   }
 
   /**
@@ -748,51 +754,34 @@ class PullForm extends FormBase {
   }
 
   /**
-   * Form submission handler to go to the first pager page.
+   * Helper function to get simple pager's link ID's and labels.
    *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
+   * @return array
+   *   Array keyed by link ID's with labels as values.
    */
-  public function firstPage(array &$form, FormStateInterface $form_state) {
-    $this->pagerRedirect($form_state, 'first');
+  protected function getBasicPagerLinks() {
+    return [
+      'first' => $this->t('First'),
+      'prev' => $this->t('Previous'),
+      'next' => $this->t('Next'),
+      'last' => $this->t('Last'),
+    ];
   }
 
   /**
-   * Form submission handler to go to the previous pager page.
+   * Form submission handler to go to pager link: first, previous, next, last.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function prevPage(array &$form, FormStateInterface $form_state) {
-    $this->pagerRedirect($form_state, 'prev');
-  }
-
-  /**
-   * Form submission handler to go to the next pager page.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   */
-  public function nextPage(array &$form, FormStateInterface $form_state) {
-    $this->pagerRedirect($form_state, 'next');
-  }
-
-  /**
-   * Form submission handler to go to the last pager page.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   */
-  public function lastPage(array &$form, FormStateInterface $form_state) {
-    $this->pagerRedirect($form_state, 'last');
+  public function goToPage(array &$form, FormStateInterface $form_state) {
+    $triggering_element = $form_state->getTriggeringElement();
+    $link_name = current($triggering_element['#parents']);
+    if ($link_name !== FALSE && array_key_exists($link_name, $this->getBasicPagerLinks())) {
+      $this->pagerRedirect($form_state, $link_name);
+    }
   }
 
   /**
@@ -808,18 +797,41 @@ class PullForm extends FormBase {
     if (isset($storage['links'][$link_name]['href'])) {
       $parsed_url = UrlHelper::parse($storage['links'][$link_name]['href']);
       if (isset($parsed_url['query']['page']) && isset($parsed_url['query']['page']['offset'])) {
-        $form_state->setRedirect('entity_share_client.admin_content_pull_form', [], [
-          'query' => [
-            'remote' => $form_state->getValue('remote'),
-            'channel' => $form_state->getValue('channel'),
-            'offset' => $parsed_url['query']['page']['offset'],
-            'search' => $form_state->getValue('search'),
-            'order' => $this->query->get('order', ''),
-            'sort' => $this->query->get('sort', ''),
-          ],
-        ]);
+        $additional_query_parameters = [
+          'offset' => $parsed_url['query']['page']['offset'],
+          'order' => $this->query->get('order', ''),
+          'sort' => $this->query->get('sort', ''),
+        ];
+        $this->setFormRedirect($form_state, $additional_query_parameters);
       }
     }
+  }
+
+  /**
+   * Helper function to redirect the form.
+   *
+   * By default it provides some parameters coming from the form state:
+   *   - Remote
+   *   - Channel
+   *   - Import config
+   *   - Search keyword.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param array $additional_query_parameters
+   *   Array of additional query parameters, if needed.
+   */
+  protected function setFormRedirect(FormStateInterface $form_state, array $additional_query_parameters = []) {
+    $query_parameters = [
+      'remote' => $form_state->getValue('remote'),
+      'channel' => $form_state->getValue('channel'),
+      'import_config' => $form_state->getValue('import_config'),
+      'search' => $form_state->getValue('search', ''),
+    ];
+    if ($additional_query_parameters) {
+      $query_parameters = array_merge($query_parameters, $additional_query_parameters);
+    }
+    $form_state->setRedirect('entity_share_client.admin_content_pull_form', [], ['query' => $query_parameters]);
   }
 
   /**
@@ -831,13 +843,7 @@ class PullForm extends FormBase {
    *   The current state of the form.
    */
   public function resetSort(array &$form, FormStateInterface $form_state) {
-    $form_state->setRedirect('entity_share_client.admin_content_pull_form', [], [
-      'query' => [
-        'remote' => $form_state->getValue('remote'),
-        'channel' => $form_state->getValue('channel'),
-        'search' => $form_state->getValue('search'),
-      ],
-    ]);
+    $this->setFormRedirect($form_state);
   }
 
 }

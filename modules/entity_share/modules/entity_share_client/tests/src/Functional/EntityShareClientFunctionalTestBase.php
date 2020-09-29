@@ -5,12 +5,12 @@ declare(strict_types = 1);
 namespace Drupal\Tests\entity_share_client\Functional;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\entity_share\EntityShareUtility;
+use Drupal\entity_share_client\ImportContext;
 use Drupal\entity_share_test\EntityFieldHelperTrait;
 use Drupal\node\NodeInterface;
 use Drupal\Tests\BrowserTestBase;
@@ -19,12 +19,11 @@ use Drupal\Tests\RandomGeneratorTrait;
 use Drupal\user\UserInterface;
 use Faker\Factory;
 use Faker\Provider\fr_FR\PhoneNumber;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
 
 /**
- * Base class for Entity share server functional tests.
+ * Base class for Entity Share Server functional tests.
  */
 abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
 
@@ -33,14 +32,20 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
   use EntityFieldHelperTrait;
 
   /**
+   * The import config ID.
+   */
+  const IMPORT_CONFIG_ID = 'test_import_config';
+
+  /**
    * {@inheritdoc}
    */
   public static $modules = [
-    'entity_share_client_request_test',
+    'basic_auth',
     'entity_share_client',
+    'entity_share_client_remote_manager_test',
     'entity_share_server',
     'entity_share_test',
-    'basic_auth',
+    'jsonapi_extras',
   ];
 
   /**
@@ -91,25 +96,18 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
   protected $entityTypeManager;
 
   /**
+   * The import service.
+   *
+   * @var \Drupal\entity_share_client\Service\ImportServiceInterface
+   */
+  protected $importService;
+
+  /**
    * The remote manager service.
    *
    * @var \Drupal\entity_share_client\Service\RemoteManagerInterface
    */
   protected $remoteManager;
-
-  /**
-   * The request service.
-   *
-   * @var \Drupal\entity_share_client\Service\RequestServiceInterface
-   */
-  protected $requestService;
-
-  /**
-   * The jsonapi helper.
-   *
-   * @var \Drupal\entity_share_client\Service\JsonapiHelperInterface
-   */
-  protected $jsonapiHelper;
 
   /**
    * Faker generator.
@@ -142,6 +140,13 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
   protected $channels = [];
 
   /**
+   * The import config used for the test.
+   *
+   * @var \Drupal\entity_share_client\Entity\ImportConfigInterface
+   */
+  protected $importConfig;
+
+  /**
    * A mapping of the entities created for the test.
    *
    * With the following structure:
@@ -163,6 +168,13 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
   protected $entitiesData;
 
   /**
+   * The entity type definitions.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeInterface[]
+   */
+  protected $entityDefinitions;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() {
@@ -172,17 +184,24 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
     $this->adminUser = $this->drupalCreateUser($this->getAdministratorPermissions());
     $this->channelUser = $this->drupalCreateUser($this->getChannelUserPermissions());
 
+    // Enable count meta to be able to use the importChannel method on the
+    // import service.
+    $config = $this->container->get('config.factory')->getEditable('jsonapi_extras.settings');
+    $config->set('include_count', TRUE);
+    $config->save(TRUE);
+
     // Retrieve required services.
     $this->entityTypeManager = $this->container->get('entity_type.manager');
+    $this->entityDefinitions = $this->entityTypeManager->getDefinitions();
+    $this->importService = $this->container->get('entity_share_client.import_service');
     $this->remoteManager = $this->container->get('entity_share_client.remote_manager');
-    $this->requestService = $this->container->get('entity_share_client.request');
-    $this->jsonapiHelper = $this->container->get('entity_share_client.jsonapi_helper');
     $this->faker = Factory::create();
     // Add French phone number.
     $this->faker->addProvider(new PhoneNumber($this->faker));
 
     $this->createRemote($this->channelUser);
     $this->createChannel($this->channelUser);
+    $this->createImportConfig();
   }
 
   /**
@@ -281,6 +300,75 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
     ]);
     $channel->save();
     $this->channels[$channel->id()] = $channel;
+  }
+
+  /**
+   * Helper function to create the import config used for the test.
+   */
+  protected function createImportConfig() {
+    $import_config_storage = $this->entityTypeManager->getStorage('import_config');
+    $import_config = $import_config_storage->create([
+      'id' => $this::IMPORT_CONFIG_ID,
+      'label' => $this->randomString(),
+      'import_processor_settings' => $this->getImportConfigProcessorSettings(),
+    ]);
+    $import_config->save();
+    $this->importConfig = $import_config;
+  }
+
+  /**
+   * Helper function to add/modify plugins in import config, runtime.
+   *
+   * @param array $plugins
+   *   Plugin configurations.
+   *   For format @see getImportConfigProcessorSettings().
+   */
+  protected function mergePluginsToImportConfig(array $plugins) {
+    $processor_settings = $this->importConfig->get('import_processor_settings');
+    // Add new plugins or override existing plugin configurations.
+    $processor_settings = array_merge($processor_settings, $plugins);
+    $this->importConfig->set('import_processor_settings', $processor_settings);
+    $this->importConfig->save();
+  }
+
+  /**
+   * Helper function to remove a plugin from import config, runtime.
+   *
+   * @param string $plugin_id
+   *   The identifier of import plugin.
+   */
+  protected function removePluginFromImportConfig(string $plugin_id) {
+    $processor_settings = $this->importConfig->get('import_processor_settings');
+    if (isset($processor_settings[$plugin_id])) {
+      unset($processor_settings[$plugin_id]);
+      $this->importConfig->set('import_processor_settings', $processor_settings);
+      $this->importConfig->save();
+    }
+  }
+
+  /**
+   * Helper function to create the import config used for the test.
+   *
+   * @return array
+   *   The import processors config.
+   */
+  protected function getImportConfigProcessorSettings() {
+    // Only locked import processors are enabled by default.
+    return [
+      'default_data_processor' => [
+        'weights' => [
+          'is_entity_importable' => -10,
+          'post_entity_save' => 0,
+          'prepare_importable_entity_data' => -100,
+        ],
+      ],
+      'entity_reference' => [
+        'max_recursion_depth' => -1,
+        'weights' => [
+          'process_entity' => 10,
+        ],
+      ],
+    ];
   }
 
   /**
@@ -384,33 +472,30 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
     // Do not use RemoteManager::getChannelsInfos so we are able to test
     // behavior with website in subdirectory on testbot.
     $entity_share_entrypoint_url = Url::fromRoute('entity_share_server.resource_list');
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
 
-    $response = $this->requestService->request($http_client, 'GET', $entity_share_entrypoint_url->setAbsolute()->toString());
+    $response = $this->remoteManager->jsonApiRequest($this->remote, 'GET', $entity_share_entrypoint_url->setAbsolute()->toString());
     $json_response = Json::decode((string) $response->getBody());
 
     foreach ($json_response['data']['channels'] as $channel_data) {
-      $this->discoverJsonApiEndpoints($http_client, $channel_data['url']);
-      $this->discoverJsonApiEndpoints($http_client, $channel_data['url_uuid']);
+      $this->discoverJsonApiEndpoints($channel_data['url']);
+      $this->discoverJsonApiEndpoints($channel_data['url_uuid']);
     }
   }
 
   /**
    * Helper function to populate the request service with responses.
    *
-   * @param \GuzzleHttp\Client $http_client
-   *   The http client.
    * @param string $url
    *   THe url to request.
    */
-  protected function discoverJsonApiEndpoints(Client $http_client, $url) {
+  protected function discoverJsonApiEndpoints($url) {
     // Prevents infinite loop.
     if (in_array($url, $this->visitedUrlsDuringSetup)) {
       return;
     }
     $this->visitedUrlsDuringSetup[] = $url;
 
-    $response = $this->requestService->request($http_client, 'GET', $url);
+    $response = $this->remoteManager->jsonApiRequest($this->remote, 'GET', $url);
     $json_response = Json::decode((string) $response->getBody());
 
     // Loop on the data and relationships to get expected endpoints.
@@ -418,8 +503,33 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
       foreach (EntityShareUtility::prepareData($json_response['data']) as $data) {
         if (isset($data['relationships'])) {
           foreach ($data['relationships'] as $field_data) {
+            // Do not check related endpoints if there are no referenced
+            // entities.
+            if ($field_data['data'] == NULL || empty($field_data['data'])) {
+              continue;
+            }
+
+            // Do not check related endpoints for config entities or users.
+            $prepared_field_data = EntityShareUtility::prepareData($field_data['data']);
+            $config_or_user = FALSE;
+            foreach ($prepared_field_data as $field_data_value) {
+              $parsed_type = explode('--', $field_data_value['type']);
+              $entity_type_id = $parsed_type[0];
+              if ($entity_type_id == 'user') {
+                $config_or_user = TRUE;
+                break;
+              }
+              elseif ($this->entityDefinitions[$entity_type_id]->getGroup() == 'configuration') {
+                $config_or_user = TRUE;
+                break;
+              }
+            }
+            if ($config_or_user) {
+              continue;
+            }
+
             if (isset($field_data['links']['related']['href'])) {
-              $this->discoverJsonApiEndpoints($http_client, $field_data['links']['related']['href']);
+              $this->discoverJsonApiEndpoints($field_data['links']['related']['href']);
             }
           }
         }
@@ -429,7 +539,7 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
           // Need to handle exception for the test where the physical file has
           // been deleted.
           try {
-            $this->requestService->request($this->remoteManager->prepareClient($this->remote), 'GET', $data['attributes']['uri']['url']);
+            $this->remoteManager->request($this->remote, 'GET', $data['attributes']['uri']['url']);
           }
           catch (ClientException $exception) {
             // Do nothing.
@@ -440,7 +550,7 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
 
     // Handle pagination.
     if (isset($json_response['links']['next']['href'])) {
-      $this->discoverJsonApiEndpoints($http_client, $json_response['links']['next']['href']);
+      $this->discoverJsonApiEndpoints($json_response['links']['next']['href']);
     }
   }
 
@@ -456,9 +566,29 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
 
         // Check that the entity has been deleted.
         $remaining_entities = $entity_storage->loadByProperties(['uuid' => $entity_uuid]);
-        $this->assertTrue(empty($remaining_entities), 'The ' . $entity_type_id . ' has been deleted.');
+        $this->assertTrue(empty($remaining_entities), 'The ' . $entity_type_id . ' with UUID ' . $entity_uuid . ' has been deleted.');
       }
     }
+  }
+
+  /**
+   * Helper function to delete all (prepared or imported) content.
+   *
+   * This function doesn't assert the deletion of entities.
+   */
+  protected function resetImportedContent() {
+    $entity_type_ids = array_keys($this->getEntitiesDataArray());
+    foreach ($entity_type_ids as $entity_type_id) {
+      $entity_storage = $this->entityTypeManager->getStorage($entity_type_id);
+      $entities = $entity_storage->loadByProperties();
+      if ($entities) {
+        foreach ($entities as $entity) {
+          $entity->delete();
+        }
+      }
+    }
+    $this->entities = [];
+    $this->importService->getRuntimeImportContext()->clearImportedEntities();
   }
 
   /**
@@ -512,57 +642,49 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
    * Helper function to import all channels.
    */
   protected function pullEveryChannels() {
-    $channel_infos = $this->remoteManager->getChannelsInfos($this->remote);
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-
-    foreach ($this->channels as $channel_id => $channel) {
-      $channel_url = $channel_infos[$channel_id]['url'];
-      while ($channel_url) {
-        $response = $this->requestService->request($http_client, 'GET', $channel_url);
-        $json = Json::decode((string) $response->getBody());
-
-        $this->jsonapiHelper->importEntityListData(EntityShareUtility::prepareData($json['data']));
-
-        if (isset($json['links']['next']['href'])) {
-          $channel_url = $json['links']['next']['href'];
-        }
-        else {
-          $channel_url = FALSE;
-        }
-      }
+    foreach (array_keys($this->channels) as $channel_id) {
+      $this->pullChannel($channel_id);
     }
   }
 
   /**
-   * Helper function to import all channels.
+   * Helper function to import one channel.
    *
    * @param string $channel_id
    *   The channel ID.
    */
   protected function pullChannel($channel_id) {
-    $channel_infos = $this->remoteManager->getChannelsInfos($this->remote);
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-
-    $channel_url = $channel_infos[$channel_id]['url'];
-    while ($channel_url) {
-      $response = $this->requestService->request($http_client, 'GET', $channel_url);
-      $json = Json::decode((string) $response->getBody());
-
-      $this->jsonapiHelper->importEntityListData(EntityShareUtility::prepareData($json['data']));
-
-      if (isset($json['links']['next']['href'])) {
-        $channel_url = $json['links']['next']['href'];
-      }
-      else {
-        $channel_url = FALSE;
-      }
-    }
+    $import_context = new ImportContext($this->remote->id(), $channel_id, $this::IMPORT_CONFIG_ID);
+    $this->importService->importChannel($import_context);
+    $batch =& batch_get();
+    $batch['progressive'] = FALSE;
+    batch_process();
   }
 
   /**
-   * Helper function to import all channels.
+   * Helper function.
+   *
+   * Imports selected entities.
+   *
+   * @param string[] $selected_entities
+   *   Array of entity UUIDs.
+   * @param string $channel_id
+   *   Identifier of the import channel.
+   */
+  protected function importSelectedEntities(array $selected_entities, string $channel_id = NULL) {
+    // Generate the remote URL.
+    // Unless overridden by parameter, pull from the default channel.
+    $channel_id = $channel_id ?: static::$entityTypeId . '_' . static::$entityBundleId . '_' . static::$entityLangcode;
+    $prepared_url = $this->prepareUrlFilteredOnUuids($selected_entities, $channel_id);
+    // Prepare import context.
+    $import_context = new ImportContext($this->remote->id(), 'node_es_test_en', $this::IMPORT_CONFIG_ID);
+    $this->importService->prepareImport($import_context);
+    // Imports data from the remote URL.
+    $this->importService->importFromUrl($prepared_url);
+  }
+
+  /**
+   * Helper function to get the JSON:API data of an entity.
    *
    * @param string $channel_id
    *   The channel ID.
@@ -575,12 +697,10 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
   protected function getEntityJsonData($channel_id, $entity_uuid) {
     $json_data = [];
     $channel_infos = $this->remoteManager->getChannelsInfos($this->remote);
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
 
     $channel_url = $channel_infos[$channel_id]['url'];
     while ($channel_url) {
-      $response = $this->requestService->request($http_client, 'GET', $channel_url);
+      $response = $this->remoteManager->jsonApiRequest($this->remote, 'GET', $channel_url);
       $json = Json::decode((string) $response->getBody());
 
       $json_data = EntityShareUtility::prepareData($json['data']);
@@ -784,19 +904,7 @@ abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
   protected function prepareUrlFilteredOnUuids(array $selected_entities, $channel_id) {
     $channel_infos = $this->remoteManager->getChannelsInfos($this->remote);
     $channel_url = $channel_infos[$channel_id]['url'];
-    $parsed_url = UrlHelper::parse($channel_url);
-    $query = $parsed_url['query'];
-    $query['filter']['uuid-filter'] = [
-      'condition' => [
-        'path' => 'id',
-        'operator' => 'IN',
-        'value' => array_values($selected_entities),
-      ],
-    ];
-    $query = UrlHelper::buildQuery($query);
-    $prepared_url = $parsed_url['path'] . '?' . $query;
-
-    return $prepared_url;
+    return EntityShareUtility::prepareUuidsFilteredUrl($channel_url, array_values($selected_entities));
   }
 
   /**

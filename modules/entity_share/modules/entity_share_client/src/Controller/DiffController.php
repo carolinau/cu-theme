@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\entity_share_client\Controller;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\diff\Controller\PluginRevisionController;
@@ -24,13 +23,6 @@ class DiffController extends PluginRevisionController {
    * @var \Drupal\entity_share_client\Service\RemoteManagerInterface
    */
   private $remoteManager;
-
-  /**
-   * The request service.
-   *
-   * @var \Drupal\entity_share_client\Service\RequestServiceInterface
-   */
-  private $requestService;
 
   /**
    * The jsonapi helper.
@@ -66,7 +58,6 @@ class DiffController extends PluginRevisionController {
   public static function create(ContainerInterface $container) {
     $instance = parent::create($container);
     $instance->remoteManager = $container->get('entity_share_client.remote_manager');
-    $instance->requestService = $container->get('entity_share_client.request');
     $instance->jsonapiHelper = $container->get('entity_share_client.jsonapi_helper');
     $instance->routeMatch = $container->get('current_route_match');
     $instance->dateFormatter = $container->get('date.formatter');
@@ -103,20 +94,9 @@ class DiffController extends PluginRevisionController {
 
     // Get the right/remote revision.
     $url = $channels_infos[$channel_id]['url'];
-    $parsed_url = UrlHelper::parse($url);
-    $query = $parsed_url['query'];
-    $query['filter']['uuid-filter'] = [
-      'condition' => [
-        'path' => 'id',
-        'operator' => 'IN',
-        'value' => array_values([$uuid]),
-      ],
-    ];
-    $query = UrlHelper::buildQuery($query);
-    $prepared_url = $parsed_url['path'] . '?' . $query;
+    $prepared_url = EntityShareUtility::prepareUuidsFilteredUrl($url, [$uuid]);
 
-    $http_client = $this->remoteManager->prepareJsonApiClient($remote);
-    $response = $this->requestService->request($http_client, 'GET', $prepared_url);
+    $response = $this->remoteManager->jsonApiRequest($remote, 'GET', $prepared_url);
     $json = Json::decode((string) $response->getBody());
 
     $entity_type = $storage->getEntityType();
@@ -167,7 +147,8 @@ class DiffController extends PluginRevisionController {
     // Perform comparison only if both entity revisions loaded successfully.
     if ($left_revision != FALSE && $right_revision != FALSE) {
       // Build the diff comparison with the plugin.
-      if ($plugin = $this->diffLayoutManager->createInstance($filter)) {
+      $plugin = $this->diffLayoutManager->createInstance($filter);
+      if ($plugin) {
         $build = array_merge_recursive($build, $plugin->build($left_revision, $right_revision, $entity));
         unset($build['header']);
         unset($build['controls']);

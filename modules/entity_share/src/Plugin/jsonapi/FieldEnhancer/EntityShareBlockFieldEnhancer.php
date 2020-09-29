@@ -72,6 +72,7 @@ class EntityShareBlockFieldEnhancer extends ResourceFieldEnhancerBase implements
   protected function doUndoTransform($data, Context $context) {
 
     if (isset($data['settings']['id'])) {
+      $parsed_id = [];
       // Check if it is a link to an entity.
       preg_match("/block_content:(.*)/", $data['settings']['id'], $parsed_id);
       if (!empty($parsed_id)) {

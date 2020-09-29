@@ -9,7 +9,7 @@ use Drupal\Tests\BrowserTestBase;
 use GuzzleHttp\RequestOptions;
 
 /**
- * Base class for Entity share server functional tests.
+ * Base class for Entity Share Server functional tests.
  */
 abstract class EntityShareServerFunctionalTestBase extends BrowserTestBase {
 

@@ -1,12 +1,12 @@
-name: Entity share async
+name: 'Entity Share Async'
 type: module
-description: Provides asynchronous import of entities.
-core_version_requirement: ^8.8 || ^9
-package: Web services
+description: 'Provides asynchronous import of entities.'
+core_version_requirement: ^8 || ^9
+package: 'Web services'
 dependencies:
   - entity_share:entity_share_client
 
 # Information added by Drupal.org packaging script on 2020-08-20
-version: '8.x-2.0-alpha12'
+version: '8.x-3.0-alpha1'
 project: 'entity_share'
-datestamp: 1597935224
+datestamp: 1597935793

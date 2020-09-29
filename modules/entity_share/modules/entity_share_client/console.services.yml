@@ -1,6 +1,0 @@
-services:
-  entity_share_client.entity_share_client_pull:
-    class: Drupal\entity_share_client\Command\PullCommand
-    arguments: ['@entity_share_client.cli']
-    tags:
-      - { name: drupal.command }

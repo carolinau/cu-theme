@@ -4,12 +4,10 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\entity_share_client\Functional;
 
-use Drupal\Component\Serialization\Json;
-use Drupal\entity_share\EntityShareUtility;
 use Drupal\node\NodeInterface;
 
 /**
- * Functional test class for content entity reference field.
+ * Functional test class for infinite loop in content entity reference field.
  *
  * @group entity_share
  * @group entity_share_client
@@ -46,6 +44,7 @@ class InfiniteLoopTest extends EntityShareClientFunctionalTestBase {
     /** @var \Drupal\node\NodeStorageInterface $node_storage */
     $node_storage = $this->entityTypeManager->getStorage('node');
 
+    // Create two nodes referencing each other.
     $node_1 = $node_storage->create([
       'uuid' => 'es_test_content_reference_one',
       'type' => static::$entityBundleId,
@@ -86,21 +85,17 @@ class InfiniteLoopTest extends EntityShareClientFunctionalTestBase {
    *
    * In a scenario of infinite loop.
    */
-  public function testInfiniteLoopFromNodeOne() {
-    // Select only the referencing entity.
+  public function testInfiniteLoop() {
+    // Select only the first referencing entity.
     $selected_entities = [
       'es_test_content_reference_one',
     ];
     $this->infiniteLoopTestHelper($selected_entities);
-  }
 
-  /**
-   * Test that a referenced entity is pulled even if not selected.
-   *
-   * In a scenario of infinite loop.
-   */
-  public function testInfiniteLoopFromNodeTwo() {
-    // Select only the referencing entity.
+    // Reset before starting again.
+    $this->resetImportedContent();
+
+    // Select only the second referencing entity.
     $selected_entities = [
       'es_test_content_reference_two',
     ];
@@ -119,10 +114,7 @@ class InfiniteLoopTest extends EntityShareClientFunctionalTestBase {
       'es_test_content_reference_one',
     ];
     $prepared_url = $this->prepareUrlFilteredOnUuids($selected_entities, 'node_es_test_en');
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-
-    $this->discoverJsonApiEndpoints($http_client, $prepared_url);
+    $this->discoverJsonApiEndpoints($prepared_url);
 
     // Needs to make the requests when only one referencing content will be
     // required.
@@ -130,10 +122,7 @@ class InfiniteLoopTest extends EntityShareClientFunctionalTestBase {
       'es_test_content_reference_two',
     ];
     $prepared_url = $this->prepareUrlFilteredOnUuids($selected_entities, 'node_es_test_en');
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-
-    $this->discoverJsonApiEndpoints($http_client, $prepared_url);
+    $this->discoverJsonApiEndpoints($prepared_url);
   }
 
   /**
@@ -143,13 +132,7 @@ class InfiniteLoopTest extends EntityShareClientFunctionalTestBase {
    *   The selected entities to pull.
    */
   protected function infiniteLoopTestHelper(array $selected_entities) {
-    $prepared_url = $this->prepareUrlFilteredOnUuids($selected_entities, 'node_es_test_en');
-    $this->jsonapiHelper->setRemote($this->remote);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-
-    $response = $this->requestService->request($http_client, 'GET', $prepared_url);
-    $json = Json::decode((string) $response->getBody());
-    $this->jsonapiHelper->importEntityListData(EntityShareUtility::prepareData($json['data']));
+    $this->importSelectedEntities($selected_entities);
 
     // Check that both entities had been created. If the process ends the
     // infinite loop has been avoided.

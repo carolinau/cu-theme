@@ -29,17 +29,6 @@ interface ChannelManipulatorInterface {
    *   The channel entity.
    *
    * @return array
-   *   The field mapping used for sorting.
-   */
-  public function getFieldMapping(ChannelInterface $channel);
-
-  /**
-   * Get field mapping.
-   *
-   * @param \Drupal\entity_share_server\Entity\ChannelInterface $channel
-   *   The channel entity.
-   *
-   * @return array
    *   The field mapping used for text search.
    */
   public function getSearchConfiguration(ChannelInterface $channel);

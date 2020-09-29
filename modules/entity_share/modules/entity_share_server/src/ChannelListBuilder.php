@@ -84,6 +84,7 @@ class ChannelListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
+    $header = [];
     $header['label'] = $this->t('Channel');
     $header['entity_type'] = $this->t('Entity type');
     $header['bundle'] = $this->t('Bundle');
@@ -98,6 +99,7 @@ class ChannelListBuilder extends ConfigEntityListBuilder {
     $entity_type = $entity->get('channel_entity_type');
     $bundle = $entity->get('channel_bundle');
 
+    $row = [];
     $row['label'] = $entity->label() . ' (' . $entity->id() . ')';
     $row['entity_type'] = $this->entityTypeLabels[$entity_type];
     $row['bundle'] = $this->bundleInfos[$entity_type][$bundle]['label'];

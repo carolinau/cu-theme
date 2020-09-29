@@ -26,9 +26,11 @@ interface QueueHelperInterface {
    *   The remote ID.
    * @param string $channel_id
    *   The channel ID.
+   * @param string $import_config_id
+   *   The import config ID.
    * @param string[] $uuids
    *   The UUIDs of the entities to pull.
    */
-  public function enqueue($remote_id, $channel_id, array $uuids);
+  public function enqueue($remote_id, $channel_id, $import_config_id, array $uuids);
 
 }

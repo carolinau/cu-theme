@@ -10,7 +10,7 @@ use Drush\Commands\DrushCommands;
 /**
  * Class EntityShareClientCommands.
  *
- * This is the Drush 9 commands.
+ * These are the Drush >= 9 commands.
  *
  * @package Drupal\entity_share_client\Commands
  */
@@ -36,25 +36,41 @@ class EntityShareClientCommands extends DrushCommands {
   /**
    * Pull a channel from a remote website.
    *
-   * @param string $remote_id
-   *   The remote website id to import from.
-   * @param string $channel_id
-   *   The remote channel id to import.
    * @param array $options
-   *   Additional Drush 9 command options.
+   *   Additional command options.
    *
    * @command entity-share-client:pull
-   * @options update Optional --update argument which denotes script to fetch only new and updated entities.
-   * @usage drush entity-share-client:pull remote_id channel_id --update
-   *   Pull a channel from a remote website. Add --update option to fetch only
-   *   new and updated entities.
+   * @options remote-id Required. The remote website id to import from.
+   * @options channel-id Required. The remote channel id to import.
+   * @options import-config-id Required. The import config id to import with.
+   * @usage drush entity-share-client:pull --remote-id=site_1 --channel-id=articles_en --import-config-id=default
+   *   Pull a channel from a remote website. The "Include count in collection
+   *   queries" option should be enabled on the server website. This option is
+   *   provided by the JSON:API Extras module.
    */
-  public function pullChannel($remote_id = '', $channel_id = '', array $options = ['update' => FALSE]) {
-    if ($options['update']) {
-      $this->cliService->ioPullUpdates($remote_id, $channel_id, $this->io(), 'dt');
+  public function pullChannel(array $options = [
+    'remote-id' => '',
+    'channel-id' => '',
+    'import-config-id' => '',
+  ]) {
+    // Validate options.
+    $required_options = [
+      'remote-id',
+      'channel-id',
+      'import-config-id',
+    ];
+    $missing_option = FALSE;
+    foreach ($required_options as $required_option) {
+      if (empty($options[$required_option])) {
+        $missing_option = TRUE;
+        $this->logger()->error(dt('Missing required option @option.', [
+          '@option' => $required_option,
+        ]));
+      }
     }
-    else {
-      $this->cliService->ioPull($remote_id, $channel_id, $this->io(), 'dt');
+
+    if (!$missing_option) {
+      $this->cliService->ioPull($options['remote-id'], $options['channel-id'], $options['import-config-id'], $this->io(), 'dt');
     }
   }
 

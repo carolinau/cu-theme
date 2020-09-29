@@ -12,26 +12,42 @@ use Drupal\entity_share_client\Entity\RemoteInterface;
 interface RemoteManagerInterface {
 
   /**
-   * Prepare an HTTP client authenticated to handle private files.
+   * Performs a HTTP request. Wraps the HTTP client.
+   *
+   * We need to override this method during tests to emulate another website.
    *
    * @param \Drupal\entity_share_client\Entity\RemoteInterface $remote
-   *   The remote website on which to prepare the client.
+   *   The remote website on which to perform the request.
+   * @param string $method
+   *   HTTP method.
+   * @param string $url
+   *   URL to request.
    *
-   * @return \GuzzleHttp\Client
-   *   An HTTP client with some info from the remote.
+   * @return \Psr\Http\Message\ResponseInterface
+   *   The response.
+   *
+   * @see \GuzzleHttp\ClientInterface::request()
    */
-  public function prepareClient(RemoteInterface $remote);
+  public function request(RemoteInterface $remote, $method, $url);
 
   /**
-   * Prepare an HTTP client for the JSON:API endpoints.
+   * Performs a HTTP request on a JSON:API endpoint. Wraps the HTTP client.
+   *
+   * We need to override this method during tests to emulate another website.
    *
    * @param \Drupal\entity_share_client\Entity\RemoteInterface $remote
-   *   The remote website on which to prepare the client.
+   *   The remote website on which to perform the request.
+   * @param string $method
+   *   HTTP method.
+   * @param string $url
+   *   URL to request.
    *
-   * @return \GuzzleHttp\Client
-   *   An HTTP client with some info from the remote.
+   * @return \Psr\Http\Message\ResponseInterface
+   *   The response.
+   *
+   * @see \GuzzleHttp\ClientInterface::request()
    */
-  public function prepareJsonApiClient(RemoteInterface $remote);
+  public function jsonApiRequest(RemoteInterface $remote, $method, $url);
 
   /**
    * Get the channels infos of a remote website.
@@ -40,8 +56,19 @@ interface RemoteManagerInterface {
    *   The remote website on which to get the channels infos.
    *
    * @return array
-   *   An array of channel infos as returned by entity_share_server entry point.
+   *   Channel infos as returned by entity_share_server entry point.
    */
   public function getChannelsInfos(RemoteInterface $remote);
+
+  /**
+   * Get the field mappings of a remote website.
+   *
+   * @param \Drupal\entity_share_client\Entity\RemoteInterface $remote
+   *   The remote website on which to get the field mappings.
+   *
+   * @return array
+   *   Field mappings as returned by entity_share_server entry point.
+   */
+  public function getfieldMappings(RemoteInterface $remote);
 
 }

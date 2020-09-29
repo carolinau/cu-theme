@@ -88,6 +88,19 @@ class MediaEntityReferenceTest extends EntityShareClientFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
+  protected function getImportConfigProcessorSettings() {
+    $processors = parent::getImportConfigProcessorSettings();
+    $processors['physical_file'] = [
+      'weights' => [
+        'process_entity' => 0,
+      ],
+    ];
+    return $processors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getEntitiesDataArray() {
     return [
       'file' => [

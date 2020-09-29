@@ -42,35 +42,150 @@ dependencies:
     - datetime_range
     - dynamic_entity_reference
     - entity_reference_revisions
+    - field_group
     - file
     - image
     - link
-    - metatag
     - options
     - telephone
     - text
     - user
+third_party_settings:
+  field_group:
+    group_dates:
+      children:
+        - field_es_test_timestamp
+        - field_es_test_date_only
+        - field_es_test_date
+        - field_es_test_date_only_range
+        - field_es_test_date_range
+        - field_es_test_date_all_day_range
+      parent_name: ''
+      weight: 4
+      format_type: details
+      region: content
+      format_settings:
+        description: ''
+        open: true
+        id: ''
+        classes: ''
+      label: Dates
+    group_texts:
+      children:
+        - field_es_test_text_plain
+        - field_es_test_text_plain_long
+        - field_es_test_text_formatted
+        - field_es_test_text_formatted_lon
+        - field_es_test_body
+      parent_name: ''
+      weight: 10
+      format_type: details
+      region: content
+      format_settings:
+        description: ''
+        open: true
+        id: ''
+        classes: ''
+      label: Texts
+    group_medias:
+      children:
+        - field_es_test_file
+        - field_es_test_image
+        - field_es_test_media
+      parent_name: ''
+      weight: 8
+      format_type: details
+      region: content
+      format_settings:
+        description: ''
+        open: true
+        id: ''
+        classes: ''
+      label: Medias
+    group_lists:
+      children:
+        - field_es_test_list_text
+        - field_es_test_list_integer
+        - field_es_test_list_float
+      parent_name: ''
+      weight: 6
+      format_type: details
+      region: content
+      format_settings:
+        description: ''
+        open: true
+        id: ''
+        classes: ''
+      label: Lists
+    group_references:
+      children:
+        - field_es_test_block
+        - field_es_test_content_reference
+        - field_es_test_dynamic_reference
+        - field_es_test_paragraphs
+        - field_es_test_taxonomy
+      parent_name: ''
+      weight: 9
+      format_type: details
+      region: content
+      format_settings:
+        description: ''
+        open: true
+        id: ''
+        classes: ''
+      label: References
+    group_numbers:
+      children:
+        - field_es_test_number_integer
+        - field_es_test_number_decimal
+        - field_es_test_number_float
+        - field_es_test_telephone
+      parent_name: ''
+      weight: 7
+      format_type: details
+      region: content
+      format_settings:
+        description: ''
+        open: true
+        id: ''
+        classes: ''
+      label: Numbers
+    group_general:
+      children:
+        - field_es_test_boolean
+        - field_es_test_email
+        - field_es_test_link
+      parent_name: ''
+      weight: 5
+      format_type: details
+      region: content
+      format_settings:
+        description: ''
+        open: true
+        id: ''
+        classes: ''
+      label: General
 id: node.es_test.default
 targetEntityType: node
 bundle: es_test
 mode: default
 content:
   field_es_test_block:
-    weight: 30
+    weight: 16
     label: above
     settings: {  }
     third_party_settings: {  }
     type: block_field
     region: content
   field_es_test_body:
-    weight: 1
+    weight: 28
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
   field_es_test_boolean:
-    weight: 2
+    weight: 1
     label: above
     settings:
       format: default
@@ -80,7 +195,7 @@ content:
     type: boolean
     region: content
   field_es_test_comments:
-    weight: 14
+    weight: 11
     label: above
     settings:
       view_mode: default
@@ -89,7 +204,7 @@ content:
     type: comment_default
     region: content
   field_es_test_content_reference:
-    weight: 29
+    weight: 17
     label: above
     settings:
       link: true
@@ -97,7 +212,7 @@ content:
     type: entity_reference_label
     region: content
   field_es_test_date:
-    weight: 3
+    weight: 13
     label: above
     settings:
       format_type: medium
@@ -106,7 +221,7 @@ content:
     type: datetime_default
     region: content
   field_es_test_date_all_day_range:
-    weight: 17
+    weight: 16
     label: above
     settings:
       separator: '-'
@@ -116,7 +231,7 @@ content:
     type: daterange_default
     region: content
   field_es_test_date_only:
-    weight: 4
+    weight: 12
     label: above
     settings:
       format_type: medium
@@ -125,7 +240,7 @@ content:
     type: datetime_default
     region: content
   field_es_test_date_only_range:
-    weight: 18
+    weight: 14
     label: above
     settings:
       separator: '-'
@@ -145,7 +260,7 @@ content:
     type: daterange_default
     region: content
   field_es_test_dynamic_reference:
-    weight: 5
+    weight: 18
     label: above
     settings:
       link: true
@@ -153,14 +268,14 @@ content:
     type: dynamic_entity_reference_label
     region: content
   field_es_test_email:
-    weight: 6
+    weight: 2
     label: above
     settings: {  }
     third_party_settings: {  }
     type: basic_string
     region: content
   field_es_test_file:
-    weight: 7
+    weight: 4
     label: above
     settings:
       use_description_as_link_text: true
@@ -168,7 +283,7 @@ content:
     type: file_default
     region: content
   field_es_test_image:
-    weight: 8
+    weight: 5
     label: above
     settings:
       image_style: ''
@@ -177,7 +292,7 @@ content:
     type: image
     region: content
   field_es_test_link:
-    weight: 9
+    weight: 3
     label: above
     settings:
       trim_length: 80
@@ -189,21 +304,21 @@ content:
     type: link
     region: content
   field_es_test_list_float:
-    weight: 27
+    weight: 26
     label: above
     settings: {  }
     third_party_settings: {  }
     type: list_default
     region: content
   field_es_test_list_integer:
-    weight: 28
+    weight: 25
     label: above
     settings: {  }
     third_party_settings: {  }
     type: list_default
     region: content
   field_es_test_list_text:
-    weight: 26
+    weight: 24
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -211,22 +326,15 @@ content:
     region: content
   field_es_test_media:
     type: entity_reference_entity_view
-    weight: 31
+    weight: 6
     label: above
     settings:
       view_mode: default
       link: false
     third_party_settings: {  }
     region: content
-  field_es_test_metatag:
-    weight: 15
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: metatag_empty_formatter
-    region: content
   field_es_test_number_decimal:
-    weight: 19
+    weight: 22
     label: above
     settings:
       thousand_separator: ''
@@ -237,7 +345,7 @@ content:
     type: number_decimal
     region: content
   field_es_test_number_float:
-    weight: 20
+    weight: 23
     label: above
     settings:
       thousand_separator: ''
@@ -258,7 +366,7 @@ content:
     region: content
   field_es_test_paragraphs:
     type: entity_reference_revisions_entity_view
-    weight: 13
+    weight: 19
     label: above
     settings:
       view_mode: default
@@ -266,7 +374,7 @@ content:
     third_party_settings: {  }
     region: content
   field_es_test_taxonomy:
-    weight: 10
+    weight: 20
     label: above
     settings:
       link: true
@@ -274,7 +382,7 @@ content:
     type: entity_reference_label
     region: content
   field_es_test_telephone:
-    weight: 11
+    weight: 24
     label: above
     settings:
       title: ''
@@ -282,21 +390,21 @@ content:
     type: telephone_link
     region: content
   field_es_test_text_formatted:
-    weight: 24
+    weight: 26
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
   field_es_test_text_formatted_lon:
-    weight: 25
+    weight: 27
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
   field_es_test_text_plain:
-    weight: 22
+    weight: 24
     label: above
     settings:
       link_to_entity: false
@@ -304,14 +412,14 @@ content:
     type: string
     region: content
   field_es_test_text_plain_long:
-    weight: 23
+    weight: 25
     label: above
     settings: {  }
     third_party_settings: {  }
     type: basic_string
     region: content
   field_es_test_timestamp:
-    weight: 12
+    weight: 11
     label: above
     settings:
       date_format: medium
@@ -320,10 +428,19 @@ content:
     third_party_settings: {  }
     type: timestamp
     region: content
-  links:
+  langcode:
+    type: language
     weight: 0
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+      native_language: false
+    third_party_settings: {  }
+  links:
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
-  langcode: true
+  field_es_test_metatag: true

@@ -1,4 +1,4 @@
-# This is the DrupalCI testbot build file for Entity share.
+# This is the DrupalCI testbot build file for Entity Share.
 # Learn to make one for your own drupal.org project:
 # https://www.drupal.org/drupalorg/docs/drupal-ci/customizing-drupalci-testing
 build:

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\entity_share_entity_test\Entity;
 
 /**

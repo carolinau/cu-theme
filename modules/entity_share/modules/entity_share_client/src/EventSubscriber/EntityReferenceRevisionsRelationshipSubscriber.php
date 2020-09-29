@@ -36,6 +36,7 @@ class EntityReferenceRevisionsRelationshipSubscriber implements EventSubscriberI
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[RelationshipFieldValueEvent::EVENT_NAME] = ['alterRelationshipValue', 100];
     return $events;
   }

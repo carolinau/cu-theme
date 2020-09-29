@@ -786,7 +786,9 @@ class ChannelForm extends EntityForm implements ContainerInjectionInterface {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   protected function getAuthorizedUsersOptions() {
-    $authorized_users = [];
+    $authorized_users = [
+      'anonymous' => $this->t('Anonymous'),
+    ];
     $authorized_roles = [];
     $users = [];
 

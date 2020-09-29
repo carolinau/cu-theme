@@ -47,8 +47,7 @@ class QueueHelper implements QueueHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function enqueue($remote_id, $channel_id, array $uuids) {
-    /** @var \Drupal\Core\Queue\QueueInterface $queue */
+  public function enqueue($remote_id, $channel_id, $import_config_id, array $uuids) {
     $queue = $this->queueFactory->get(QueueHelperInterface::QUEUE_NAME);
 
     $async_states = $this->state->get(QueueHelperInterface::STATE_ID, []);
@@ -56,13 +55,14 @@ class QueueHelper implements QueueHelperInterface {
     foreach ($uuids as $uuid) {
       if (!isset($async_states[$remote_id][$channel_id][$uuid])) {
         // Add the entity to the async states.
-        $async_states[$remote_id][$channel_id][$uuid] = $uuid;
+        $async_states[$remote_id][$channel_id][$uuid] = $import_config_id;
 
         // Create queue item.
         $item = [
           'uuid' => $uuid,
           'remote_id' => $remote_id,
           'channel_id' => $channel_id,
+          'import_config_id' => $import_config_id,
         ];
 
         $queue->createItem($item);

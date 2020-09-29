@@ -92,6 +92,7 @@ class Remote extends ConfigEntityBase implements RemoteInterface {
 
     // Ensure no trailing slash at the end of the remote URL.
     $remote_url = $this->get('url');
+    $matches = [];
     if (!empty($remote_url) && preg_match('/(.*)\/$/', $remote_url, $matches)) {
       $this->set('url', $matches[1]);
     }

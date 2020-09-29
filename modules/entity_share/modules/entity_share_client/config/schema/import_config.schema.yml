@@ -1,0 +1,42 @@
+entity_share_client.import_config.*:
+  type: config_entity
+  label: 'Import config config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    import_processor_settings:
+      type: sequence
+      label: 'Import processor settings'
+      orderby: key
+      sequence:
+        type: entity_share_client.plugin.import_processor_configuration.[%key]
+        label: 'The configuration for a single processor'
+
+entity_share_client.plugin.import_processor_configuration:
+  type: mapping
+  label: 'Default import processor configuration'
+  mapping:
+    weights:
+      type: sequence
+      label: 'The import processor''s weights for the different processing stages'
+      orderby: key
+      sequence:
+        type: integer
+        label: 'The import processor''s weight for this stage'
+
+entity_share_client.plugin.import_processor_configuration.*:
+  type: entity_share_client.plugin.import_processor_configuration
+
+entity_share_client.plugin.import_processor_configuration.entity_reference:
+  type: entity_share_client.plugin.import_processor_configuration
+  mapping:
+    max_recursion_depth:
+      type: integer
+      label: 'The maximum recursion depth'
+
+entity_share_client.plugin.import_processor_configuration.block_field_block_content_importer:
+  type: entity_share_client.plugin.import_processor_configuration.entity_reference

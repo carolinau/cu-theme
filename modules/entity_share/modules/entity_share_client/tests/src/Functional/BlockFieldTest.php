@@ -67,6 +67,20 @@ class BlockFieldTest extends EntityShareClientFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
+  protected function getImportConfigProcessorSettings() {
+    $processors = parent::getImportConfigProcessorSettings();
+    $processors['block_field_block_content_importer'] = [
+      'max_recursion_depth' => -1,
+      'weights' => [
+        'prepare_importable_entity_data' => 20,
+      ],
+    ];
+    return $processors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function getEntitiesDataArray() {
     return [
       'block_content' => [
@@ -112,11 +126,27 @@ class BlockFieldTest extends EntityShareClientFunctionalTestBase {
   }
 
   /**
-   * Test basic pull feature.
+   * Test behavior when plugin "Block field block content" is not enabled.
    */
-  public function testBasicPull() {
+  public function testBlockFieldBlockContentImporterPlugin() {
+    // First test the import when the plugin is enabled.
     $this->pullEveryChannels();
     $this->checkCreatedEntities();
+
+    // Now test the import when the plugin is disabled.
+    // Before that we need to delete the entities created in the previous run.
+    $this->removePluginFromImportConfig('block_field_block_content_importer');
+    $recreated_node = $this->loadEntity('node', 'es_test_block');
+    $recreated_node->delete();
+    $recreated_block_entity = $this->loadEntity('block_content', 'block_content_test');
+    $recreated_block_entity->delete();
+
+    $this->pullEveryChannels();
+
+    $recreated_node = $this->loadEntity('node', 'es_test_block');
+    $this->assertNotNull($recreated_node, 'The node with UUID es_test_block has been recreated.');
+    $recreated_block_entity = $this->loadEntity('block_content', 'block_content_test');
+    $this->assertNull($recreated_block_entity, 'The block_content with UUID block_content_test has not been recreated.');
   }
 
   /**
@@ -132,8 +162,7 @@ class BlockFieldTest extends EntityShareClientFunctionalTestBase {
     ])
       ->setOption('language', $this->container->get('language_manager')->getLanguage('en'))
       ->setOption('absolute', TRUE);
-    $http_client = $this->remoteManager->prepareJsonApiClient($this->remote);
-    $this->requestService->request($http_client, 'GET', $url->toString());
+    $this->remoteManager->jsonApiRequest($this->remote, 'GET', $url->toString());
   }
 
 }

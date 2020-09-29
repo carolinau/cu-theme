@@ -1,11 +1,11 @@
-name: Entity share
+name: 'Entity Share'
 type: module
-description: Provides an UI to share entities.
+description: 'Provides an UI to share entities.'
 core_version_requirement: ^8.8 || ^9
-package: Web services
+package: 'Web services'
 configure: entity_share.admin_config_page
 
 # Information added by Drupal.org packaging script on 2020-08-20
-version: '8.x-2.0-alpha12'
+version: '8.x-3.0-alpha1'
 project: 'entity_share'
-datestamp: 1597935224
+datestamp: 1597935793

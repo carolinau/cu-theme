@@ -9,7 +9,7 @@ use Drupal\Tests\jsonapi\Functional\JsonApiRequestTestTrait;
 use GuzzleHttp\RequestOptions;
 
 /**
- * Boilerplate for Entity share server Functional tests' HTTP requests.
+ * Boilerplate for Entity Share Server Functional tests' HTTP requests.
  */
 trait EntityShareServerRequestTestTrait {
 

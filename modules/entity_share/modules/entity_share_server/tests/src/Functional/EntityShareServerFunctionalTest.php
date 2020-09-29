@@ -64,10 +64,6 @@ class EntityShareServerFunctionalTest extends EntityShareServerFunctionalTestBas
     $entity_share_entrypoint_url = Url::fromRoute('entity_share_server.resource_list');
     $response = $this->request('GET', $entity_share_entrypoint_url, $this->getAuthenticationRequestOptions($this->channelUser));
     $entity_share_endpoint_response = Json::decode((string) $response->getBody());
-    $expected_field_mapping = [
-      'label' => 'title',
-      'changed' => 'changed',
-    ];
     $expected_search_configuration = [
       'label' => [
         'path' => 'title',
@@ -75,11 +71,13 @@ class EntityShareServerFunctionalTest extends EntityShareServerFunctionalTestBas
       ],
     ];
 
+    // Test that the field_mapping entry exists.
+    $this->assertTrue(isset($entity_share_endpoint_response['data']['field_mappings']), 'The field mappings has been found');
+
     // Test the english channel info.
     $this->assertTrue(isset($entity_share_endpoint_response['data']['channels']['es_test_en']), 'The english channel has been found');
     $this->assertEquals($entity_share_endpoint_response['data']['channels']['es_test_en']['label'], $es_test_en_channel->label(), 'The expected channel label has been found.');
     $this->assertEquals($entity_share_endpoint_response['data']['channels']['es_test_en']['channel_entity_type'], $es_test_en_channel->get('channel_entity_type'), 'The expected channel entity type has been found.');
-    $this->assertEquals($entity_share_endpoint_response['data']['channels']['es_test_en']['field_mapping'], $expected_field_mapping, 'The expected field mapping had been found.');
     $this->assertEquals($entity_share_endpoint_response['data']['channels']['es_test_en']['search_configuration'], $expected_search_configuration, 'The expected search configuration had been found.');
 
     // Test that the node can be found on the channel URL.
@@ -97,7 +95,6 @@ class EntityShareServerFunctionalTest extends EntityShareServerFunctionalTestBas
     $this->assertTrue(isset($entity_share_endpoint_response['data']['channels']['es_test_fr']), 'The french channel has been found');
     $this->assertEquals($entity_share_endpoint_response['data']['channels']['es_test_fr']['label'], $es_test_fr_channel->label(), 'The expected channel label has been found.');
     $this->assertEquals($entity_share_endpoint_response['data']['channels']['es_test_fr']['channel_entity_type'], $es_test_fr_channel->get('channel_entity_type'), 'The expected channel entity type has been found.');
-    $this->assertEquals($entity_share_endpoint_response['data']['channels']['es_test_fr']['field_mapping'], $expected_field_mapping, 'The expected field mapping had been found.');
     $this->assertEquals($entity_share_endpoint_response['data']['channels']['es_test_fr']['search_configuration'], $expected_search_configuration, 'The expected search configuration had been found.');
 
     // Test that the node translation can be found on the channel URL.
@@ -151,7 +148,7 @@ class EntityShareServerFunctionalTest extends EntityShareServerFunctionalTestBas
 
     // @codingStandardsIgnoreStart
     // Prepare nodes.
-    $node_1 = $this->createNode([
+    $this->createNode([
       'type' => 'es_test',
       'uuid' => 'es_test_1',
       'title' => 'Foo Bar Test',
@@ -165,7 +162,7 @@ class EntityShareServerFunctionalTest extends EntityShareServerFunctionalTestBas
       ],
       'field_es_test_text_plain' => 'not null',
     ]);
-    $node_2 = $this->createNode([
+    $this->createNode([
       'type' => 'es_test',
       'uuid' => 'es_test_2',
       'title' => 'Foo Contains Test',
@@ -178,7 +175,7 @@ class EntityShareServerFunctionalTest extends EntityShareServerFunctionalTestBas
         'target_id' => $tag_2->id(),
       ],
     ]);
-    $node_3 = $this->createNode([
+    $this->createNode([
       'type' => 'es_test',
       'uuid' => 'es_test_3',
       'title' => 'Bar Test',

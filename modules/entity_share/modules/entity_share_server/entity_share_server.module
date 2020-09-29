@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the entity share server module.
+ * Hook implementations for the Entity Share Server module.
  */
 
 declare(strict_types = 1);

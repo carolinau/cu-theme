@@ -152,7 +152,8 @@ class Channel extends ConfigEntityBase implements ChannelInterface {
    */
   public function removeAuthorizedUser($uuid) {
     $authorized_users = $this->authorized_users;
-    if (($key = array_search($uuid, $authorized_users)) !== FALSE) {
+    $key = array_search($uuid, $authorized_users);
+    if ($key !== FALSE) {
       unset($authorized_users[$key]);
       $this->set('authorized_users', $authorized_users);
       return TRUE;

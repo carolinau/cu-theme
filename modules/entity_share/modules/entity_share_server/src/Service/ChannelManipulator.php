@@ -69,7 +69,7 @@ class ChannelManipulator implements ChannelManipulatorInterface {
         $channel->get('channel_bundle')
       );
       $langcode_path = 'langcode';
-      if (isset($entity_keys['langcode']) && !empty($entity_keys['langcode'])) {
+      if (isset($entity_keys['langcode']) && !empty($entity_keys['langcode']) && $resource_type->hasField($entity_keys['langcode'])) {
         $langcode_path = $resource_type->getPublicName($entity_keys['langcode']);
       }
 
@@ -138,36 +138,6 @@ class ChannelManipulator implements ChannelManipulatorInterface {
     }
 
     return $query;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFieldMapping(ChannelInterface $channel) {
-    $channel_entity_type = $channel->get('channel_entity_type');
-    $channel_bundle = $channel->get('channel_bundle');
-
-    $field_mapping = [];
-    $field_keys = [
-      'label',
-      'changed',
-    ];
-    $entity_type = $this->entityTypeManager->getStorage($channel_entity_type)->getEntityType();
-    $entity_keys = $entity_type->getKeys();
-    $resource_type = $this->resourceTypeRepository->get(
-      $channel_entity_type,
-      $channel_bundle
-    );
-    foreach ($field_keys as $original_field_key) {
-      $field_key = $original_field_key;
-      if (isset($entity_keys[$field_key])) {
-        $field_key = $entity_keys[$field_key];
-      }
-      if ($resource_type->hasField($field_key)) {
-        $field_mapping[$original_field_key] = $resource_type->getPublicName($field_key);
-      }
-    }
-    return $field_mapping;
   }
 
   /**

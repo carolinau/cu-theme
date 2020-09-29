@@ -161,4 +161,13 @@ settings:
   metatag_defaults:
     handler: 'default:metatag_defaults'
     handler_settings: {  }
+  import_config:
+    handler: 'default:import_config'
+    handler_settings: {  }
+  media:
+    handler: 'default:media'
+    handler_settings: {  }
+  media_type:
+    handler: 'default:media_type'
+    handler_settings: {  }
 field_type: dynamic_entity_reference
