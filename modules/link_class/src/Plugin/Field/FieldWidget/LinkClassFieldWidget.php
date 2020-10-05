@@ -4,7 +4,7 @@ namespace Drupal\link_class\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use \Drupal\link\Plugin\Field\FieldWidget\LinkWidget;
+use Drupal\link\Plugin\Field\FieldWidget\LinkWidget;
 
 /**
  * Plugin implementation of the 'link_class_field_widget' widget.

@@ -1,12 +1,12 @@
 name: Link Class
 type: module
 description: Provide a widget for Link field type which permit to add classes.
-# core: 8.x
+core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - drupal:link
 
-# Information added by Drupal.org packaging script on 2019-07-25
-version: '8.x-1.4'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2020-10-05
+version: '8.x-1.5'
 project: 'link_class'
-datestamp: 1564049895
+datestamp: 1601892581
