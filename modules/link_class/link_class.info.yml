@@ -7,6 +7,6 @@ dependencies:
   - drupal:link
 
 # Information added by Drupal.org packaging script on 2020-10-05
-version: '8.x-1.5'
+version: '2.0.0'
 project: 'link_class'
-datestamp: 1601892581
+datestamp: 1601892766
