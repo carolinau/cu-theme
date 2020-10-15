@@ -170,4 +170,7 @@ settings:
   media_type:
     handler: 'default:media_type'
     handler_settings: {  }
+  entity_import_status:
+    handler: 'default:entity_import_status'
+    handler_settings: {  }
 field_type: dynamic_entity_reference

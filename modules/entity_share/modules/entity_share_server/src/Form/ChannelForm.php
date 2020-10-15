@@ -126,6 +126,9 @@ class ChannelForm extends EntityForm implements ContainerInjectionInterface {
     $form['authorized_users'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Authorized users'),
+      '#description' => $this->t('Only users with the %entity_share_server_access_channels permission are listed.', [
+        '%entity_share_server_access_channels' => $this->t('Access channels list'),
+      ]),
       '#options' => $this->getAuthorizedUsersOptions(),
       '#default_value' => !is_null($authorized_users) ? $authorized_users : [],
     ];
@@ -751,6 +754,10 @@ class ChannelForm extends EntityForm implements ContainerInjectionInterface {
       if ($definition->getGroup() != 'content' || $entity_type_id == 'user') {
         continue;
       }
+      // Keep only content entity type with UUID (required for JSON API).
+      if (!$definition->hasKey('uuid')) {
+        continue;
+      }
 
       $options[$entity_type_id] = $definition->getLabel();
     }
@@ -786,9 +793,7 @@ class ChannelForm extends EntityForm implements ContainerInjectionInterface {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   protected function getAuthorizedUsersOptions() {
-    $authorized_users = [
-      'anonymous' => $this->t('Anonymous'),
-    ];
+    $authorized_users = [];
     $authorized_roles = [];
     $users = [];
 
@@ -804,6 +809,10 @@ class ChannelForm extends EntityForm implements ContainerInjectionInterface {
     }
 
     if (!empty($authorized_roles)) {
+      if (in_array('anonymous', $authorized_roles)) {
+        $authorized_users['anonymous'] = $this->t('Anonymous');
+      }
+
       $users = $this->entityTypeManager
         ->getStorage('user')
         ->loadByProperties(['roles' => $authorized_roles]);

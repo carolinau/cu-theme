@@ -65,7 +65,12 @@ class EntryPoint extends ControllerBase {
 
     $uuid = 'anonymous';
     if ($this->currentUser()->isAuthenticated()) {
-      $uuid = $this->currentUser()->getAccount()->uuid();
+      // Load the user to ensure with have a user entity.
+      /** @var \Drupal\user\UserInterface $account */
+      $account = $this->entityTypeManager()->getStorage('user')->load($this->currentUser()->id());
+      if (!is_null($account)) {
+        $uuid = $account->uuid();
+      }
     }
 
     /** @var \Drupal\entity_share_server\Entity\ChannelInterface[] $channels */

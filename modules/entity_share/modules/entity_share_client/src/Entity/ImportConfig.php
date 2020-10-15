@@ -21,7 +21,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *       "delete" = "Drupal\entity_share_client\Form\ImportConfigDeleteForm"
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\entity_share_client\ImportConfigHtmlRouteProvider",
+ *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
  *   config_prefix = "import_config",

@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\entity_share_client\ClientAuthorization\ClientAuthorizationInterface;
 
 /**
  * Implements hook_entity_delete().
@@ -31,4 +32,16 @@ function entity_share_client_entity_translation_delete(EntityInterface $translat
   $state_information_service = \Drupal::service('entity_share_client.state_information');
   // This deletes "Entity import status" only for translation being deleted.
   $state_information_service->deleteImportStatusOfEntity($translation, $translation->language()->getId());
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for 'remote'.
+ */
+function entity_share_client_remote_delete(EntityInterface $entity) {
+  // Clean key value store.
+  $key_value_store = \Drupal::keyValue(ClientAuthorizationInterface::LOCAL_STORAGE_KEY_VALUE_COLLECTION);
+  $auth = $entity->get('auth');
+  $key_value_store->delete($auth['uuid']);
+  // In case the plugin has plugin specific storage.
+  $key_value_store->delete($auth['uuid'] . '-' . $auth['pid']);
 }

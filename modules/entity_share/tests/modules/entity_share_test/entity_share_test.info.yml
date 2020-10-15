@@ -102,6 +102,7 @@ config_devel:
     - field.field.node.es_test.field_es_test_text_plain_long
     - field.field.node.es_test.field_es_test_timestamp
     - field.field.paragraph.es_test.field_es_test_text_plain
+    - field.field.paragraph.es_test.field_es_test_paragraphs
     - field.storage.media.field_es_test_audio_file
     - field.storage.media.field_es_test_document
     - field.storage.media.field_es_test_image
@@ -139,6 +140,7 @@ config_devel:
     - field.storage.node.field_es_test_text_plain_long
     - field.storage.node.field_es_test_timestamp
     - field.storage.paragraph.field_es_test_text_plain
+    - field.storage.paragraph.field_es_test_paragraphs
     - language.content_settings.comment.es_test
     - language.content_settings.media.es_test_audio
     - language.content_settings.media.es_test_document
@@ -158,7 +160,7 @@ config_devel:
     - paragraphs.paragraphs_type.es_test
     - taxonomy.vocabulary.es_test
 
-# Information added by Drupal.org packaging script on 2020-08-20
-version: '8.x-3.0-alpha1'
+# Information added by Drupal.org packaging script on 2020-10-15
+version: '8.x-3.0-beta1'
 project: 'entity_share'
-datestamp: 1597935793
+datestamp: 1602777023

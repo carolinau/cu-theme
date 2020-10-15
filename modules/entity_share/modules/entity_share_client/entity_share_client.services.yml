@@ -10,6 +10,10 @@ services:
     class: Drupal\entity_share_client\ImportProcessor\ImportProcessorPluginManager
     parent: default_plugin_manager
 
+  plugin.manager.entity_share_client_authorization:
+    class: Drupal\entity_share_client\ClientAuthorization\ClientAuthorizationPluginManager
+    parent: default_plugin_manager
+
   entity_share_client.import_config_manipulator:
     class: Drupal\entity_share_client\Service\ImportConfigManipulator
     arguments:
@@ -18,7 +22,6 @@ services:
   entity_share_client.remote_manager:
     class: Drupal\entity_share_client\Service\RemoteManager
     arguments:
-      - '@http_client_factory'
       - '@logger.channel.entity_share_client'
 
   entity_share_client.import_service:
@@ -67,3 +70,9 @@ services:
     arguments:
       - '@string_translation'
       - '@entity_share_client.import_service'
+
+  entity_share_client.key_provider:
+    class: Drupal\entity_share_client\Service\KeyProvider
+    arguments: ['@keyvalue']
+    calls:
+      - [setKeyRepository, ['@?key.repository']]

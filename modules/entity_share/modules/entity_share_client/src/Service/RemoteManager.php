@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\entity_share_client\Service;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Http\ClientFactory;
 use Drupal\entity_share_client\Entity\RemoteInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -21,11 +20,18 @@ use Psr\Log\LoggerInterface;
 class RemoteManager implements RemoteManagerInterface {
 
   /**
-   * The HTTP client factory.
+   * A constant to document the call for a standard client.
    *
-   * @var \Drupal\Core\Http\ClientFactory
+   * @var bool
    */
-  protected $httpClientFactory;
+  const STANDARD_CLIENT = FALSE;
+
+  /**
+   * A constant to document the call for a JSON:API client.
+   *
+   * @var bool
+   */
+  const JSON_API_CLIENT = TRUE;
 
   /**
    * Logger.
@@ -58,16 +64,12 @@ class RemoteManager implements RemoteManagerInterface {
   /**
    * RemoteManager constructor.
    *
-   * @param \Drupal\Core\Http\ClientFactory $http_client_factory
-   *   The HTTP client factory.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger service.
    */
   public function __construct(
-    ClientFactory $http_client_factory,
     LoggerInterface $logger
   ) {
-    $this->httpClientFactory = $http_client_factory;
     $this->logger = $logger;
   }
 
@@ -124,56 +126,36 @@ class RemoteManager implements RemoteManagerInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Prepares a client object from the auth plugin.
+   *
+   * @param \Drupal\entity_share_client\Entity\RemoteInterface $remote
+   *   The remote website on which to perform the request.
+   *
+   * @return \GuzzleHttp\Client
+   *   The configured client.
    */
   protected function getHttpClient(RemoteInterface $remote) {
     $remote_id = $remote->id();
     if (!isset($this->httpClients[$remote_id])) {
-      $http_client = $this->httpClientFactory->fromOptions([
-        'base_uri' => $remote->get('url') . '/',
-        'cookies' => TRUE,
-        'allow_redirects' => TRUE,
-      ]);
-
-      if ($remote->get('basic_auth_username') && $remote->get('basic_auth_password')) {
-        $http_client->post('user/login', [
-          'form_params' => [
-            'name' => $remote->get('basic_auth_username'),
-            'pass' => $remote->get('basic_auth_password'),
-            'form_id' => 'user_login_form',
-          ],
-        ]);
-      }
-
-      $this->httpClients[$remote_id] = $http_client;
+      $this->httpClients[$remote_id] = $remote->getHttpClient(self::STANDARD_CLIENT);
     }
 
     return $this->httpClients[$remote_id];
   }
 
   /**
-   * {@inheritdoc}
+   * Prepares a client object from the auth plugin.
+   *
+   * @param \Drupal\entity_share_client\Entity\RemoteInterface $remote
+   *   The remote website on which to perform the request.
+   *
+   * @return \GuzzleHttp\Client
+   *   The configured client.
    */
   protected function getJsonApiHttpClient(RemoteInterface $remote) {
     $remote_id = $remote->id();
     if (!isset($this->jsonApiHttpClients[$remote_id])) {
-      $options = [
-        'base_uri' => $remote->get('url') . '/',
-        'headers' => [
-          'Content-type' => 'application/vnd.api+json',
-        ],
-      ];
-
-      if ($remote->get('basic_auth_username') && $remote->get('basic_auth_password')) {
-        $options += [
-          'auth' => [
-            $remote->get('basic_auth_username'),
-            $remote->get('basic_auth_password'),
-          ],
-        ];
-      }
-
-      $this->jsonApiHttpClients[$remote_id] = $this->httpClientFactory->fromOptions($options);
+      $this->jsonApiHttpClients[$remote_id] = $remote->getHttpClient(self::JSON_API_CLIENT);
     }
 
     return $this->jsonApiHttpClients[$remote_id];

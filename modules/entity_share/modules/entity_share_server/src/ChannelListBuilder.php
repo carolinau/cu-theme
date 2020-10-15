@@ -103,7 +103,7 @@ class ChannelListBuilder extends ConfigEntityListBuilder {
     $row['label'] = $entity->label() . ' (' . $entity->id() . ')';
     $row['entity_type'] = $this->entityTypeLabels[$entity_type];
     $row['bundle'] = $this->bundleInfos[$entity_type][$bundle]['label'];
-    $row['language'] = $this->languages[$entity->get('channel_langcode')]->getName();
+    $row['language'] = $this->languages[$entity->get('channel_langcode') ?? LanguageInterface::LANGCODE_NOT_SPECIFIED]->getName();
     return $row + parent::buildRow($entity);
   }
 

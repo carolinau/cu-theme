@@ -6,6 +6,7 @@ namespace Drupal\entity_share_client\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\entity_share_client\ClientAuthorization\ClientAuthorizationInterface;
 
 /**
  * Defines the Remote entity.
@@ -21,7 +22,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
  *       "delete" = "Drupal\entity_share_client\Form\RemoteDeleteForm"
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\entity_share_client\RemoteHtmlRouteProvider",
+ *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
  *   config_prefix = "remote",
@@ -35,8 +36,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
  *     "id",
  *     "label",
  *     "url",
- *     "basic_auth_username",
- *     "basic_auth_password",
+ *     "auth",
  *   },
  *   links = {
  *     "canonical" = "/admin/config/services/entity_share/remote/{remote}",
@@ -71,18 +71,11 @@ class Remote extends ConfigEntityBase implements RemoteInterface {
   protected $url;
 
   /**
-   * The Remote basic auth username.
+   * An associative array of the authorization plugin data.
    *
-   * @var string
+   * @var array
    */
-  protected $basic_auth_username;
-
-  /**
-   * The Remote basic auth password.
-   *
-   * @var string
-   */
-  protected $basic_auth_password;
+  protected $auth;
 
   /**
    * {@inheritdoc}
@@ -96,6 +89,43 @@ class Remote extends ConfigEntityBase implements RemoteInterface {
     if (!empty($remote_url) && preg_match('/(.*)\/$/', $remote_url, $matches)) {
       $this->set('url', $matches[1]);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAuthPlugin() {
+    $pluginData = $this->auth;
+    if (!empty($pluginData['pid'])) {
+      // DI not available in entities:
+      // https://www.drupal.org/project/drupal/issues/2142515.
+      /** @var \Drupal\entity_share_client\ClientAuthorization\ClientAuthorizationPluginManager $manager */
+      $manager = \Drupal::service('plugin.manager.entity_share_client_authorization');
+      $pluginId = $pluginData['pid'];
+      unset($pluginData['pid']);
+      return $manager->createInstance($pluginId, $pluginData);
+    }
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function mergePluginConfig(ClientAuthorizationInterface $plugin) {
+    $auth = ['pid' => $plugin->getPluginId()] +
+      $plugin->getConfiguration();
+    $this->auth = $auth;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getHttpClient(bool $json) {
+    $plugin = $this->getAuthPlugin();
+    if ($json) {
+      return $plugin->getJsonApiClient($this->url);
+    }
+    return $plugin->getClient($this->url);
   }
 
 }

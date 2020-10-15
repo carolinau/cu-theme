@@ -35,7 +35,7 @@ class SearchAddForm extends SearchBaseForm {
       ],
     ];
 
-    $form['label'] = [
+    $form['search_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
       '#required' => TRUE,
@@ -58,7 +58,7 @@ class SearchAddForm extends SearchBaseForm {
 
     $channel_searches[$form_state->getValue('search_id')] = [
       'path' => $form_state->getValue('path'),
-      'label' => $form_state->getValue('label'),
+      'label' => $form_state->getValue('search_label'),
     ];
     $channel->set('channel_searches', $channel_searches);
     $channel->save();

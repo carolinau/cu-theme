@@ -201,6 +201,18 @@ On the client website:
    (admin/content/entity_share/pull), and select your remote website, the
    available channels will be listed and when selecting a channel, the entities
    exposed on this channel will be available to synchronize.
+ * Optional Key module integration
+   - https://www.drupal.org/project/key
+   - https://www.drupal.org/docs/8/modules/key/concepts-and-terminology
+   Credentials used to authorize pulling from remotes may be more securely
+   stored using the Key module. Additional optional modules allow the storage in
+   an external key/value storage service. With only the Key module, credentials
+   may be stored in JSON format in files outside the web root.
+   1. Configure Keys: Key types for Entity Share are listed in Key config form
+   (/admin/config/system/keys). Instructions for each type are shown in the
+   form.
+   2. Create a remote and select Key module as the credential provider, then
+   select the appropriate key.
 
 
 TROUBLESHOOTING
@@ -230,6 +242,8 @@ MAINTAINERS
 Current maintainers:
  * Thomas Bernard (ithom) - https://www.drupal.org/user/3175403
  * Florent Torregrosa (Grimreaper) - https://www.drupal.org/user/2388214
+ * Ivan Vujović (ivan.vujovic) - https://www.drupal.org/user/382945
+ * Yarik Lutsiuk (yarik.lutsiuk) - https://www.drupal.org/user/3212333
 
 This project has been sponsored by:
  * Smile - https://www.drupal.org/smile

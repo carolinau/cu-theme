@@ -11,9 +11,31 @@ entity_share_client.remote.*:
     url:
       type: string
       label: 'URL'
-    basic_auth_username:
-      type: string
-      label: 'Basic auth username'
-    basic_auth_password:
-      type: string
-      label: 'Basic auth password'
+    auth:
+      type: mapping
+      mapping:
+        pid:
+          label: 'Plugin ID'
+          type: string
+        uuid:
+          label: 'UUID'
+          type: string
+        data:
+          type: mapping
+          label: 'Credential data'
+          mapping:
+            credential_provider:
+              type: string
+              label: 'Credential provider'
+            storage_key:
+              type: string
+              label: 'Storage key'
+
+key.type.entity_share_basic_auth:
+  type: sequence
+
+key.type.entity_share_header:
+  type: sequence
+
+key.type.entity_share_oauth:
+  type: sequence

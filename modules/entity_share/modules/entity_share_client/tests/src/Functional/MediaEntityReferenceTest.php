@@ -227,24 +227,7 @@ class MediaEntityReferenceTest extends EntityShareClientFunctionalTestBase {
    * Test basic pull feature.
    */
   public function testBasicPull() {
-    foreach (static::$filesData as $file_data) {
-      $this->assertFalse(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' has been deleted.');
-    }
-
-    $this->pullEveryChannels();
-    $this->checkCreatedEntities();
-
-    foreach (static::$filesData as $file_uuid => $file_data) {
-      $this->assertTrue(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' has been pulled and recreated.');
-      if (isset($file_data['file_content'])) {
-        $recreated_file_data = file_get_contents($file_data['uri']);
-        $this->assertEquals($file_data['file_content'], $recreated_file_data, 'The recreated physical file ' . $file_data['filename'] . ' has the same content.');
-      }
-
-      if (isset($this->filesSize[$file_uuid])) {
-        $this->assertEquals($this->filesSize[$file_uuid], filesize($file_data['uri']), 'The recreated physical file ' . $file_data['filename'] . ' has the same size has the original.');
-      }
-    }
+    $this->commonBasicPull();
   }
 
   /**

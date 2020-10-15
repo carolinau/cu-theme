@@ -31,6 +31,15 @@ entity_share_client.plugin.import_processor_configuration:
 entity_share_client.plugin.import_processor_configuration.*:
   type: entity_share_client.plugin.import_processor_configuration
 
+entity_share_client.plugin.import_processor_configuration.block_field_block_content_importer:
+  type: entity_share_client.plugin.import_processor_configuration.entity_reference
+
+entity_share_client.plugin.import_processor_configuration.changed_time:
+  type: entity_share_client.plugin.import_processor_configuration
+
+entity_share_client.plugin.import_processor_configuration.default_data_processor:
+  type: entity_share_client.plugin.import_processor_configuration
+
 entity_share_client.plugin.import_processor_configuration.entity_reference:
   type: entity_share_client.plugin.import_processor_configuration
   mapping:
@@ -38,5 +47,18 @@ entity_share_client.plugin.import_processor_configuration.entity_reference:
       type: integer
       label: 'The maximum recursion depth'
 
-entity_share_client.plugin.import_processor_configuration.block_field_block_content_importer:
-  type: entity_share_client.plugin.import_processor_configuration.entity_reference
+entity_share_client.plugin.import_processor_configuration.physical_file:
+  type: entity_share_client.plugin.import_processor_configuration
+
+entity_share_client.plugin.import_processor_configuration.revision:
+  type: entity_share_client.plugin.import_processor_configuration
+  mapping:
+    enforce_new_revision:
+      type: boolean
+      label: 'Enforce new revision'
+    translation_affected:
+      type: boolean
+      label: 'Enforce translation affected'
+
+entity_share_client.plugin.import_processor_configuration.skip_imported:
+  type: entity_share_client.plugin.import_processor_configuration

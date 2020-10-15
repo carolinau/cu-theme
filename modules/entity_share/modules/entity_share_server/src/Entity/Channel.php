@@ -32,7 +32,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *       "group_delete" = "Drupal\entity_share_server\Form\GroupDeleteForm",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\entity_share_server\ChannelHtmlRouteProvider",
+ *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
  *   },
  *   config_prefix = "channel",

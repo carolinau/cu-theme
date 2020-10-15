@@ -311,11 +311,17 @@ class StateInformation implements StateInformationInterface {
     if (in_array($entity->getEntityTypeId(), ['user', 'entity_import_status'])) {
       return;
     }
+    if (!$entity->uuid()) {
+      return;
+    }
     $entity_storage = $this->entityTypeManager->getStorage('entity_import_status');
     $search_criteria = [
-      'entity_uuid' => $entity->uuid(),
+      'entity_id' => $entity->id(),
       'entity_type_id' => $entity->getEntityTypeId(),
     ];
+    if ($entity_storage->getEntityType()->hasKey('uuid')) {
+      $search_criteria['entity_uuid'] = $entity->uuid();
+    }
     if ($langcode && $entity_storage->getEntityType()->hasKey('langcode')) {
       $search_criteria['langcode'] = $langcode;
     }

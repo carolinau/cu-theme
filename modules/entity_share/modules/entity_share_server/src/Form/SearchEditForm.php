@@ -58,7 +58,7 @@ class SearchEditForm extends SearchBaseForm {
       '#disabled' => TRUE,
     ];
 
-    $form['label'] = [
+    $form['search_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
       '#default_value' => $channel_searches[$search_id]['label'],
@@ -78,7 +78,7 @@ class SearchEditForm extends SearchBaseForm {
 
     $channel_searches[$form_state->getValue('search_id')] = [
       'path' => $form_state->getValue('path'),
-      'label' => $form_state->getValue('label'),
+      'label' => $form_state->getValue('search_label'),
     ];
     $channel->set('channel_searches', $channel_searches);
     $channel->save();
