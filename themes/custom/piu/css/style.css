@@ -576,7 +576,7 @@ h3.cta-title {
 .video-title:after {
   content: "";
   display: block;
-  margin: 0 auto;
+  margin: 0 auto 15px;
   width: 7%;
   padding: 10px 0 12px;
   border-bottom: 3px solid var(--primary-blue);

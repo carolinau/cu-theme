@@ -81,7 +81,7 @@
   {% endif %}
 </div>
 
-  {% if content.field_video_title|length > 1 %}
+  {% if not (node.field_video_title.isEmpty == true) and content.field_video_title is defined %}
     <div class="row">
       <div class="col-md-12">
 	       <h2 class="video-title bottom-divider-c">{{ content.field_video_title }}</h2>
