@@ -91,6 +91,7 @@ class MediaEntityReferenceTest extends EntityShareClientFunctionalTestBase {
   protected function getImportConfigProcessorSettings() {
     $processors = parent::getImportConfigProcessorSettings();
     $processors['physical_file'] = [
+      'rename' => FALSE,
       'weights' => [
         'process_entity' => 0,
       ],

@@ -49,6 +49,10 @@ entity_share_client.plugin.import_processor_configuration.entity_reference:
 
 entity_share_client.plugin.import_processor_configuration.physical_file:
   type: entity_share_client.plugin.import_processor_configuration
+  mapping:
+    rename:
+      type: boolean
+      label: 'Rename imported files with the same name, instead of overwriting'
 
 entity_share_client.plugin.import_processor_configuration.revision:
   type: entity_share_client.plugin.import_processor_configuration

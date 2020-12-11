@@ -17,6 +17,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\entity_share_client\ImportContext;
 use Drupal\entity_share_client\Service\FormHelperInterface;
 use Drupal\entity_share_client\Service\ImportServiceInterface;
@@ -193,6 +194,15 @@ class PullForm extends FormBase {
     if ($select_element) {
       $select_element['#title'] = $this->t('Import configuration');
       $form['import_config'] = $select_element;
+    }
+    else {
+      $url = Url::fromRoute('entity.import_config.collection');
+      if ($url->renderAccess($url->toRenderArray())) {
+        $this->messenger()->addError($this->t('Please configure <a href=":url">Import configuration</a> before trying to import content.', [':url' => $url->toString()]));
+      }
+      else {
+        $this->messenger()->addError($this->t('There are no "Import configuration" available. Please contact the website administrator.'));
+      }
     }
 
     // Build the Remote selector.

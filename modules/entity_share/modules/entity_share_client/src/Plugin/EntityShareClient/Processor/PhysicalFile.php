@@ -6,6 +6,8 @@ namespace Drupal\entity_share_client\Plugin\EntityShareClient\Processor;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\entity_share_client\ImportProcessor\ImportProcessorPluginBase;
 use Drupal\entity_share_client\RuntimeImportContext;
 use Drupal\file\FileInterface;
@@ -26,7 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   locked = false,
  * )
  */
-class PhysicalFile extends ImportProcessorPluginBase {
+class PhysicalFile extends ImportProcessorPluginBase implements PluginFormInterface {
 
   /**
    * The stream wrapper manager.
@@ -71,6 +73,29 @@ class PhysicalFile extends ImportProcessorPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'rename' => FALSE,
+    ] + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $form['rename'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Rename imported files with the same name, instead of overwriting'),
+      '#description' => $this->t('If a file with the same name exists, the imported file will be saved as filename_0 or filename_1... etc. <strong>Warning! This can make a lot of duplicated files on your websites!</strong>'),
+      '#default_value' => $this->configuration['rename'],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function processEntity(RuntimeImportContext $runtime_import_context, ContentEntityInterface $processed_entity, array $entity_json_data) {
     if ($processed_entity instanceof FileInterface) {
       $field_mappings = $runtime_import_context->getFieldMappings();
@@ -99,14 +124,22 @@ class PhysicalFile extends ImportProcessorPluginBase {
         '%uri' => $remote_file_uri,
       ];
 
+      $file_overwrite_mode = $this->configuration['rename']
+        ? FileSystemInterface::EXISTS_RENAME
+        : FileSystemInterface::EXISTS_REPLACE;
+
+      $file_destination = $this->fileSystem->getDestinationFilename($processed_entity->getFileUri(), $file_overwrite_mode);
+      $processed_entity->setFileUri($file_destination);
+      $processed_entity->setFilename($this->fileSystem->basename($file_destination));
+
       // Create the destination folder.
       if ($this->fileSystem->prepareDirectory($directory_uri, FileSystemInterface::CREATE_DIRECTORY)) {
         try {
           $response = $this->remoteManager->request($runtime_import_context->getRemote(), 'GET', $remote_file_url);
           $file_content = (string) $response->getBody();
-          $result = @file_put_contents($remote_file_uri, $file_content);
+          $result = @file_put_contents($file_destination, $file_content);
           if (!$result) {
-            throw new Exception('Error writing file to ' . $remote_file_uri);
+            throw new Exception('Error writing file to ' . $file_destination);
           }
         }
         catch (ClientException $e) {

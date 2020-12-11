@@ -12,6 +12,7 @@ use Drupal\Core\Entity\ContentEntityType;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\entity_share_client\ClientAuthorization\ClientAuthorizationInterface;
 use Drupal\entity_share_client\Entity\Remote;
+use Drupal\Core\Utility\UpdateException;
 
 /**
  * Implements hook_uninstall().
@@ -55,7 +56,7 @@ function entity_share_client_update_8302() {
 /**
  * Move any basic auth credentials stored in configuration into the new plugin.
  */
-function entity_share_client_update_8201() {
+function entity_share_client_update_8303() {
   /** @var \Drupal\entity_share_client\ClientAuthorization\ClientAuthorizationPluginManager $manager */
   $manager = \Drupal::service('plugin.manager.entity_share_client_authorization');
   $state = \Drupal::state();
@@ -63,6 +64,12 @@ function entity_share_client_update_8201() {
   /** @var \Drupal\entity_share_client\Entity\RemoteInterface[] $remotes */
   $remotes = Remote::loadMultiple();
   foreach ($remotes as $remote) {
+    // Check that the remote config had not already been converted into the new
+    // plugin system due to hook_update renaming.
+    if (!is_null($remote->get('auth'))) {
+      continue;
+    }
+
     if (!empty($remote->get('basic_auth_username'))
       && !empty($remote->get('basic_auth_password'))
     ) {
@@ -95,5 +102,26 @@ function entity_share_client_update_8201() {
     $plugin->setConfiguration($configuration);
     $remote->mergePluginConfig($plugin);
     $remote->save();
+  }
+}
+
+/**
+ * Adding the default 'rename' value to the physical file import config.
+ */
+function entity_share_client_update_8304() {
+  try {
+    /** @var \Drupal\entity_share_client\Entity\ImportConfig[] $import_config_items */
+    $import_config_items = \Drupal::entityTypeManager()->getStorage('import_config')
+      ->loadMultiple();
+    foreach ($import_config_items as $item) {
+      $settings = $item->get('import_processor_settings');
+      if (isset($settings['physical_file']) && !isset($settings['physical_file']['rename'])) {
+        $settings['physical_file']['rename'] = FALSE;
+        $item->set('import_processor_settings', $settings)->save();
+      }
+    }
+  }
+  catch (Exception $exception) {
+    throw new UpdateException($exception->getMessage());
   }
 }

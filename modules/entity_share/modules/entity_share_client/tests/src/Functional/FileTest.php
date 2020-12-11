@@ -107,6 +107,7 @@ class FileTest extends EntityShareClientFunctionalTestBase {
   protected function getImportConfigProcessorSettings() {
     $processors = parent::getImportConfigProcessorSettings();
     $processors['physical_file'] = [
+      'rename' => FALSE,
       'weights' => [
         'process_entity' => 0,
       ],
@@ -338,6 +339,63 @@ class FileTest extends EntityShareClientFunctionalTestBase {
     foreach (static::$filesData as $file_data) {
       $this->assertFalse(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' has not been pulled and recreated.');
     }
+
+    // Test rename option.
+    // Re-enable the plugin.
+    $this->mergePluginsToImportConfig([
+      'physical_file' => [
+        'rename' => FALSE,
+        'weights' => [
+          'process_entity' => 0,
+        ],
+      ],
+    ]);
+    // Need to remove all imported content (and files) prior to that.
+    $this->resetImportedContent();
+    // Pull twice to test that by default there are no duplicated physical
+    // files.
+    $this->pullEveryChannels();
+    $this->importService->getRuntimeImportContext()->clearImportedEntities();
+    $this->pullEveryChannels();
+
+    // Test that the files had been recreated without rename.
+    foreach (static::$filesData as $file_uuid => $file_data) {
+      $this->assertTrue(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' has been pulled and recreated.');
+      $replaced_file_info = $this->getReplacedFileInfo($file_data);
+      $this->assertFalse(file_exists($replaced_file_info['uri']), 'The physical file ' . $replaced_file_info['filename'] . ' has not been renamed.');
+    }
+
+    // Need to remove all imported content (and files) prior to that.
+    $this->resetImportedContent();
+
+    // Update the 'rename' setting.
+    $this->mergePluginsToImportConfig([
+      'physical_file' => [
+        'rename' => TRUE,
+        'weights' => [
+          'process_entity' => 0,
+        ],
+      ],
+    ]);
+
+    $this->pullEveryChannels();
+    $this->importService->getRuntimeImportContext()->clearImportedEntities();
+
+    // At the first import there should not be duplicated files.
+    foreach (static::$filesData as $file_uuid => $file_data) {
+      $this->assertTrue(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' has been pulled and recreated.');
+      $replaced_file_info = $this->getReplacedFileInfo($file_data);
+      $this->assertFalse(file_exists($replaced_file_info['uri']), 'The physical file ' . $replaced_file_info['filename'] . ' has not been renamed.');
+    }
+
+    $this->pullEveryChannels();
+
+    // At the second import there should be duplicated files.
+    foreach (static::$filesData as $file_uuid => $file_data) {
+      $this->assertTrue(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' still exists.');
+      $replaced_file_info = $this->getReplacedFileInfo($file_data);
+      $this->assertTrue(file_exists($replaced_file_info['uri']), 'The physical file ' . $replaced_file_info['filename'] . ' has been created.');
+    }
   }
 
   /**
@@ -356,6 +414,31 @@ class FileTest extends EntityShareClientFunctionalTestBase {
     fwrite($file_pointer, 'a');
     fclose($file_pointer);
     $this->filesSize[$file_uuid] = filesize($file_data['uri']);
+  }
+
+  /**
+   * Get the replaced file infos.
+   *
+   * @param array $file_data
+   *   The file's data with the same structure as in static::$filesData.
+   *
+   * @return array
+   *   The array of data for the replaced file. Same structure as input.
+   */
+  protected function getReplacedFileInfo(array $file_data) {
+    $replaced_file_data = $file_data;
+
+    $uri = $file_data['uri'];
+    $filename = $file_data['filename'];
+
+    // Generate replaced file name.
+    $parts = pathinfo($filename);
+    $replaced_file_name = $parts['filename'] . '_0.' . $parts['extension'];
+    $replaced_file_data['filename'] = $replaced_file_name;
+
+    // Generate replaced URI.
+    $replaced_file_data['uri'] = str_replace($filename, $replaced_file_name, $uri);
+    return $replaced_file_data;
   }
 
 }

@@ -309,6 +309,11 @@ class ImportService implements ImportServiceInterface {
     $log_variables['@import_config_id'] = $import_config_id;
 
     // Prepare import processors.
+    if (is_null($import_config_id)) {
+      $this->logger->error('No import config ID provided.');
+      $this->messenger->addError($this->t('No import config ID provided.'));
+      return FALSE;
+    }
     try {
       /** @var \Drupal\entity_share_client\Entity\ImportConfigInterface $import_config */
       $import_config = $this->entityTypeManager->getStorage('import_config')
@@ -319,6 +324,8 @@ class ImportService implements ImportServiceInterface {
       $this->messenger->addError($this->t('Impossible to load the import config with the ID: @import_config_id', $log_variables));
     }
     if (is_null($import_config)) {
+      $this->logger->error('Impossible to load the import config with the ID: @import_config_id', $log_variables);
+      $this->messenger->addError($this->t('Impossible to load the import config with the ID: @import_config_id', $log_variables));
       return FALSE;
     }
     $this->importProcessors = $this->importConfigManipulator->getImportProcessorsByStages($import_config);

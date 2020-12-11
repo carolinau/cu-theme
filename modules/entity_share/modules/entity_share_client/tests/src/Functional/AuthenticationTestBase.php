@@ -78,6 +78,7 @@ abstract class AuthenticationTestBase extends EntityShareClientFunctionalTestBas
   protected function getImportConfigProcessorSettings() {
     $processors = parent::getImportConfigProcessorSettings();
     $processors['physical_file'] = [
+      'rename' => FALSE,
       'weights' => [
         'process_entity' => 0,
       ],
