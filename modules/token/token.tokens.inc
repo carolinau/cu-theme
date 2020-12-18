@@ -1601,7 +1601,7 @@ function field_tokens($type, $tokens, array $data, array $options, BubbleableMet
       // For [entity:field_name:0], [entity:field_name:0:value] and
       // [entity:field_name:value] tokens.
       else {
-        [$field_name, $delta] = explode(':', $name, 2);
+        list($field_name, $delta) = explode(':', $name, 2);
         if (!is_numeric($delta)) {
           unset($delta);
         }
