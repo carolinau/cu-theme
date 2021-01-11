@@ -41,19 +41,23 @@ INSTALLATION
 CONFIGURATION
 -------------
 
-    1. Navigate to Administration > Extend to enable the module.
-    2. Navigate to Administration > Structure > [Entity to edit] > Manage
-       display.
+  1. Navigate to Administration > Extend to enable the module.
+  2. Navigate to Administration > Structure > [Entity to edit] > Manage
+     display.
 
 The Field Formatter Class settings are found in the Manage display tab for
 content types, users, and other entities. A text box is available for each
 field, revealed by using the formatter settings edit button (gear wheel icon)
 for that field.
 
-The class is added to the outer <div> container for the field. The default
-Drupal field classes (e.g. "field-type-taxonomy-term-reference") remain
-available - this module does not remove any classes.
+The class is added to the outer `<div>` container for the field.
 
+This module supports the use of tokens in the Field Formatter Class setting.
+
+  * For more information about tokens, see the token documentation at
+    https://www.drupal.org/node/390482
+  * If the Token module (https://www.drupal.org/project/token) is installed, a
+    token browser link will be available with the formatter settings.
 
 MAINTAINERS
 -----------
