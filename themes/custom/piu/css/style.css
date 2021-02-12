@@ -148,9 +148,9 @@ body.navbar-is-static-top {
 	box-shadow: var(--button-box-shadow);
 }
 .btn-secondary:hover {
-	filter: brightness(110%);
-	background: var(--primary-blue);
-	border-color: var(--primary-blue);
+	filter: brightness(115%);
+	background: var(--secondary-red);
+	border-color: var(--secondary-red);
 	color: #fff;
 	box-shadow: var(--button-box-shadow-h);
 }
