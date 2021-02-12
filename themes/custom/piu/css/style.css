@@ -136,8 +136,8 @@ body.navbar-is-static-top {
 }
 .btn-primary:hover {
 	filter: brightness(110%);
-	background: var(--primary-blue);
-	border-color: var(--primary-blue);
+	background: var(--secondary-red);
+	border-color: var(--secondary-red);
 	color: #fff;
 	box-shadow: var(--button-box-shadow-h);
 }
@@ -149,8 +149,8 @@ body.navbar-is-static-top {
 }
 .btn-secondary:hover {
 	filter: brightness(110%);
-	background: var(--secondary-red);
-	border-color: var(--secondary-red);
+	background: var(--primary-blue);
+	border-color: var(--primary-blue);
 	color: #fff;
 	box-shadow: var(--button-box-shadow-h);
 }
@@ -158,7 +158,7 @@ body.navbar-is-static-top {
 	background: var(--accent-yellow);
 	border-color: var(--accent-yellow);
 	color: #fff;
-	box-shadow: var(--button-box-shadow);
+	box-shadow: var(--button-box-shadow-h);
 }
 .btn-success:hover, .btn-success.focus, .btn-success:focus {
 	filter: brightness(110%);
