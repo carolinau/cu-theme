@@ -556,7 +556,7 @@ h3.cta-title {
 .bottom-divider:after {
   content: "";
   display: block;
-  width: 7%;
+  width: 75px;
   padding: 10px 0 12px 0;
   border-bottom: 3px solid var(--secondary-red);
 }
@@ -564,7 +564,7 @@ h3.cta-title {
   content: "";
   display: block;
   margin: 0 auto;
-  width: 7%;
+  width: 75px;
   padding: 10px 0 12px 0;
   border-bottom: 3px solid var(--secondary-red);
 }
