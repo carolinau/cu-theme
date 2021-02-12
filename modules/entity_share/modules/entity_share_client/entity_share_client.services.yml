@@ -51,6 +51,11 @@ services:
       - '@entity_share_client.state_information'
       - '@module_handler'
 
+  entity_share_client.entity_reference_helper:
+    class: Drupal\entity_share_client\Service\EntityReferenceHelper
+    arguments:
+      - '@entity_type.manager'
+
   entity_share_client.state_information:
     class: Drupal\entity_share_client\Service\StateInformation
     arguments:

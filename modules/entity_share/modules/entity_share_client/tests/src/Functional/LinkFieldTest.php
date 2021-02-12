@@ -42,7 +42,7 @@ class LinkFieldTest extends EntityShareClientFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->entityTypeManager->getStorage('jsonapi_resource_config')->create([

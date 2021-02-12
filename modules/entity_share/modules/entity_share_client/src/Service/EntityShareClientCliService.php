@@ -9,7 +9,7 @@ use Drupal\Component\Utility\Timer;
 use Drupal\entity_share_client\ImportContext;
 
 /**
- * Class EntityShareClientCliService.
+ * Service to ease the usage of CLI tools.
  *
  * @package Drupal\entity_share_client
  *

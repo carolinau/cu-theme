@@ -8,7 +8,7 @@ use Drupal\entity_share_client\Service\RemoteManager;
 use GuzzleHttp\ClientInterface;
 
 /**
- * Class TestRemoteManager.
+ * Service that allows to emulate another website in tests.
  *
  * @package Drupal\entity_share_client_remote_manager_test\Service
  */

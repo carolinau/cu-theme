@@ -66,7 +66,7 @@ abstract class AuthenticationTestBase extends EntityShareClientFunctionalTestBas
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->fileSystem = $this->container->get('file_system');

@@ -8,7 +8,7 @@ use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\State\StateInterface;
 
 /**
- * Class QueueHelper.
+ * Populate a queue for asynchronous treatment.
  *
  * @package Drupal\entity_share_async\Service
  */

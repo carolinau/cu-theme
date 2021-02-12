@@ -198,10 +198,12 @@ class PullForm extends FormBase {
     else {
       $url = Url::fromRoute('entity.import_config.collection');
       if ($url->renderAccess($url->toRenderArray())) {
-        $this->messenger()->addError($this->t('Please configure <a href=":url">Import configuration</a> before trying to import content.', [':url' => $url->toString()]));
+        $this->messenger()
+          ->addError($this->t('Please configure <a href=":url">Import configuration</a> before trying to import content.', [':url' => $url->toString()]));
       }
       else {
-        $this->messenger()->addError($this->t('There are no "Import configuration" available. Please contact the website administrator.'));
+        $this->messenger()
+          ->addError($this->t('There are no "Import configuration" available. Please contact the website administrator.'));
       }
     }
 
@@ -670,7 +672,7 @@ class PullForm extends FormBase {
         ],
       ],
     ];
-    if ($this->moduleHandler->moduleExists('diff')) {
+    if ($this->moduleHandler->moduleExists('entity_share_diff')) {
       $form['channel_wrapper']['entities_wrapper']['entities']['#attached']['library'][] = 'core/drupal.dialog.ajax';
     }
 
@@ -752,7 +754,10 @@ class PullForm extends FormBase {
       $context['sort'] = 'asc';
       $image = '';
     }
-    $cell['data'] = Link::createFromRoute(new FormattableMarkup('@cell_content@image', ['@cell_content' => $header, '@image' => $image]), '<current>', [], [
+    $cell['data'] = Link::createFromRoute(new FormattableMarkup('@cell_content@image', [
+      '@cell_content' => $header,
+      '@image' => $image,
+    ]), '<current>', [], [
       'attributes' => ['title' => $title],
       'query' => array_merge($context['query'], [
         'sort' => $context['sort'],

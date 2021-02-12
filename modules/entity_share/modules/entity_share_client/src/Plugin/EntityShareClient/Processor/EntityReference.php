@@ -6,14 +6,13 @@ namespace Drupal\entity_share_client\Plugin\EntityShareClient\Processor;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
-use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\entity_share\EntityShareUtility;
 use Drupal\entity_share_client\Event\RelationshipFieldValueEvent;
 use Drupal\entity_share_client\ImportProcessor\ImportProcessorPluginBase;
 use Drupal\entity_share_client\RuntimeImportContext;
+use Drupal\entity_share_client\Service\EntityReferenceHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,13 +38,6 @@ class EntityReference extends ImportProcessorPluginBase implements PluginFormInt
   protected $entityTypeManager;
 
   /**
-   * The entity type definitions.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeInterface[]
-   */
-  protected $entityDefinitions;
-
-  /**
    * The event dispatcher service.
    *
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -67,6 +59,13 @@ class EntityReference extends ImportProcessorPluginBase implements PluginFormInt
   protected $logger;
 
   /**
+   * Entity reference helper service.
+   *
+   * @var \Drupal\entity_share_client\Service\EntityReferenceHelperInterface
+   */
+  protected $entityReferenceHelper;
+
+  /**
    * The current recursion depth.
    *
    * @var int
@@ -78,12 +77,11 @@ class EntityReference extends ImportProcessorPluginBase implements PluginFormInt
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $entity_type_manager = $container->get('entity_type.manager');
-    $instance->entityTypeManager = $entity_type_manager;
-    $instance->entityDefinitions = $entity_type_manager->getDefinitions();
+    $instance->entityTypeManager = $container->get('entity_type.manager');
     $instance->eventDispatcher = $container->get('event_dispatcher');
     $instance->remoteManager = $container->get('entity_share_client.remote_manager');
     $instance->logger = $container->get('logger.channel.entity_share_client');
+    $instance->entityReferenceHelper = $container->get('entity_share_client.entity_reference_helper');
     return $instance;
   }
 
@@ -122,7 +120,7 @@ class EntityReference extends ImportProcessorPluginBase implements PluginFormInt
         $field_internal_name = array_search($field_public_name, $field_mappings[$processed_entity->getEntityTypeId()][$processed_entity->bundle()]);
         $field = $processed_entity->get($field_internal_name);
 
-        if (!$this->relationshipHandleable($field)) {
+        if ($this->entityReferenceHelper->relationshipHandleable($field) !== EntityReferenceHelperInterface::RELATIONSHIP_HANDLEABLE) {
           continue;
         }
 
@@ -174,65 +172,10 @@ class EntityReference extends ImportProcessorPluginBase implements PluginFormInt
         $processed_entity->set($field_public_name, $field_values);
       }
 
-      // TODO: Test if this is still needed.
+      // @todo Test if this is still needed.
       // Save the entity once all the references have been updated.
       $processed_entity->save();
     }
-  }
-
-  /**
-   * Check if a relationship is handleable.
-   *
-   * Filter on fields not targeting config entities or users.
-   *
-   * @param \Drupal\Core\Field\FieldItemListInterface $field
-   *   The field item list.
-   *
-   * @return bool
-   *   TRUE if the relationship is handleable.
-   */
-  protected function relationshipHandleable(FieldItemListInterface $field) {
-    $relationship_handleable = FALSE;
-
-    if ($field instanceof EntityReferenceFieldItemListInterface) {
-      $settings = $field->getItemDefinition()->getSettings();
-
-      // Entity reference and Entity reference revisions.
-      if (isset($settings['target_type'])) {
-        $relationship_handleable = !$this->isUserOrConfigEntity($settings['target_type']);
-      }
-      // Dynamic entity reference.
-      elseif (isset($settings['entity_type_ids'])) {
-        foreach ($settings['entity_type_ids'] as $entity_type_id) {
-          $relationship_handleable = !$this->isUserOrConfigEntity($entity_type_id);
-          if (!$relationship_handleable) {
-            break;
-          }
-        }
-      }
-    }
-
-    return $relationship_handleable;
-  }
-
-  /**
-   * Helper function to check if an entity type id is a user or a config entity.
-   *
-   * @param string $entity_type_id
-   *   The entity type id.
-   *
-   * @return bool
-   *   TRUE if the entity type is user or a config entity. FALSE otherwise.
-   */
-  protected function isUserOrConfigEntity($entity_type_id) {
-    if ($entity_type_id == 'user') {
-      return TRUE;
-    }
-    elseif ($this->entityDefinitions[$entity_type_id]->getGroup() == 'configuration') {
-      return TRUE;
-    }
-
-    return FALSE;
   }
 
   /**

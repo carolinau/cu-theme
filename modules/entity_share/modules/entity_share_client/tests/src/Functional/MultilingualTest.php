@@ -49,7 +49,7 @@ class MultilingualTest extends EntityShareClientFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->stateInformation = $this->container->get('entity_share_client.state_information');

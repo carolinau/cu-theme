@@ -13,7 +13,7 @@ use GuzzleHttp\Exception\ServerException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class RemoteManager.
+ * Service to wrap requests logic.
  *
  * @package Drupal\entity_share_client\Service
  */

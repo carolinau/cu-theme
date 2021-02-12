@@ -83,7 +83,7 @@ class DefaultDataProcessor extends ImportProcessorPluginBase {
     $parsed_type = explode('--', $entity_json_data['type']);
     $entity_type_id = $parsed_type[0];
     $entity_bundle = $parsed_type[1];
-    // TODO: Refactor in attributes to avoid getting entity keys each time.
+    // @todo Refactor in attributes to avoid getting entity keys each time.
     $entity_storage = $this->entityTypeManager->getStorage($entity_type_id);
     $entity_keys = $entity_storage->getEntityType()->getKeys();
 
@@ -129,7 +129,7 @@ class DefaultDataProcessor extends ImportProcessorPluginBase {
     $parsed_type = explode('--', $entity_json_data['type']);
     $entity_type_id = $parsed_type[0];
     $entity_bundle = $parsed_type[1];
-    // TODO: Refactor in attributes to avoid getting entity keys each time.
+    // @todo Refactor in attributes to avoid getting entity keys each time.
     $entity_storage = $this->entityTypeManager->getStorage($entity_type_id);
     $entity_keys = $entity_storage->getEntityType()->getKeys();
 

@@ -13,7 +13,7 @@ use Drupal\entity_share_client\ClientAuthorization\ClientAuthorizationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class RemoteForm.
+ * Entity form of the remote entity.
  *
  * @package Drupal\entity_share_client\Form
  */

@@ -125,3 +125,14 @@ function entity_share_client_update_8304() {
     throw new UpdateException($exception->getMessage());
   }
 }
+
+/**
+ * Install module Entity Share Diff.
+ *
+ * Its functionality was previously a part of Entity Share Client.
+ */
+function entity_share_client_update_8305() {
+  if (\Drupal::moduleHandler()->moduleExists('diff')) {
+    \Drupal::service('module_installer')->install(['entity_share_diff']);
+  }
+}

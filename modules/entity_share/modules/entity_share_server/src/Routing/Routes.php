@@ -46,7 +46,7 @@ class Routes implements ContainerInjectionInterface {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    /* @var \Drupal\Core\Authentication\AuthenticationCollectorInterface $auth_collector */
+    /** @var \Drupal\Core\Authentication\AuthenticationCollectorInterface $auth_collector */
     $auth_collector = $container->get('authentication_collector');
 
     return new static($auth_collector);

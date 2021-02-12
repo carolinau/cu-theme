@@ -15,7 +15,7 @@ use Drupal\entity_share_client\Service\ImportConfigManipulatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ImportConfigForm.
+ * Entity form of the import config entity.
  */
 class ImportConfigForm extends EntityForm {
 

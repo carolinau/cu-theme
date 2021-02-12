@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\entity_share_server\OperatorsHelper;
 
 /**
- * Class FilterAddForm.
+ * Form to add a filter on a channel.
  *
  * @package Drupal\entity_share_server\Form
  */

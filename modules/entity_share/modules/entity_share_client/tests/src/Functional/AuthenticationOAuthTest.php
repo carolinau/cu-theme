@@ -70,7 +70,7 @@ class AuthenticationOAuthTest extends AuthenticationTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->keyService = $this->container->get('entity_share_client.key_provider');

@@ -7,7 +7,6 @@ namespace Drupal\entity_share_client\Service;
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\entity_share_client\Entity\ImportConfigInterface;
 use Drupal\entity_share_client\ImportProcessor\ImportProcessorPluginManager;
-use Exception;
 
 /**
  * Class ImportConfigManipulator.
@@ -74,7 +73,7 @@ class ImportConfigManipulator implements ImportConfigManipulatorInterface {
         $plugins[$plugin_id] = $this->importProcessorPluginManager->createInstance($plugin_id, $configuration);
       }
       catch (PluginException $e) {
-        throw new Exception("Unknown import processor plugin with ID '$plugin_id'");
+        throw new \Exception("Unknown import processor plugin with ID '$plugin_id'");
       }
     }
 
@@ -107,7 +106,7 @@ class ImportConfigManipulator implements ImportConfigManipulatorInterface {
 
     if (empty($processors[$processor_id])) {
       $import_config_label = $import_config->label();
-      throw new Exception("The import processor with ID '$processor_id' could not be retrieved for import config '$import_config_label'.");
+      throw new \Exception("The import processor with ID '$processor_id' could not be retrieved for import config '$import_config_label'.");
     }
 
     return $processors[$processor_id];

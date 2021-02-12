@@ -15,7 +15,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ChannelForm.
+ * Entity form for the channel entity.
  *
  * @package Drupal\entity_share_server\Form
  */

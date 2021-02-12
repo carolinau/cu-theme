@@ -17,14 +17,3 @@ entity_share_client.admin_content_pull_form:
     _permission: 'entity_share_client_pull_content'
   options:
     _admin_route: TRUE
-
-entity_share_client.diff:
-  path: '/admin/content/entity_share/pull/diff/{left_revision}/{remote}/{channel_id}/{uuid}'
-  defaults:
-    _controller: '\Drupal\entity_share_client\Controller\DiffController::compareEntities'
-    _title: 'Entity comparison'
-  requirements:
-    _permission: 'entity_share_client_pull_content'
-    _module_dependencies: 'diff'
-  options:
-    _admin_route: TRUE

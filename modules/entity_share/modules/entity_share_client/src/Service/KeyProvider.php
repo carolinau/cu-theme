@@ -10,7 +10,7 @@ use Drupal\entity_share_client\ClientAuthorization\ClientAuthorizationInterface;
 use Drupal\key\KeyRepositoryInterface;
 
 /**
- * Class KeyProvider.
+ * Abstraction layer to support local storage and Key module.
  *
  * @package Drupal\entity_share_client\Service
  */

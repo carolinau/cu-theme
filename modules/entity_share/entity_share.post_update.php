@@ -5,6 +5,8 @@
  * Post-update functions for Entity Share.
  */
 
+declare(strict_types = 1);
+
 /**
  * Clear cache because custom HTML route providers had been removed.
  */

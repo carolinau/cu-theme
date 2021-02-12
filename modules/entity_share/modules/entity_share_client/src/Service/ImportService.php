@@ -403,7 +403,7 @@ class ImportService implements ImportServiceInterface {
    *   The entity to be processed.
    */
   protected function getProcessedEntity(array $entity_data) {
-    // TODO: Avoid duplicated code (and duplicate execution?) with
+    // @todo Avoid duplicated code (and duplicate execution?) with
     // DefaultDataProcessor.
     $field_mappings = $this->runtimeImportContext->getFieldMappings();
     $parsed_type = explode('--', $entity_data['type']);

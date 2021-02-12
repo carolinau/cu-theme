@@ -7,7 +7,7 @@ namespace Drupal\entity_share_server\Form;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class SearchDeleteForm.
+ * Form to delete a search on a channel.
  *
  * @package Drupal\entity_share_server\Form
  */

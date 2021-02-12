@@ -10,7 +10,7 @@ use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Class JsonapiHelper.
+ * Provides methods not present in the JSON:API module.
  *
  * @package Drupal\entity_share_client\Service
  */

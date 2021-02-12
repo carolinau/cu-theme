@@ -11,7 +11,6 @@ use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\entity_share_client\ImportProcessor\ImportProcessorPluginBase;
 use Drupal\entity_share_client\RuntimeImportContext;
 use Drupal\file\FileInterface;
-use Exception;
 use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -139,7 +138,7 @@ class PhysicalFile extends ImportProcessorPluginBase implements PluginFormInterf
           $file_content = (string) $response->getBody();
           $result = @file_put_contents($file_destination, $file_content);
           if (!$result) {
-            throw new Exception('Error writing file to ' . $file_destination);
+            throw new \Exception('Error writing file to ' . $file_destination);
           }
         }
         catch (ClientException $e) {

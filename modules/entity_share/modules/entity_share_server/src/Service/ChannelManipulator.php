@@ -13,7 +13,7 @@ use Drupal\entity_share_server\OperatorsHelper;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 
 /**
- * Class ChannelManipulator.
+ * Helps to manipulate a channel.
  *
  * @package Drupal\entity_share_server\Service
  */

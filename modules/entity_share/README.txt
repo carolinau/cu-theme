@@ -158,10 +158,6 @@ RECOMMENDED MODULES
  * JSON:API Extras (https://www.drupal.org/project/jsonapi_extras):
    To allow to customize the JSON:API endpoints and to enable full pager
    feature. See the troubleshooting section about the link fields.
- * Diff (https://www.drupal.org/project/diff):
-   To see a diff if entities are not synchronized. Note that the following patch
-   needs to be applied on the diff module:
-   https://www.drupal.org/project/diff/issues/3088274#comment-13312389
 
 
 SIMILAR MODULES

@@ -7,7 +7,7 @@ namespace Drupal\entity_share_server\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class ChannelListEvent.
+ * Allows to alter the list of channels provided by the website.
  *
  * @package Drupal\entity_share_server\Event
  */

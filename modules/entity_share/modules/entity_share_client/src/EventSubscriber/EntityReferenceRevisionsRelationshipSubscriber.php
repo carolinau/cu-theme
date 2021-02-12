@@ -9,7 +9,7 @@ use Drupal\entity_share_client\Event\RelationshipFieldValueEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class EntityReferenceRevisionsRelationshipSubscriber.
+ * Allows entity reference revisions fields to be supported.
  *
  * @package Drupal\entity_share_client
  */
@@ -37,7 +37,9 @@ class EntityReferenceRevisionsRelationshipSubscriber implements EventSubscriberI
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[RelationshipFieldValueEvent::EVENT_NAME] = ['alterRelationshipValue', 100];
+    $events[RelationshipFieldValueEvent::EVENT_NAME] = [
+      'alterRelationshipValue', 100,
+    ];
     return $events;
   }
 

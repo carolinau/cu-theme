@@ -25,7 +25,7 @@ class AuthenticationBasicAuthTest extends AuthenticationTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     Role::load(AccountInterface::AUTHENTICATED_ROLE)

@@ -32,7 +32,7 @@ class MissingEntityReferenceTest extends EntityShareClientFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $node_storage = $this->entityTypeManager->getStorage('node');

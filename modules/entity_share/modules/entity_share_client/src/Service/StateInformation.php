@@ -14,7 +14,7 @@ use Drupal\entity_share\EntityShareUtility;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 
 /**
- * Class StateInformation.
+ * Service to handle presentation of import state.
  *
  * @package Drupal\entity_share_client\Service
  */

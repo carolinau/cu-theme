@@ -7,7 +7,7 @@ namespace Drupal\entity_share_server\Form;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class GroupDeleteForm.
+ * Form to delete a group on a channel.
  *
  * @package Drupal\entity_share_server\Form
  */

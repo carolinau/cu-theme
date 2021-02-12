@@ -20,7 +20,7 @@ use Drupal\entity_share_client\Entity\RemoteInterface;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 
 /**
- * Class FormHelper.
+ * Service to extract code out of the PullForm.
  *
  * @package Drupal\entity_share_client\Service
  */
@@ -192,32 +192,34 @@ class FormHelper implements FormHelperInterface {
       ],
     ];
 
-    $id_public_name = $resource_type->getPublicName($entity_keys['id']);
-    if ($this->moduleHandler->moduleExists('diff') &&
-      in_array($status_info['info_id'], [
-        StateInformationInterface::INFO_ID_CHANGED,
-        StateInformationInterface::INFO_ID_NEW_TRANSLATION,
-      ]) &&
-      !is_null($status_info['local_revision_id']) &&
-      isset($data['attributes'][$id_public_name])
-    ) {
-      $options[$data['id']]['status']['data'] = new FormattableMarkup('@label: @diff_link', [
-        '@label' => $options[$data['id']]['status']['data'],
-        '@diff_link' => Link::createFromRoute($this->t('Diff'), 'entity_share_client.diff', [
-          'left_revision' => $status_info['local_revision_id'],
-          'remote' => $remote->id(),
-          'channel_id' => $channel_id,
-          'uuid' => $data['id'],
-        ], [
-          'attributes' => [
-            'class' => [
-              'use-ajax',
+    if ($this->moduleHandler->moduleExists('entity_share_diff')) {
+      $id_public_name = $resource_type->getPublicName($entity_keys['id']);
+      if (
+        in_array($status_info['info_id'], [
+          StateInformationInterface::INFO_ID_CHANGED,
+          StateInformationInterface::INFO_ID_NEW_TRANSLATION,
+        ]) &&
+        !is_null($status_info['local_revision_id']) &&
+        isset($data['attributes'][$id_public_name])
+      ) {
+        $options[$data['id']]['status']['data'] = new FormattableMarkup('@label: @diff_link', [
+          '@label' => $options[$data['id']]['status']['data'],
+          '@diff_link' => Link::createFromRoute($this->t('Diff'), 'entity_share_diff.comparison', [
+            'left_revision_id' => $status_info['local_revision_id'],
+            'remote' => $remote->id(),
+            'channel_id' => $channel_id,
+            'uuid' => $data['id'],
+          ], [
+            'attributes' => [
+              'class' => [
+                'use-ajax',
+              ],
+              'data-dialog-type' => 'modal',
+              'data-dialog-options' => Json::encode(['width' => '90%']),
             ],
-            'data-dialog-type' => 'modal',
-            'data-dialog-options' => Json::encode(['width' => '90%']),
-          ],
-        ])->toString(),
-      ]);
+          ])->toString(),
+        ]);
+      }
     }
   }
 

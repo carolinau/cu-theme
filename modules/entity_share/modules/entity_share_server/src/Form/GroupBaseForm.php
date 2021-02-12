@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class GroupBaseForm.
+ * Base class for group form.
  *
  * @package Drupal\entity_share_server\Form
  */

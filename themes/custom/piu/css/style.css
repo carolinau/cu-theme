@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap');
 :root {
 	--primary-blue: #002868;
 	--secondary-red: #BF0A30;
@@ -15,11 +15,15 @@
 h1, h2, h3, h4, h5, h6 {
 	font-family: 'Lato', sans-serif;
 }
-h1, h2 {
-	font-weight: 600;
-}
 h4 {
 	margin-bottom: 6px;
+}
+h5 {
+	color: var(--secondary-red);
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	margin: 20px 0 -5px;
 }
 body {
 	font: 1.6em/1.6em 'Lato', sans-serif;
@@ -116,10 +120,13 @@ body.navbar-is-static-top {
 /* Buttons */
 .btn {
 	font-family: 'Lato', sans-serif;
-	text-transform: uppercase;
-	letter-spacing: .1em;
+	text-transform: none;
 	padding: 10px 18px;
 	transition: all 400ms;
+	border-radius: 5px;
+	font-weight: 300;
+	font-size: 1em;
+	letter-spacing: 0.03em;
 }
 .btn-primary {
 	background: var(--primary-blue);

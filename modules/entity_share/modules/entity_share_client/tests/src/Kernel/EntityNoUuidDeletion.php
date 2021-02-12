@@ -32,7 +32,7 @@ class EntityNoUuidDeletion extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('entity_test_no_uuid');
     $this->installEntitySchema('entity_import_status');

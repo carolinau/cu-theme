@@ -34,7 +34,7 @@ class BcTimestampNormalizerUnixTest extends EntityShareClientFunctionalTestBase 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $serialization_settings = $this->config('serialization.settings');

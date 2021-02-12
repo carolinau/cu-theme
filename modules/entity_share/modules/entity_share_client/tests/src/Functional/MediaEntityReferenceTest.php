@@ -74,7 +74,7 @@ class MediaEntityReferenceTest extends EntityShareClientFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->getTestFiles('image');
     // Special case for the image created using native helper method.

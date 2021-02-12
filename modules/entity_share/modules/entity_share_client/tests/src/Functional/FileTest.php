@@ -84,7 +84,7 @@ class FileTest extends EntityShareClientFunctionalTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->fileSystem = $this->container->get('file_system');
@@ -359,7 +359,7 @@ class FileTest extends EntityShareClientFunctionalTestBase {
     $this->pullEveryChannels();
 
     // Test that the files had been recreated without rename.
-    foreach (static::$filesData as $file_uuid => $file_data) {
+    foreach (static::$filesData as $file_data) {
       $this->assertTrue(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' has been pulled and recreated.');
       $replaced_file_info = $this->getReplacedFileInfo($file_data);
       $this->assertFalse(file_exists($replaced_file_info['uri']), 'The physical file ' . $replaced_file_info['filename'] . ' has not been renamed.');
@@ -382,7 +382,7 @@ class FileTest extends EntityShareClientFunctionalTestBase {
     $this->importService->getRuntimeImportContext()->clearImportedEntities();
 
     // At the first import there should not be duplicated files.
-    foreach (static::$filesData as $file_uuid => $file_data) {
+    foreach (static::$filesData as $file_data) {
       $this->assertTrue(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' has been pulled and recreated.');
       $replaced_file_info = $this->getReplacedFileInfo($file_data);
       $this->assertFalse(file_exists($replaced_file_info['uri']), 'The physical file ' . $replaced_file_info['filename'] . ' has not been renamed.');
@@ -391,7 +391,7 @@ class FileTest extends EntityShareClientFunctionalTestBase {
     $this->pullEveryChannels();
 
     // At the second import there should be duplicated files.
-    foreach (static::$filesData as $file_uuid => $file_data) {
+    foreach (static::$filesData as $file_data) {
       $this->assertTrue(file_exists($file_data['uri']), 'The physical file ' . $file_data['filename'] . ' still exists.');
       $replaced_file_info = $this->getReplacedFileInfo($file_data);
       $this->assertTrue(file_exists($replaced_file_info['uri']), 'The physical file ' . $replaced_file_info['filename'] . ' has been created.');
