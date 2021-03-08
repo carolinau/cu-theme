@@ -1,8 +1,7 @@
-name: 'Weight test views'
+name: 'Weight Test Views'
 type: module
 description: 'Provides default views for views weight tests.'
 package: Testing
-# version: VERSION
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
@@ -11,7 +10,7 @@ dependencies:
   - drupal:language
   - drupal:weight
 
-# Information added by Drupal.org packaging script on 2020-07-23
-version: '8.x-3.2'
+# Information added by Drupal.org packaging script on 2021-03-05
+version: '8.x-3.3'
 project: 'weight'
-datestamp: 1595497151
+datestamp: 1614970758

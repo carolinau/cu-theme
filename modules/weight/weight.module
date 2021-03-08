@@ -10,12 +10,17 @@
  */
 function weight_preprocess_views_view_table(&$variables) {
 
+  // Check if view return results
+  if (!$variables['result']) {
+    return;
+  }
+
   // Check for a weight selector field.
   foreach ($variables['view']->field as $field_key => $field) {
-    if ($field->options['plugin_id'] == 'weight_selector') {
+    if (isset($field->options['plugin_id']) && $field->options['plugin_id'] == 'weight_selector') {
 
       // Check if the weight selector is on the first column.
-      $is_first_column = array_search($field_key, array_keys($variables['view']->field)) > 0 ? false : true;
+      $is_first_column = array_search($field_key, array_keys($variables['view']->field)) > 0 ? FALSE : TRUE;
 
       // Add the tabledrag attributes.
       foreach ($variables['rows'] as $key => $row) {
@@ -34,8 +39,8 @@ function weight_preprocess_views_view_table(&$variables) {
         $variables['rows'][$key]['attributes']->addClass('draggable');
       }
       // The row key identify in an unique way a view grouped by a field.
-      // Without row number, all the groups will share the same table_id and just the
-      // first table can be draggable.
+      // Without row number, all the groups will share the same table_id
+      // and just the first table can be draggable.
       $table_id = 'weight-table-' . $variables['view']->dom_id . '-row-' . $key;
       $variables['attributes']['id'] = $table_id;
 

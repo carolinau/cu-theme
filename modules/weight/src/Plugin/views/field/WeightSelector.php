@@ -131,6 +131,9 @@ class WeightSelector extends FieldPluginBase {
    */
   public function viewsFormSubmit(array &$form, FormStateInterface $form_state) {
     $field_name = $form_state->getValue('views_field');
+    if (!$field_name) {
+      return;
+    }
     $rows = $form_state->getValue($field_name);
 
     foreach ($rows as $row) {
@@ -143,6 +146,7 @@ class WeightSelector extends FieldPluginBase {
       if ($entity && $entity->hasField($field_name)) {
         $entity->set($field_name, $row['weight']);
         $entity->save();
+        \Drupal::messenger()->addMessage($this->t('Your changes have been saved.'));
       }
     }
   }

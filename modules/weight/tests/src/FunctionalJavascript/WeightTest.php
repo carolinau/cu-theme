@@ -45,14 +45,14 @@ class WeightTest extends WebDriverTestBase {
    *
    * @var string
    */
-  protected static $field_name = 'field_weight';
+  protected static $fieldName = 'field_weight';
 
   /**
    * Type of the field.
    *
    * @var string
    */
-  protected static $field_type = 'weight';
+  protected static $fieldType = 'weight';
 
   /**
    * A user that can edit content types.
@@ -101,9 +101,9 @@ class WeightTest extends WebDriverTestBase {
     $this->container->get('router.builder')->rebuild();
 
     $fieldStorage = FieldStorageConfig::create([
-      'field_name' => static::$field_name,
+      'field_name' => static::$fieldName,
       'entity_type' => 'node',
-      'type' => static::$field_type,
+      'type' => static::$fieldType,
     ]);
     $fieldStorage->save();
     $field = FieldConfig::create([
@@ -172,8 +172,8 @@ class WeightTest extends WebDriverTestBase {
     $this->assertSession()->pageTextNotContains('You have unsaved changes.');
 
     // Drag and drop the 'Article 1' row over the 'Article 2' row.
-    // @todo: Test also the reverse, 'Article 2' over 'Article 1', when
-    //   https://www.drupal.org/node/2769825 is fixed.
+    // @todo Test also the reverse, 'Article 2' over 'Article 1', when
+    // https://www.drupal.org/node/2769825 is fixed.
     // @see https://www.drupal.org/node/2769825
     $dragged = $this->xpath("//tr[@class='draggable'][1]//a[@class='tabledrag-handle']")[0];
     $target = $this->xpath("//tr[@class='draggable'][2]//a[@class='tabledrag-handle']")[0];
@@ -189,8 +189,7 @@ class WeightTest extends WebDriverTestBase {
     $this->assertOrderInPage(['Article 2', 'Article 1']);
 
     $this->submitForm([], 'Save');
-    // TODO: Fix the send message after saving the changes.
-
+    // @todo Fix the send message after saving the changes.
     // Check that page reordering was done in the backend for drag-n-drop.
     $page1 = Node::load($this->nodes[0]->id());
     $page2 = Node::load($this->nodes[1]->id());
@@ -222,7 +221,7 @@ class WeightTest extends WebDriverTestBase {
     $this->assertFalse($weight_select1->isVisible());
     $this->assertFalse($weight_select2->isVisible());
 
-    // TODO: Fix the send message after saving the changes.
+    // @todo Fix the send message after saving the changes.
     $this->submitForm([], 'Save');
 
     // Check that the 'Article 1' is first again.
@@ -251,8 +250,8 @@ class WeightTest extends WebDriverTestBase {
     $this->assertFalse($weight_select4->isVisible());
 
     // Drag and drop the 'Article 1' row over the 'Article 2' row.
-    // @todo: Test also the reverse, 'Article 2' over 'Article 1', when
-    //   https://www.drupal.org/node/2769825 is fixed.
+    // @todo Test also the reverse, 'Article 2' over 'Article 1', when
+    // https://www.drupal.org/node/2769825 is fixed.
     // @see https://www.drupal.org/node/2769825
     $dragged = $this->xpath("//tr[@class='draggable'][1]//a[@class='tabledrag-handle']")[0];
     $target = $this->xpath("//tr[@class='draggable'][2]//a[@class='tabledrag-handle']")[0];
@@ -268,8 +267,7 @@ class WeightTest extends WebDriverTestBase {
     $this->assertOrderInPage(['Article 2', 'Article 1']);
 
     $this->submitForm([], 'Save');
-    // TODO: Fix the send message after saving the changes.
-
+    // @todo Fix the send message after saving the changes.
     // Test weight with a grouped views.
     $this->drupalGet('test-weight-grouped');
     $page = $this->getSession()->getPage();
