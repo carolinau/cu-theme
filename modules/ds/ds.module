@@ -417,11 +417,6 @@ function template_preprocess_ds_entity_view(&$variables) {
 
   $configuration = $build['#ds_configuration'];
 
-  // Process the render array so we can reuse it.
-  // Don't add/override the cache key if there aren't any.
-  if (!empty($build['#cache']['keys'])) {
-    $build['#cache']['keys'][0] = 'ds_entity_view';
-  }
   unset($build['#theme']);
   unset($build['#pre_render']);
   unset($build['#sorted']);
