@@ -28,7 +28,8 @@ class DiffFormatter extends CoreDiffFormatter {
   public function __construct(ConfigFactoryInterface $config_factory) {
     parent::__construct($config_factory);
     $config = $config_factory->get('entity_share_diff.settings');
-    if ($context_settings = $config->get('context')) {
+    $context_settings = $config->get('context');
+    if ($context_settings) {
       $this->leading_context_lines = $context_settings['lines_leading'];
       $this->leading_context_lines = $context_settings['lines_trailing'];
     }

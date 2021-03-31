@@ -1,0 +1,15 @@
+name: OpenID Connect Windows Azure Active Directory
+description: This module adds a Windows Azure AD client to OpenID Connect.
+package: Other
+
+dependencies:
+  - openid_connect:openid_connect
+  
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+# Information added by Drupal.org packaging script on 2020-06-19
+version: '8.x-1.3'
+project: 'openid_connect_windows_aad'
+datestamp: 1592556551

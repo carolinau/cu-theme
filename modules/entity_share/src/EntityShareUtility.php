@@ -67,8 +67,11 @@ class EntityShareUtility {
     if (is_numeric($changed_time)) {
       $entity_changed_time = (int) $changed_time;
     }
-    elseif ($changed_datetime = \DateTime::createFromFormat(\DateTime::RFC3339, $changed_time)) {
-      $entity_changed_time = $changed_datetime->getTimestamp();
+    else {
+      $changed_datetime = \DateTime::createFromFormat(\DateTime::RFC3339, $changed_time);
+      if ($changed_datetime) {
+        $entity_changed_time = $changed_datetime->getTimestamp();
+      }
     }
     return $entity_changed_time;
   }

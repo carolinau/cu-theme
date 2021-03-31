@@ -26,6 +26,8 @@ interface ImportServiceInterface {
    * @return array|void
    *   The list of entity IDs imported keyed by UUIDs, if not batched.
    *   If batched, the method doesn't return.
+   *
+   * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
    */
   public function importEntities(ImportContext $context, array $uuids, bool $is_batched = TRUE);
 

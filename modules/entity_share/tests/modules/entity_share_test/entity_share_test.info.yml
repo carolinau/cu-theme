@@ -160,7 +160,7 @@ config_devel:
     - paragraphs.paragraphs_type.es_test
     - taxonomy.vocabulary.es_test
 
-# Information added by Drupal.org packaging script on 2021-02-12
-version: '8.x-3.0-beta3'
+# Information added by Drupal.org packaging script on 2021-03-26
+version: '8.x-3.0-beta4'
 project: 'entity_share'
-datestamp: 1613123267
+datestamp: 1616764302

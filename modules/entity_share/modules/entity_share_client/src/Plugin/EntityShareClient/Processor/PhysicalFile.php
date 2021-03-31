@@ -94,6 +94,8 @@ class PhysicalFile extends ImportProcessorPluginBase implements PluginFormInterf
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.ErrorControlOperator)
    */
   public function processEntity(RuntimeImportContext $runtime_import_context, ContentEntityInterface $processed_entity, array $entity_json_data) {
     if ($processed_entity instanceof FileInterface) {

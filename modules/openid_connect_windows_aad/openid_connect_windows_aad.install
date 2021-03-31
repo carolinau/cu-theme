@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Remove Configuration of settings form.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function openid_connect_windows_aad_uninstall() {
+  // Remove configuration.
+  Drupal::configFactory()->getEditable('openid_connect.settings.windows_aad')->delete();
+}

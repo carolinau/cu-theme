@@ -243,7 +243,7 @@ Current maintainers:
 
 This project has been sponsored by:
  * Smile - https://www.drupal.org/smile
-   Sponsored initial development, evolutions, maintainance and support.
+   Sponsored initial development, evolutions, maintenance and support.
  * Lullabot - https://www.drupal.org/lullabot
    Sponsored development of new features in association with
    https://www.drupal.org/carnegie-mellon-university

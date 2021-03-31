@@ -88,7 +88,7 @@ class DiffGeneratorPluginManager extends DefaultPluginManager {
       // Sort the plugins based on their weight.
       uasort($plugins[$field_type], 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
-      foreach ($plugins[$field_type] as $id => $weight) {
+      foreach (array_keys($plugins[$field_type]) as $id) {
         $definition = $this->getDefinition($id, FALSE);
         // Check if the plugin is applicable.
         if (isset($definition['class']) && in_array($field_type, $definition['field_types'])) {

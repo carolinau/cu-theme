@@ -88,7 +88,7 @@ class EntityShareAsyncWorker extends QueueWorkerBase implements ContainerFactory
 
     if (empty($ids)) {
       $this->logger->warning(
-        "Cannot synchronise item @uuid from channel @channel_id of remote @remote_id with the import config @import_config_id",
+        "Cannot synchronize item @uuid from channel @channel_id of remote @remote_id with the import config @import_config_id",
         [
           '@uuid' => $item['uuid'],
           '@channel_id' => $item['channel_id'],

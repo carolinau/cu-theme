@@ -73,6 +73,9 @@ class MediaEntityReferenceTest extends EntityShareClientFunctionalTestBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.UndefinedVariable)
+   * Bug in PHPMD, @see https://github.com/phpmd/phpmd/issues/714
    */
   protected function setUp(): void {
     parent::setUp();

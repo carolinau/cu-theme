@@ -74,6 +74,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "group-delete" = "/admin/config/services/entity_share/channel/{channel}/groups/{group}/delete",
  *   }
  * )
+ *
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Channel extends ConfigEntityBase implements ChannelInterface {
 

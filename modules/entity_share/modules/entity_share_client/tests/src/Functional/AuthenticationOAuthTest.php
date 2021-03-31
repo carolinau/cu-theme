@@ -139,7 +139,7 @@ class AuthenticationOAuthTest extends AuthenticationTestBase {
 
     $access_token = '';
     try {
-      $access_token = $plugin->initalizeToken($remote, $credentials);
+      $access_token = $plugin->initializeToken($remote, $credentials);
     }
     catch (\Exception $e) {
       // Do nothing.
@@ -274,7 +274,7 @@ class AuthenticationOAuthTest extends AuthenticationTestBase {
     ];
     $access_token = '';
     try {
-      $access_token = $plugin->initalizeToken($this->remote, $credentials, $request_options);
+      $access_token = $plugin->initializeToken($this->remote, $credentials, $request_options);
     }
     catch (\Exception $e) {
       // Do nothing.

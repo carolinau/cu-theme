@@ -293,7 +293,8 @@ class EntityParser implements EntityParserInterface {
     $plugin = $this->diffGeneratorManager->createInstanceForFieldDefinition($field_type);
     if ($plugin) {
       // Pass the Remote config entity to the plugin.
-      if ($remote = $this->getRemote()) {
+      $remote = $this->getRemote();
+      if ($remote) {
         $plugin->setRemote($remote);
       }
       // Let the plugin build the value.

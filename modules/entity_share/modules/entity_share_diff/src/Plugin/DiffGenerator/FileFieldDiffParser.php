@@ -69,7 +69,7 @@ class FileFieldDiffParser extends DiffGeneratorPluginBase {
         $data = [];
       }
 
-      foreach ($remote_field_data['data'] as $field_key => $remote_item_data) {
+      foreach (array_keys($remote_field_data['data']) as $field_key) {
         if ($data[$field_key]['attributes']['filename']) {
           $label = (string) $this->t('File name');
           $result[$field_key][$label] = $data[$field_key]['attributes']['filename'];

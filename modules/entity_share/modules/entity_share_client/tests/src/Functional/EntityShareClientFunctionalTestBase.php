@@ -26,6 +26,10 @@ use GuzzleHttp\RequestOptions;
 
 /**
  * Base class for Entity Share Client functional tests.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class EntityShareClientFunctionalTestBase extends BrowserTestBase {
 

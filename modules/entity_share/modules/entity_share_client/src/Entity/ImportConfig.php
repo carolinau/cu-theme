@@ -44,6 +44,8 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "collection" = "/admin/config/services/entity_share/import_config"
  *   }
  * )
+ *
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class ImportConfig extends ConfigEntityBase implements ImportConfigInterface {
 

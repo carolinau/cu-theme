@@ -158,7 +158,7 @@ class EntityReference extends ImportProcessorPluginBase implements PluginFormInt
             $field_value = [
               $main_property => $referenced_entities_ids[$referenced_entity_uuid],
             ];
-            // Add field metadatas.
+            // Add field metadata.
             if (isset($field_value_data['meta'])) {
               $field_value += $field_value_data['meta'];
             }

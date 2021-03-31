@@ -225,7 +225,8 @@ class StateInformation implements StateInformationInterface {
     // We are determining if the entity has changed by comparing the dates.
     // The last import date must be after the remote changed date, otherwise
     // the entity has changed.
-    if ($import_status_entity = $this->getImportStatusOfEntity($entity)) {
+    $import_status_entity = $this->getImportStatusOfEntity($entity);
+    if ($import_status_entity) {
       return $import_status_entity->getLastImport() < $remote_changed_time;
     }
     // If for some reason the "Entity import status" entity doesn't exist,

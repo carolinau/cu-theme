@@ -125,6 +125,7 @@ class DiffController extends ControllerBase {
    *   Array with left and right header labels.
    */
   protected function prepareHeaderlabels(ContentEntityInterface $left_entity, array $remote_entity_data) {
+    $header = [];
     // Changes diff table header.
     if (method_exists($left_entity, 'getChangedTime')) {
       $left_changed = $this->dateFormatter->format($left_entity->getChangedTime(), 'short');
@@ -165,6 +166,7 @@ class DiffController extends ControllerBase {
    *   A table render array.
    */
   protected function diffGenerator(array $left_entity, array $right_entity, array $header = []) {
+    $element = [];
     $diff = new Diff($left_entity, $right_entity);
     $this->diffFormatter->show_header = FALSE;
     $this->diffFormatter->htmlOutput = TRUE;

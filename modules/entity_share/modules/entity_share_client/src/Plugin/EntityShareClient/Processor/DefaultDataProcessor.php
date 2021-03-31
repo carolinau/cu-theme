@@ -171,7 +171,8 @@ class DefaultDataProcessor extends ImportProcessorPluginBase {
   public function postEntitySave(RuntimeImportContext $runtime_import_context, ContentEntityInterface $processed_entity) {
     // Create or update the dedicated "Entity import status" entity.
     // At this point the entity has been successfully imported.
-    if (!$import_status_entity = $this->stateInformation->getImportStatusOfEntity($processed_entity)) {
+    $import_status_entity = $this->stateInformation->getImportStatusOfEntity($processed_entity);
+    if (!$import_status_entity) {
       // If a dedicated "Entity import status" entity doesn't exist (which
       // means that either this is a new imported entity, or it is a "legacy"
       // content imported before the introduction of "Entity import status"

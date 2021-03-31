@@ -109,7 +109,7 @@ class Revision extends ImportProcessorPluginBase implements PluginFormInterface 
         $processed_entity->{$revision_metadata_keys['revision_log_message']}->value = $this->t('Auto created revision during Entity Share synchronization.');
       }
       catch (\Exception $e) {
-        $this->messenger->addError($this->t('There was a problem: @message', ['@message' => $e->getMessage()]));
+        $this->messenger()->addError($this->t('There was a problem: @message', ['@message' => $e->getMessage()]));
       }
     }
   }

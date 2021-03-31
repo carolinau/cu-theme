@@ -238,14 +238,14 @@ class Oauth extends ClientAuthorizationPluginBase {
           $requestCredentials = $this->keyService->getCredentials($this);
           $requestCredentials['username'] = $credentials['username'];
           $requestCredentials['password'] = $credentials['password'];
-          $accessToken = $this->initalizeToken($remote, $requestCredentials);
+          $accessToken = $this->initializeToken($remote, $requestCredentials);
           // In case the credentials were previously stored locally, clear
           // the local storage.
           $this->keyValueStore->delete($configuration['uuid']);
           break;
 
         default:
-          $accessToken = $this->initalizeToken($remote, $credentials);
+          $accessToken = $this->initializeToken($remote, $credentials);
           // Remove the username and password.
           unset($credentials['username']);
           unset($credentials['password']);
@@ -302,6 +302,31 @@ class Oauth extends ClientAuthorizationPluginBase {
     return $oauth_client;
   }
 
+  // phpcs:disable
+  /**
+   * Helper function to initialize a token.
+   *
+   * @param \Drupal\entity_share_client\Entity\Remote $remote
+   *   The remote website for which authorization is needed.
+   * @param array $credentials
+   *   Trial credentials.
+   *
+   * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
+   *   Exception thrown if the provider response contains errors.
+   *
+   * @deprecated in 8.x-3.0-beta4 and will be removed in 4.0.0. Use
+   *   initializeToken() instead.
+   *
+   * @SuppressWarnings(PHPMD.ErrorControlOperator)
+   * cSpell:disable.
+   */
+  public function initalizeToken(Remote $remote, array $credentials) {
+    // cSpell:enable.
+    @trigger_error(__METHOD__ . '() is deprecated in 8.x-3.0-beta4 and will be removed in 4.0.0. use initializeToken() instead.', \E_USER_DEPRECATED);
+    $this->initializeToken($remote, $credentials);
+  }
+  // phpcs:enable
+
   /**
    * Helper function to initialize a token.
    *
@@ -316,7 +341,7 @@ class Oauth extends ClientAuthorizationPluginBase {
    * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
    *   Exception thrown if the provider response contains errors.
    */
-  public function initalizeToken(Remote $remote, array $credentials) {
+  public function initializeToken(Remote $remote, array $credentials) {
     $oauth_client = $this->getOauthClient($remote->get('url'), $credentials);
     // Try to get an access token using the
     // resource owner password credentials grant.

@@ -172,10 +172,13 @@ class FormHelper implements FormHelperInterface {
             'timezone' => date_default_timezone_get(),
           ]);
         }
-        elseif ($remote_changed_date = DrupalDateTime::createFromFormat(\DateTime::RFC3339, $data['attributes'][$changed_public_name])) {
-          $remote_changed_info = $remote_changed_date->format(self::CHANGED_FORMAT, [
-            'timezone' => date_default_timezone_get(),
-          ]);
+        else {
+          $remote_changed_date = DrupalDateTime::createFromFormat(\DateTime::RFC3339, $data['attributes'][$changed_public_name]);
+          if ($remote_changed_date) {
+            $remote_changed_info = $remote_changed_date->format(self::CHANGED_FORMAT, [
+              'timezone' => date_default_timezone_get(),
+            ]);
+          }
         }
       }
     }

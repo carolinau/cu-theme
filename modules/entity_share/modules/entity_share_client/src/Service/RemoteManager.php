@@ -172,7 +172,7 @@ class RemoteManager implements RemoteManagerInterface {
    *   URL to request.
    *
    * @return \Psr\Http\Message\ResponseInterface||null
-   *   The response or NULL if a problem occured.
+   *   The response or NULL if a problem occurred.
    *
    * @see \GuzzleHttp\ClientInterface::request()
    */

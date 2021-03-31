@@ -13,6 +13,8 @@ use Drupal\Component\Annotation\Plugin;
  * @see plugin_api
  *
  * @Annotation
+ *
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class DiffGenerator extends Plugin {
 

@@ -118,6 +118,8 @@ class ImportService implements ImportServiceInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
    */
   public function importEntities(ImportContext $context, array $uuids, bool $is_batched = TRUE) {
     if (!$this->prepareImport($context)) {

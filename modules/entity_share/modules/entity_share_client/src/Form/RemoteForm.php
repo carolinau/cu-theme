@@ -153,7 +153,7 @@ class RemoteForm extends EntityForm {
     $options = [];
     $plugins = [];
     $commonUuid = '';
-    if ($this->getAuthPlugin()) {
+    if ($this->hasAuthPlugin()) {
       $options[$this->authPlugin->getPluginId()] = $this->authPlugin->getLabel();
       $plugins[$this->authPlugin->getPluginId()] = $this->authPlugin;
       // Ensure all plugins will have the same uuid in the configuration to
@@ -223,11 +223,11 @@ class RemoteForm extends EntityForm {
    * Helper method to instantiate plugin from this entity.
    *
    * @return bool
-   *   The Remote entity has a plugin.
+   *   True if the remote entity has a plugin.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  protected function getAuthPlugin() {
+  protected function hasAuthPlugin() {
     /** @var \Drupal\entity_share_client\Entity\RemoteInterface $remote */
     $remote = $this->entity;
     $plugin = $remote->getAuthPlugin();

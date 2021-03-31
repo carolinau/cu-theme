@@ -72,7 +72,7 @@ class ImportConfigManipulator implements ImportConfigManipulatorInterface {
       try {
         $plugins[$plugin_id] = $this->importProcessorPluginManager->createInstance($plugin_id, $configuration);
       }
-      catch (PluginException $e) {
+      catch (PluginException $exception) {
         throw new \Exception("Unknown import processor plugin with ID '$plugin_id'");
       }
     }

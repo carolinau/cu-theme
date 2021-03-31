@@ -105,6 +105,7 @@ class EntityImportStatusListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
+    $header = [];
     $header['id'] = $this->t('ID');
     $header['entity_uuid'] = $this->t('Entity UUID');
     $header['entity_id'] = $this->t('Entity ID');
@@ -123,6 +124,7 @@ class EntityImportStatusListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
+    $row = [];
     $row['id'] = $entity->id();
     // Load the imported entity.
     $imported_entity_storage = $this->entityTypeManager
