@@ -28,6 +28,19 @@ h5 {
 body {
 	font: 1.6em/1.6em 'Lato', sans-serif;
 }
+.main-container a:not(.btn):not(.panel-title):not(.page-nav-item):not(.pager__item>a) {
+	color: var(--primary-blue);
+}
+.main-container a:hover:not(.btn):not(.panel-title):not(.page-nav-item):not(.pager__item>a) {
+	text-decoration: none;
+	color: rgba(0, 30, 79, 0.75);
+}
+.main-container p > a:not(.btn):not(.external-link):not(.internal-link), .main-container li > a:not(.btn):not(.external-link):not(.internal-link):not(.pager__item>a), h6 > a {
+	font-weight: 700;
+}
+.main-container p > a:hover:not(.btn):not(.external-link):not(.internal-link), .main-container li > a:hover:not(.btn):not(.external-link):not(.internal-link):not(.pager__item>a), h6 > a {
+	font-weight: 700;
+}
 * {
 	-webkit-font-smoothing: inherit !important;
 }
