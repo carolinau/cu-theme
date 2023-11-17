@@ -1,0 +1,4 @@
+name: cu-theme
+recipe: drupal8
+config:
+  webroot: ./
