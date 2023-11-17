@@ -44,7 +44,8 @@
         "drupal/simple_sitemap": "^4.1",
         "drupal/token": "^1.10",
         "drupal/token_filter": "^1.4",
-        "drupal/upgrade_status": "^3.19"
+        "drupal/upgrade_status": "^3.19",
+        "drupal/video_embed_field": "^2.4"
     },
     "conflict": {
         "drupal/drupal": "*"
