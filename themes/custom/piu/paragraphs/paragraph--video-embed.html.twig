@@ -1,6 +1,0 @@
-{#
-/**
- * Displays an iframe with query field.
- */
-#}
-<iframe{% if content.field_video_embed_url is not empty %} src="{{ content.field_video_embed_url.0 }}{% if content.field_video_embed_query is not empty %}?{{ content.field_video_embed_query }}{% endif %}"{% endif %} width="640" height="360" frameborder="0" allowfullscreen></iframe>

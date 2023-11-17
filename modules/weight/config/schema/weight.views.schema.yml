@@ -1,7 +1,0 @@
-views.field.weight_selector:
-  type: views_field_bulk_form
-  label: 'weight selector element'
-  mapping:
-    range:
-      type: string
-      label: 'Range'
