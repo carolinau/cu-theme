@@ -14,30 +14,55 @@
         }
     ],
     "require": {
-        "pantheon-upstreams/upstream-configuration": "dev-main",
         "composer/installers": "^1.9",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/block_field": "^1.0@RC",
+        "drupal/bootstrap_layouts": "^5.2",
+        "drupal/collapse_text": "^2.0",
         "drupal/core-composer-scaffold": "^9.2",
         "drupal/core-recommended": "^9.2",
+        "drupal/core-vendor-hardening": "^8.8",
+        "drupal/ctools": "^3.9",
+        "drupal/ds": "^3.14",
+        "drupal/entity_reference_revisions": "^1.9",
+        "drupal/entity_share": "^2.0@alpha",
+        "drupal/field_formatter_class": "^1.6",
+        "drupal/google_tag": "^1.6",
+        "drupal/jsonapi_extras": "^3.21",
+        "drupal/link_class": "^2.0",
+        "drupal/mailsystem": "^4.3",
+        "drupal/metatag": "^1.16",
+        "drupal/openid_connect_windows_aad": "^1.4",
+        "drupal/openid_connect": "^2.0@beta",
+        "drupal/paragraphs_grid": "^1.4",
+        "drupal/paragraphs": "^1.13",
+        "drupal/pathauto": "^1.10",
+        "drupal/redirect": "^1.7",
+        "drupal/sendgrid_integration": "^2.0@beta",
+        "drupal/simple_sitemap": "^4.1",
+        "drupal/token_filter": "^1.4",
+        "drupal/token": "^1.10",
+        "drupal/upgrade_status": "^3.19",
+        "drupal/video_embed_field": "^2.4",
+        "drupal/weight": "^3.4",
+        "drush/drush": "^11 || ^12",
         "pantheon-systems/drupal-integrations": "^9",
-        "cweagans/composer-patches": "^1.7",
-        "drush/drush": "^11 || ^12"
+        "pantheon-upstreams/upstream-configuration": "dev-main"
     },
     "require-dev": {
         "drupal/core-dev": "^9.2"
     },
     "conflict": {
-            "drupal/drupal": "*"
+        "drupal/drupal": "*"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
         "drupal-scaffold": {
             "locations": {
                 "web-root": "./web"
             },
-            "allowed-packages": [
-                "pantheon-systems/drupal-integrations"
-            ],
+            "allowed-packages": ["pantheon-systems/drupal-integrations"],
             "file-mapping": {
                 "[project-root]/.editorconfig": false,
                 "[project-root]/pantheon.upstream.yml": false,
@@ -59,35 +84,35 @@
         "composer-exit-on-patch-failure": true,
         "patchLevel": {
             "drupal/core": "-p2"
-        }
+        },
+        "enable-patching": true
     },
     "autoload": {
-        "classmap": [
-            "upstream-configuration/scripts/ComposerScripts.php"
-        ]
+        "classmap": ["upstream-configuration/scripts/ComposerScripts.php"]
     },
     "scripts": {
-        "pre-update-cmd": [
-            "DrupalComposerManaged\\ComposerScripts::preUpdate"
-        ],
-        "upstream-require": [
-            "DrupalComposerManaged\\ComposerScripts::upstreamRequire"
-        ]
-    },
-    "scripts-descriptions": {
-        "upstream-require": "Add a dependency to an upstream. See https://pantheon.io/docs/create-custom-upstream for information on creating custom upstreams."
+        "pre-update-cmd": ["DrupalComposerManaged\\ComposerScripts::preUpdate"],
+        "post-update-cmd": ["DrupalComposerManaged\\ComposerScripts::postUpdate"]
     },
     "config": {
         "preferred-install": "dist",
-        "sort-packages": false,
-        "platform": {
-            "php": "7.4"
-        },
+        "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true,
             "cweagans/composer-patches": true,
             "drupal/core-composer-scaffold": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-vendor-hardening": true,
+            "phpstan/extension-installer": true
+        },
+        "platform": {
+            "php": "8.1.13"
+        }
+    },
+    "enable-patching": true,
+    "patches": {
+        "drupal/sendgrid_integration": {
+            "merp": "https://git.drupalcode.org/project/sendgrid_integration/-/merge_requests/15.diff"
         }
     }
 }

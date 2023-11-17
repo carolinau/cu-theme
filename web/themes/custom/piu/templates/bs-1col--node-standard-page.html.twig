@@ -1,0 +1,118 @@
+<{{ wrapper }}>
+{% if node.field_hero.value == 1 %}
+<div{{ attributes.addClass(classes) }}>
+   <div class="hero-background" {% if content.field_featured_image['#items'].entity.uri.value %} style="background-image: url({{file_url(content.field_featured_image['#items'].entity.uri.value) }}); background-size: cover; background-position: center; width: 100%"{% endif %} >
+      <div class="container">
+           <h1 class="hero-title">{{ node.label }}</h1>
+           {% if content.field_teaser %}
+             <h2 class="hero-title">{{ content.field_teaser }}</h1>
+           {% endif %}
+           {% if content.field_featured_button[0]['#url'] %}
+             <div><a href="{{ content.field_featured_button[0]['#url'] }}" class="btn btn-primary hero-button">{{ content.field_featured_button[0]['#title'] }}</a></div>
+            {% endif %}
+      </div>
+    </div>
+</div>
+{% endif %}
+<div class="container">
+{% if node.field_hero.value == 0 %}
+<div {{ attributes.removeClass('row') }}>
+  {{ title_suffix.contextual_links }}
+
+  {% if content.field_featured_image.0 is empty %}
+  <div class="row">
+    <div class="col-sm">
+      <h1 class="bottom-divider">{{ node.label }}</h1>
+    </div>
+  </div>
+  {% else %}
+  <div class="fh-section">
+  <div class="row">
+    <div class="col-md-12 col-lg-8 fh-left">
+      <div class="fh-image">{{ content.field_featured_image }}</div>
+    </div>
+
+    <div class="col-md-12 col-lg fh-right">
+      <h1 class="fh-header">{{ node.label }}</h1>
+    {% if content.field_teaser %}
+      <div class="fh-teaser">{{ content.field_teaser }}</div>
+    {% endif %}
+    {% if content.field_featured_button[0]['#url'] %}
+      <div><a href="{{ content.field_featured_button[0]['#url'] }}" class="btn btn-bw btn-margin">{{ content.field_featured_button[0]['#title'] }}</a></div>
+    {% endif %}
+    </div>
+  </div>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+
+  {% if content.body %}
+    <div class="row">
+      <div class="col-sm">
+        {{ content.body }}
+      </div>
+    </div>
+  {% endif %}
+
+{% if content.field_image_cta_title_1.0|length > 1 and content.field_image_cta_title_2.0|length > 1 %}
+  {% set columns = 'col-md-6' %}
+  {% set row = 'row' %}
+  {% else %}
+  {% set columns = 'col-md-12' %}
+{% endif %}
+<div{{ attributes.addClass(row) }}>
+  {% if content.field_image_cta_title_1.0|length > 1 %}
+  <div{{ attributes.addClass(classes, columns).removeClass('row') }}>
+    <div class="image-cta" style="background-image: url({{file_url(content.field_image_cta_background_1['#items'].entity.uri.value) }}); background-size: cover; background-position: center">
+      <div class="image-cta-title">{{ content.field_image_cta_title_1 }}</div>
+      <div class="image-cta-button"><a href="{{ content.field_image_cta_button_1[0]['#url'] }}" class="btn btn-primary">{{ content.field_image_cta_button_1[0]['#title'] }}</a></div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if content.field_image_cta_title_2.0|length > 1 %}
+  <div{{ attributes.addClass(classes, columns).removeClass('row') }}>
+    <div class="image-cta" style="background-image: url({{file_url(content.field_image_cta_background_2['#items'].entity.uri.value) }}); background-size: cover; background-position: center">
+      <div class="image-cta-title">{{ content.field_image_cta_title_2 }}</div>
+      <div class="image-cta-button"><a href="{{ content.field_image_cta_button_2[0]['#url'] }}" class="btn btn-primary">{{ content.field_image_cta_button_2[0]['#title'] }}</a></div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+  {% if not (node.field_video_title.isEmpty == true) and content.field_video_title is defined %}
+    <div class="row">
+      <div class="col-md-12">
+	       <h2 class="video-title bottom-divider-c">{{ content.field_video_title }}</h2>
+	        <div class="video-embed">{{ content.field_video_url }}</div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if content.field_block %}
+    {{ content.field_block }}
+  {% endif %}
+
+  {% if content.field_file %}
+    {{ content.field_file }}
+  {% endif %}
+
+  {% if content.field_colored_cta_title.0|length > 1 %}
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="colored-cta">
+   		  <h3 class="colored-cta-title">{{ content.field_colored_cta_title }}</h3>
+  		  <div class="colored-cta-content">{{ content.field_colored_cta_content }}</div>
+        {% if content.field_colored_cta_button[0]['#title']|length > 1 %}
+          <div class="colored-cta-button">
+            <a href="{{ content.field_colored_cta_button[0]['#url'] }}" class="btn btn-primary btn-clear">{{ content.field_colored_cta_button[0]['#title'] }}</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  </div>
+</{{ wrapper }}>

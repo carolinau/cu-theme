@@ -95,3 +95,9 @@
 
 # Ignore .env files as they are personal
 #/.env
+
+# Ignore Lando's private files
+private-files/
+
+# Ignore the config directory
+config/default/

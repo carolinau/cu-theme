@@ -1,0 +1,18 @@
+<div class="container">
+<{{ wrapper }}{{ attributes }}>
+  {{ title_suffix.contextual_links }}
+
+  {% if left.content %}
+  <div class="clearfix col-sm-12 col-md-8">
+    {{ left.content }}
+  </div>
+  {% endif %}
+
+  {% if right.content %}
+  <div class="clearfix col-sm-12 col-md">
+    {{ right.content }}
+  </div>
+  {% endif %}
+
+</{{ wrapper }}>
+</div>
