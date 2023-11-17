@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "18d87c280a2bd3ffd84743aaa7e33783",
+    "content-hash": "9ddd1aabb3a679bf1b49f254c48b3be8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -857,6 +857,55 @@
             "homepage": "https://www.drupal.org/project/bootstrap_layouts",
             "support": {
                 "source": "https://git.drupalcode.org/project/bootstrap_layouts"
+            }
+        },
+        {
+            "name": "drupal/collapse_text",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/collapse_text.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/collapse_text-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "d80a497c3b77d60609732139c75ea22509f47fda"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1635373584",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "DYdave",
+                    "homepage": "https://www.drupal.org/user/467284"
+                },
+                {
+                    "name": "mukila",
+                    "homepage": "https://www.drupal.org/user/3223526"
+                }
+            ],
+            "description": "Insert collapsible text in content.",
+            "homepage": "https://www.drupal.org/project/collapse_text",
+            "support": {
+                "source": "https://git.drupalcode.org/project/collapse_text",
+                "issues": "https://www.drupal.org/project/issues/collapse_text"
             }
         },
         {
