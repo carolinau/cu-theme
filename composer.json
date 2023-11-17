@@ -40,6 +40,7 @@
         "drupal/paragraphs_grid": "^1.4",
         "drupal/pathauto": "^1.10",
         "drupal/redirect": "^1.7",
+        "drupal/sendgrid_integration": "^2.0@beta",
         "drupal/upgrade_status": "^3.19"
     },
     "conflict": {
