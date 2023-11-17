@@ -43,6 +43,7 @@
         "drupal/sendgrid_integration": "^2.0@beta",
         "drupal/simple_sitemap": "^4.1",
         "drupal/token": "^1.10",
+        "drupal/token_filter": "^1.4",
         "drupal/upgrade_status": "^3.19"
     },
     "conflict": {
