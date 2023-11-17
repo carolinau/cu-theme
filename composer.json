@@ -27,6 +27,7 @@
         "drupal/ds": "^3.14",
         "drupal/entity_reference_revisions": "^1.9",
         "drupal/entity_share": "^2.0@alpha",
+        "drupal/field_formatter_class": "^1.6",
         "drupal/upgrade_status": "^3.19"
     },
     "conflict": {
