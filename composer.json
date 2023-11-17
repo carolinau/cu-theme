@@ -16,6 +16,7 @@
     ],
     "require": {
         "composer/installers": "^1.2",
+        "cweagans/composer-patches": "^1.7",
         "drupal/block_field": "^1.0@RC",
         "drupal/bootstrap_layouts": "^5.2",
         "drupal/collapse_text": "^2.0",
@@ -45,7 +46,8 @@
         "drupal/token": "^1.10",
         "drupal/token_filter": "^1.4",
         "drupal/upgrade_status": "^3.19",
-        "drupal/video_embed_field": "^2.4"
+        "drupal/video_embed_field": "^2.4",
+        "drupal/weight": "^3.4"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -58,7 +60,8 @@
             "composer/installers": true,
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
-            "drupal/core-vendor-hardening": true
+            "drupal/core-vendor-hardening": true,
+            "cweagans/composer-patches": true
         }
     },
     "extra": {
@@ -92,6 +95,12 @@
             "web/themes/custom/{$name}": [
                 "type:drupal-custom-theme"
             ]
+        },
+        "enable-patching": true,
+        "patches": {
+            "drupal/sendgrid_integration": {
+                "merp": "https://git.drupalcode.org/project/sendgrid_integration/-/merge_requests/15.diff"
+            }
         }
     }
 }
