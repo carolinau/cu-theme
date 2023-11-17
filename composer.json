@@ -41,6 +41,7 @@
         "drupal/pathauto": "^1.10",
         "drupal/redirect": "^1.7",
         "drupal/sendgrid_integration": "^2.0@beta",
+        "drupal/simple_sitemap": "^4.1",
         "drupal/upgrade_status": "^3.19"
     },
     "conflict": {
