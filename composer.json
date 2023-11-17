@@ -17,6 +17,7 @@
     "require": {
         "composer/installers": "^1.2",
         "drupal/block_field": "^1.0@RC",
+        "drupal/bootstrap_layouts": "^5.2",
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-project-message": "^8.8",
         "drupal/core-recommended": "^8.8",
