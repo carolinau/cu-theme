@@ -38,6 +38,7 @@
         "drupal/openid_connect_windows_aad": "^1.4",
         "drupal/paragraphs": "^1.13",
         "drupal/paragraphs_grid": "^1.4",
+        "drupal/pathauto": "^1.10",
         "drupal/upgrade_status": "^3.19"
     },
     "conflict": {
