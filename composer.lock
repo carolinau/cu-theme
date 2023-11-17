@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6a8fb96a836c163beb1e7bd50f62732",
+    "content-hash": "b58fee1540491a1e439a0358e438aede",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2004,6 +2004,72 @@
                 "source": "https://git.drupalcode.org/project/metatag",
                 "issues": "https://www.drupal.org/project/issues/metatag",
                 "docs": "https://www.drupal.org/docs/8/modules/metatag"
+            }
+        },
+        {
+            "name": "drupal/module_missing_message_fixer",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/module_missing_message_fixer.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/module_missing_message_fixer-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "bff669790857d9a7e9f55d30b97215a6addb299b"
+            },
+            "require": {
+                "drupal/core": "~8"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1585919601",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "John Ouellet",
+                    "homepage": "https://www.drupal.org/u/labboy0276",
+                    "role": "Developer"
+                },
+                {
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
+                },
+                {
+                    "name": "kmani",
+                    "homepage": "https://www.drupal.org/user/3535684"
+                },
+                {
+                    "name": "labboy0276",
+                    "homepage": "https://www.drupal.org/user/2397942"
+                }
+            ],
+            "description": "This module displays a list of missing modules that appear on your site and lets you fix the entries",
+            "homepage": "https://www.drupal.org/project/module_missing_message_fixer",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/module_missing_message_fixer",
+                "issues": "https://www.drupal.org/project/issues/module_missing_message_fixer"
             }
         },
         {
