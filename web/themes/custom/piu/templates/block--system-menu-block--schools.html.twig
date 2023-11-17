@@ -1,0 +1,12 @@
+{% set heading_id = attributes.id ~ '-menu'|clean_id %}
+<nav role="navigation" aria-labelledby="Schools Menu"{{ attributes.removeClass('clearfix')|without('role', 'aria-labelledby') }}>
+  {# Label. If not displayed, we still provide it for screen readers. #}
+  {% if not configuration.label_display %}
+    {% set title_attributes = title_attributes.addClass('sr-only') %}
+  {% endif %}
+  <h4 class="footer-divider">{{ configuration.label }}</h4>
+
+  {% block content %}
+    {{ content }}
+  {% endblock %}
+</nav>

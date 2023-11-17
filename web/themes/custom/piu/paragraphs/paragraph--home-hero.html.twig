@@ -1,0 +1,24 @@
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished'
+  ]
+%}
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+ 		 <div class="hero-background" {% if content.field_background_image['#items'].entity.uri.value %} style="background-image: url({{file_url(content.field_background_image['#items'].entity.uri.value) }}); background-size: cover; background-position: center"{% endif %} >
+    		<div class="container">
+ 		         {% if content.field_body is not empty %}
+ 		           <div class="hero-home-title">{{ content.field_body }}</div>
+ 		         {% endif %}
+ 		         {% if content.field_button_link[0]['#url'] %}
+ 		           <div><a href="{{ content.field_button_link[0]['#url'] }}" class="btn btn-primary hero-button">{{ content.field_button_link[0]['#title'] }}</a></div>
+		          {% endif %}
+		    </div>
+		  </div>
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

@@ -1,0 +1,16 @@
+{%
+set classes = [
+'paragraph',
+'paragraph--type--' ~ paragraph.bundle|clean_class,
+view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+]
+%}
+<div class="colored-cta">
+ 		 {% if content.field_title is not empty %}
+ 		   	<h3 class="colored-cta-title">{{ content.field_title }}</h2>
+ 		 {% endif %}
+		<div class="colored-cta-content">{{ content.field_content }}</div>
+    {% if content.field_button_link is not empty %}
+      {{ content.field_button_link }}
+    {% endif %}
+</div>
