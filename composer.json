@@ -21,7 +21,6 @@
         "drupal/bootstrap_layouts": "^5.2",
         "drupal/collapse_text": "^2.0",
         "drupal/core-composer-scaffold": "^8.8",
-        "drupal/core-project-message": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
         "drupal/ctools": "^3.9",
