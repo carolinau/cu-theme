@@ -4325,6 +4325,6 @@
             "install-path": "../typo3/phar-stream-wrapper"
         }
     ],
-    "dev": false,
+    "dev": true,
     "dev-package-names": []
 }
