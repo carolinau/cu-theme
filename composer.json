@@ -31,6 +31,7 @@
         "drupal/google_tag": "^1.6",
         "drupal/jsonapi_extras": "^3.21",
         "drupal/link_class": "^2.0",
+        "drupal/mailsystem": "^4.3",
         "drupal/upgrade_status": "^3.19"
     },
     "conflict": {
