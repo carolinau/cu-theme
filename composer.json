@@ -23,6 +23,8 @@
         "drupal/core-project-message": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
+        "drupal/ctools": "^3.9",
+        "drupal/ds": "^3.14",
         "drupal/upgrade_status": "^3.19"
     },
     "conflict": {
