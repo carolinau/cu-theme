@@ -57,6 +57,21 @@ All of the above referenced websites
     mv .lando.[project_name].yml .lando.yml
     ```
 
+4. **Copy local settings file:**
+
+    Next, copy the Drupal local settings file from the .lando directory to the project's web/sites/default directory and rename it to `settings.local.php`. In each of the sites listed above (and in the cu-theme upstream itself) there is a Drupal local settings file with a unique name following this pattern:
+
+    `example.[project_name].settings.local.php`
+
+    For example, the cu-theme upstream's Drupal local settings file is called `example.cu-theme.settings.local.php`.
+
+    You can copy and rename this file manually or by executing:
+
+    ```bash
+    cp .lando/example.[project_name].settings.local.php web/sites/default
+    mv web/sites/default/.lando/example.[project_name].settings.local.php web/sites/default/settings.local.php
+    ```
+
 ### Starting the Development Environment
 
 Once you've installed the dependencies and copied the Lando configuration file, you can start the local development environment using Lando:
