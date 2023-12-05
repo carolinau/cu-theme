@@ -1,6 +1,6 @@
 # Carolina University Drupal 9 Custom Upstream
 
-Welcome to the Carolina University Drupal 9 Custom Upstream repository. This repository serves as a custom upstream project for the following Carolina University websites built on Drupal 9:
+The cu-theme repository serves as a custom upstream project for the following Carolina University websites built on Drupal 9:
 
 1. e4
 1. John Wesley School of Leadership
@@ -10,6 +10,8 @@ Welcome to the Carolina University Drupal 9 Custom Upstream repository. This rep
 1. School of Arts & Sciences
 
 ## Getting Started for Local Development
+
+All of the above referenced websites
 
 ### Prerequisites
 
@@ -21,10 +23,16 @@ Welcome to the Carolina University Drupal 9 Custom Upstream repository. This rep
 
 1. **Clone the Repository:**
 
+    For the cu-theme project, use the following as the repository location: `git@github.com:carolinau/cu-theme.git`
+
+    For each of the six websites listed above, log in to Pantheon, select the `dev` environment for the site you're working on and click `Clone with git` to find the repository location.
+
     ```bash
-    git clone git@github.com:carolinau/cu-theme.git
-    cd cu-theme
+    git clone [repository location from above]
+    cd [install directory]
     ```
+
+    The `install directory` is directory created by the `git clone` command from above.
 
 2. **Install Dependencies:**
 
