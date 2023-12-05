@@ -47,7 +47,7 @@
         "drupal/upgrade_status": "^3.19",
         "drupal/video_embed_field": "^2.4",
         "drupal/weight": "^3.4",
-        "drush/drush": "^10.6"
+        "drush/drush": "^11 || ^12"
     },
     "conflict": {
         "drupal/drupal": "*"

@@ -44,7 +44,7 @@ All of the above referenced websites
 
 3. **Copy Lando Configuration:**
 
-    After installing the dependencies, copy the Lando configuration file from the .lando directory to the project root and rename it to `.lando.yml`. In each of the sites listed above (and in the cu-theme upstream itself) there is a Lando config file with a unique name following this pattern:
+    After installing the dependencies, copy the appropriate Lando configuration file from the .lando directory to the project root and rename it to `.lando.yml`. In each of the sites listed above, in addition to the cu-theme upstream's Lando config file there is a Lando config file with a unique name following this pattern:
 
     `.lando.[project_name].yml`
 
@@ -59,7 +59,7 @@ All of the above referenced websites
 
 4. **Copy local settings file:**
 
-    Next, copy the Drupal local settings file from the .lando directory to the project's web/sites/default directory and rename it to `settings.local.php`. In each of the sites listed above (and in the cu-theme upstream itself) there is a Drupal local settings file with a unique name following this pattern:
+    Next, copy the Drupal local settings file from the .lando directory to the project's web/sites/default directory and rename it to `settings.local.php`. In each of the sites listed above, in addition to the cu-theme upstream's Drupal local settings file there is a Drupal local settings file with a unique name following this pattern:
 
     `example.[project_name].settings.local.php`
 
