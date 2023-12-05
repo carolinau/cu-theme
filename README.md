@@ -44,10 +44,17 @@ All of the above referenced websites
 
 3. **Copy Lando Configuration:**
 
-    After installing the dependencies, copy the `.lando/.lando.yml` file to the project root. You can do this manually or by running:
+    After installing the dependencies, copy the Lando configuration file from the .lando directory to the project root and rename it to `.lando.yml`. In each of the sites listed above (and in the cu-theme upstream itself) there is a Lando config file with a unique name following this pattern:
+
+    `.lando.[project_name].yml`
+
+    For example, the cu-theme upstream's Lando config file is called `.lando.cu-theme.yml`.
+
+    You can copy and rename this file manually or by executing:
 
     ```bash
-    cp .lando/.lando.yml .
+    cp .lando/.lando.[project_name].yml .
+    mv .lando.[project_name].yml .lando.yml
     ```
 
 ### Starting the Development Environment
