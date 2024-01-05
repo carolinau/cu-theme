@@ -24,3 +24,9 @@
 ## the composer.lock file to be committed, ensure that the '!composer.lock'
 ## line below is uncommented.
 !composer.lock
+
+## Allow directories needed for custom upstream functionality.
+!scripts
+!scripts/*
+!upstream-configuration
+!upstream-configuration/*
