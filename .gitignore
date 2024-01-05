@@ -32,6 +32,7 @@
 !.lando.yml
 !.lando/
 !.vscode/
+!.vscode/*
 
 ## Allow files needed for custom upstream functionality.
 !upstream-configuration
