@@ -1,25 +1,148 @@
 {
-    "name": "pantheon-upstreams/upstream-configuration",
+    "name": "carolinau/custom-upstream",
+    "description": "Custom upstream for Carolina University sites on Pantheon.",
     "type": "project",
     "version": "dev-main",
+    "license": "MIT",
     "repositories": [
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+          "type": "path",
+          "url": "upstream-configuration"
         }
     ],
     "require": {
+        "composer/installers": "^1.9",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/block_field": "^1.0@RC",
+        "drupal/bootstrap_layouts": "^5.2",
+        "drupal/bootstrap": "^3.23",
+        "drupal/collapse_text": "^2.0",
+        "drupal/core-composer-scaffold": "^9.5",
+        "drupal/core-recommended": "^9.5",
+        "drupal/core-vendor-hardening": "^8.8",
+        "drupal/ctools": "^3.9",
+        "drupal/ds": "^3.14",
+        "drupal/entity_reference_revisions": "^1.9",
+        "drupal/entity_share": "^2.0@alpha",
+        "drupal/field_formatter_class": "^1.6",
+        "drupal/google_tag": "^1.6",
+        "drupal/jsonapi_extras": "^3.21",
+        "drupal/link_class": "^2.0",
+        "drupal/mailsystem": "^4.3",
+        "drupal/metatag": "^1.16",
+        "drupal/openid_connect_windows_aad": "^1.4",
+        "drupal/openid_connect": "^2.0@beta",
+        "drupal/paragraphs_grid": "^1.4",
+        "drupal/paragraphs": "^1.13",
+        "drupal/pathauto": "^1.10",
+        "drupal/redirect": "^1.7",
+        "drupal/sendgrid_integration": "^2.0@beta",
+        "drupal/simple_sitemap": "^4.1",
+        "drupal/token_filter": "^1.4",
+        "drupal/token": "^1.10",
+        "drupal/upgrade_status": "^4.0",
+        "drupal/video_embed_field": "^2.4",
+        "drupal/weight": "^3.4",
+        "drush/drush": "^11 || ^12",
+        "pantheon-systems/drupal-integrations": "^9",
+        "pantheon-upstreams/upstream-configuration": "dev-main"
     },
+    "require-dev": {
+        "drupal/core-dev": "^9.5"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
-        "_README": "To make a custom upstream, clone this repository and add any dependencies to be provided by this upstream to this composer.json file. Leave the root-level composer.json file for the exclusive use of each individual site; do not modify it after your custom upstream has been published. See https://pantheon.io/docs/create-custom-upstream for more information."
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "./web"
+            },
+            "allowed-packages": [
+                "pantheon-systems/drupal-integrations"
+            ],
+            "file-mapping": {
+                "[project-root]/.editorconfig": false,
+                "[project-root]/pantheon.upstream.yml": false,
+                "[project-root]/.gitattributes": false
+            }
+        },
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ],
+            "web/private/scripts/quicksilver/{$name}/": [
+                "type:quicksilver-script"
+            ]
+        },
+        "composer-exit-on-patch-failure": true,
+        "patchLevel": {
+            "drupal/core": "-p2"
+        },
+        "enable-patching": true
+    },
+    "autoload": {
+        "classmap": [
+            "upstream-configuration/scripts/ComposerScripts.php"
+        ]
+    },
+    "scripts": {
+        "pre-update-cmd": [
+            "DrupalComposerManaged\\ComposerScripts::preUpdate"
+        ],
+        "post-update-cmd": [
+            "DrupalComposerManaged\\ComposerScripts::postUpdate"
+        ]
     },
     "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
             "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
-            "drupal/core-vendor-hardening": true
+            "drupal/core-vendor-hardening": true,
+            "phpstan/extension-installer": true
+        },
+        "platform": {
+            "php": "8.1.13"
+        }
+    },
+    "enable-patching": true,
+    "patches": {
+        "drupal/sendgrid_integration": {
+            "3247343: Malformed yaml breaks drupal-check module": "https://git.drupalcode.org/project/sendgrid_integration/-/merge_requests/15.diff"
         }
     }
 }
