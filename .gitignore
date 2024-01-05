@@ -10,8 +10,6 @@
 ## the .gitignore directive above (i.e. to "un-ignore" it).
 !README.md
 !composer.json
-!scripts
-!scripts/*
 !locked
 
 ## Allow composer.lock to be committed in custom upstreams if you wish
@@ -29,7 +27,6 @@
 !README.md
 
 ## Allow files used in local development.
-!.lando.yml
 !.lando/
 !.vscode/
 
