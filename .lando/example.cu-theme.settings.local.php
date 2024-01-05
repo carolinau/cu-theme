@@ -815,9 +815,6 @@ if (!empty($lando_info)) {
 
   // Trusted host pattern settings.
   $settings['trusted_host_patterns'][] = '\.lndo\.site$';
-
-  // Set config directory in Lando local dev environment.
-  $settings['config_sync_directory'] = '/app/config/default';
 }
 
 /**
