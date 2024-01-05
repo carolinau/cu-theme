@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b97541d025fa62e49b09afc19ddedaa6",
+    "content-hash": "f9583a2785d16cad2d21006b0246ea89",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1250,6 +1250,87 @@
             "time": "2023-07-27T18:11:59+00:00"
         },
         {
+            "name": "drupal/admin_toolbar",
+            "version": "3.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/admin_toolbar.git",
+                "reference": "3.4.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/admin_toolbar-3.4.2.zip",
+                "reference": "3.4.2",
+                "shasum": "f5a008e5c73f5a11c6c8067c0ea6ebb76aa33854"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10"
+            },
+            "require-dev": {
+                "drupal/admin_toolbar_tools": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.4.2",
+                    "datestamp": "1696006195",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Wilfrid Roze (eme)",
+                    "homepage": "https://www.drupal.org/u/eme",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Romain Jarraud (romainj)",
+                    "homepage": "https://www.drupal.org/u/romainj",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Adrian Cid Almaguer (adriancid)",
+                    "homepage": "https://www.drupal.org/u/adriancid",
+                    "email": "adriancid@gmail.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Mohamed Anis Taktak (matio89)",
+                    "homepage": "https://www.drupal.org/u/matio89",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "matio89",
+                    "homepage": "https://www.drupal.org/user/2320090"
+                },
+                {
+                    "name": "Musa.thomas",
+                    "homepage": "https://www.drupal.org/user/1213824"
+                },
+                {
+                    "name": "romainj",
+                    "homepage": "https://www.drupal.org/user/370706"
+                }
+            ],
+            "description": "Provides a drop-down menu interface to the core Drupal Toolbar.",
+            "homepage": "http://drupal.org/project/admin_toolbar",
+            "keywords": [
+                "Drupal",
+                "Toolbar"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/admin_toolbar",
+                "issues": "https://www.drupal.org/project/issues/admin_toolbar"
+            }
+        },
+        {
             "name": "drupal/block_field",
             "version": "1.0.0-rc4",
             "source": {
@@ -2053,48 +2134,55 @@
         },
         {
             "name": "drupal/entity_share",
-            "version": "2.0.0-alpha13",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_share.git",
-                "reference": "8.x-2.0-alpha13"
+                "reference": "8.x-3.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_share-8.x-2.0-alpha13.zip",
-                "reference": "8.x-2.0-alpha13",
-                "shasum": "748280ecee3ff177ca489c5e173567ea3bb500a7"
+                "url": "https://ftp.drupal.org/files/projects/entity_share-8.x-3.0.zip",
+                "reference": "8.x-3.0",
+                "shasum": "b1c8f40ef2714c45c956c09343e9e9808d3e8a10"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9"
+                "drupal/core": "^9 || ^10",
+                "league/oauth2-client": "^2.4"
             },
             "conflict": {
                 "drupal/jsonapi": "1.*"
             },
             "require-dev": {
                 "drupal/block_field": "~1.0",
-                "drupal/dynamic_entity_reference": "~2.0",
+                "drupal/dynamic_entity_reference": "~3.0 || ~4.0",
                 "drupal/entity_share_client": "*",
+                "drupal/field_group": "~3.0",
+                "drupal/json_api_book": "~1.0",
                 "drupal/jsonapi_extras": "~3.14",
+                "drupal/key": "~1.14",
                 "drupal/metatag": "~1.0",
                 "drupal/paragraphs": "~1.0",
-                "drupal/pathauto": "~1.0",
-                "fzaninotto/faker": "^1.7"
+                "drupal/pathauto": "~1.0"
+            },
+            "suggest": {
+                "drupal/key": "Provides ability to manage keys for Authentication plugins.",
+                "drupal/simple_oauth": "Allows to setup server for OAuth plugin."
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.0-alpha13",
-                    "datestamp": "1675949575",
+                    "version": "8.x-3.0",
+                    "datestamp": "1681198393",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -2118,60 +2206,6 @@
             "homepage": "https://www.drupal.org/project/entity_share",
             "support": {
                 "source": "https://git.drupalcode.org/project/entity_share"
-            }
-        },
-        {
-            "name": "drupal/externalauth",
-            "version": "2.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/externalauth.git",
-                "reference": "2.0.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/externalauth-2.0.3.zip",
-                "reference": "2.0.3",
-                "shasum": "dae49e3df8739538d7b9371ab7fb5005b8d953fd"
-            },
-            "require": {
-                "drupal/core": "^9 || ^10"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.0.3",
-                    "datestamp": "1668777505",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Sven Decabooter",
-                    "homepage": "https://www.drupal.org/u/svendecabooter",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "snufkin",
-                    "homepage": "https://www.drupal.org/user/58645"
-                },
-                {
-                    "name": "svendecabooter",
-                    "homepage": "https://www.drupal.org/user/35369"
-                }
-            ],
-            "description": "Helper module to authenticate users using an external site / service and storing identification details",
-            "homepage": "https://drupal.org/project/externalauth",
-            "support": {
-                "source": "https://git.drupalcode.org/project/externalauth",
-                "issues": "https://www.drupal.org/project/issues/externalauth"
             }
         },
         {
@@ -2532,32 +2566,30 @@
         },
         {
             "name": "drupal/openid_connect",
-            "version": "2.0.0-beta3",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/openid_connect.git",
-                "reference": "2.0.0-beta3"
+                "reference": "8.x-1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/openid_connect-2.0.0-beta3.zip",
-                "reference": "2.0.0-beta3",
-                "shasum": "6307b246f9364e93b00dcd337dea761a243b4c05"
+                "url": "https://ftp.drupal.org/files/projects/openid_connect-8.x-1.4.zip",
+                "reference": "8.x-1.4",
+                "shasum": "9bdbfa6365d10b2029bdaee9fbd82265aa6d4fa4"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9",
-                "drupal/externalauth": "*",
-                "ext-json": "*",
-                "php": ">=7.1.0"
+                "drupal/core": "^9.5 || ^10",
+                "ext-json": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-beta3",
-                    "datestamp": "1666251325",
+                    "version": "8.x-1.4",
+                    "datestamp": "1698170385",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -3109,27 +3141,27 @@
         },
         {
             "name": "drupal/token_filter",
-            "version": "1.4.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/token_filter.git",
-                "reference": "8.x-1.4"
+                "reference": "2.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/token_filter-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "d0d4ddc098c8e8002a0aefb066cb6cd7481a4658"
+                "url": "https://ftp.drupal.org/files/projects/token_filter-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "34d72db7151738395afd25391195b36afb140bf1"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
+                "drupal/core": "^9.4 || ^10",
                 "drupal/token": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1649114304",
+                    "version": "2.1.0",
+                    "datestamp": "1698126115",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4657,6 +4689,76 @@
             "time": "2021-11-16T10:29:06+00:00"
         },
         {
+            "name": "league/oauth2-client",
+            "version": "2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth2-client.git",
+                "reference": "160d6274b03562ebeb55ed18399281d8118b76c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/160d6274b03562ebeb55ed18399281d8118b76c8",
+                "reference": "160d6274b03562ebeb55ed18399281d8118b76c8",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0 || ^7.0",
+                "paragonie/random_compat": "^1 || ^2 || ^9.99",
+                "php": "^5.6 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3.5",
+                "php-parallel-lint/php-parallel-lint": "^1.3.1",
+                "phpunit/phpunit": "^5.7 || ^6.0 || ^9.5",
+                "squizlabs/php_codesniffer": "^2.3 || ^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\OAuth2\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Bilbie",
+                    "email": "hello@alexbilbie.com",
+                    "homepage": "http://www.alexbilbie.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Woody Gilk",
+                    "homepage": "https://github.com/shadowhand",
+                    "role": "Contributor"
+                }
+            ],
+            "description": "OAuth 2.0 Client Library",
+            "keywords": [
+                "Authentication",
+                "SSO",
+                "authorization",
+                "identity",
+                "idp",
+                "oauth",
+                "oauth2",
+                "single sign on"
+            ],
+            "support": {
+                "issues": "https://github.com/thephpleague/oauth2-client/issues",
+                "source": "https://github.com/thephpleague/oauth2-client/tree/2.7.0"
+            },
+            "time": "2023-04-16T18:19:15+00:00"
+        },
+        {
             "name": "longwave/laminas-diactoros",
             "version": "2.14.2",
             "source": {
@@ -5090,6 +5192,56 @@
             "transport-options": {
                 "relative": true
             }
+        },
+        {
+            "name": "paragonie/random_compat",
+            "version": "v9.99.100",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*",
+                "vimeo/psalm": "^1"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
+            ],
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/random_compat/issues",
+                "source": "https://github.com/paragonie/random_compat"
+            },
+            "time": "2020-10-15T08:29:30+00:00"
         },
         {
             "name": "pear/archive_tar",
@@ -12741,8 +12893,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/block_field": 5,
-        "drupal/entity_share": 15,
-        "drupal/openid_connect": 10,
         "drupal/sendgrid_integration": 10,
         "pantheon-upstreams/upstream-configuration": 20
     },
