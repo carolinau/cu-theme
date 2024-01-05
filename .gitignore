@@ -36,3 +36,6 @@
 ## Allow files needed for custom upstream functionality.
 !upstream-configuration
 !upstream-configuration/*
+
+## Allow config directory.
+!web/sites/default/config
