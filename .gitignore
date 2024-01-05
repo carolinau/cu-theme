@@ -25,8 +25,14 @@
 ## line below is uncommented.
 !composer.lock
 
-## Allow directories needed for custom upstream functionality.
-!scripts
-!scripts/*
+## Allow the project README file.
+!README.md
+
+## Allow files used in local development.
+!.lando.yml
+!.lando/
+!.vscode/
+
+## Allow files needed for custom upstream functionality.
 !upstream-configuration
 !upstream-configuration/*
