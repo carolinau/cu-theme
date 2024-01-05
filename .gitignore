@@ -10,7 +10,6 @@
 ## the .gitignore directive above (i.e. to "un-ignore" it).
 !README.md
 !composer.json
-!composer.lock
 !scripts
 !scripts/*
 !locked
