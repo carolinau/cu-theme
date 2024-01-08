@@ -60,6 +60,35 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "autoload": {
+        "classmap": [
+            "upstream-configuration/scripts/ComposerScripts.php"
+        ]
+    },
+    "scripts": {
+        "pre-update-cmd": [
+            "DrupalComposerManaged\\ComposerScripts::preUpdate"
+        ],
+        "post-update-cmd": [
+            "DrupalComposerManaged\\ComposerScripts::postUpdate"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-vendor-hardening": true,
+            "phpstan/extension-installer": true,
+            "mglaman/composer-drupal-lenient": true
+        },
+        "platform": {
+            "php": "8.1.13"
+        }
+    },
     "extra": {
         "drupal-scaffold": {
             "locations": {
@@ -110,44 +139,11 @@
         "patchLevel": {
             "drupal/core": "-p2"
         },
-        "enable-patching": true
-    },
-    "autoload": {
-        "classmap": [
-            "upstream-configuration/scripts/ComposerScripts.php"
-        ]
-    },
-    "scripts": {
-        "pre-update-cmd": [
-            "DrupalComposerManaged\\ComposerScripts::preUpdate"
-        ],
-        "post-update-cmd": [
-            "DrupalComposerManaged\\ComposerScripts::postUpdate"
-        ]
-    },
-    "config": {
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "composer/installers": true,
-            "cweagans/composer-patches": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "drupal/core-composer-scaffold": true,
-            "drupal/core-vendor-hardening": true,
-            "phpstan/extension-installer": true,
-            "mglaman/composer-drupal-lenient": true
-        },
-        "platform": {
-            "php": "8.1.13"
-        }
-    },
-    "enable-patching": true,
-    "patches": {
-        "drupal/collapse_text": {
-            "3296814: Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-15/collapse-text-3296814-3.patch"
-        },
-        "drupal/sendgrid_integration": {
-            "3247343: Malformed yaml breaks drupal-check module": "https://git.drupalcode.org/project/sendgrid_integration/-/merge_requests/15.diff"
+        "enable-patching": true,
+        "patches": {
+            "drupal/collapse_text": {
+                "3296814: Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-15/collapse-text-3296814-3.patch"
+            }
         }
     }
 }
