@@ -22,9 +22,8 @@
         "drupal/bootstrap": "^3.23",
         "drupal/bootstrap_layouts": "^5.2",
         "drupal/collapse_text": "^2.0",
-        "drupal/core-composer-scaffold": "^9.5",
-        "drupal/core-recommended": "^9.5",
-        "drupal/core-vendor-hardening": "^8.8",
+        "drupal/core-composer-scaffold": "^10.2",
+        "drupal/core-recommended": "^10.2",
         "drupal/ctools": "^3.9",
         "drupal/ds": "^3.14",
         "drupal/entity_reference_revisions": "^1.9",
@@ -51,9 +50,6 @@
         "mglaman/composer-drupal-lenient": "^1.0",
         "pantheon-systems/drupal-integrations": "^9",
         "pantheon-upstreams/upstream-configuration": "dev-main"
-    },
-    "require-dev": {
-        "drupal/core-dev": "^9.5"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -86,7 +82,7 @@
             "mglaman/composer-drupal-lenient": true
         },
         "platform": {
-            "php": "8.1.13"
+            "php": "8.2.5"
         }
     },
     "extra": {
@@ -144,6 +140,9 @@
             "drupal/collapse_text": {
                 "3296814: Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-15/collapse-text-3296814-3.patch"
             }
+        },
+        "drupal-lenient": {
+            "allowed-list": ["drupal/collapse_text"]
         }
     }
 }
