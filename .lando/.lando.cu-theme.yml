@@ -1,7 +1,7 @@
 name: cu-theme
-recipe: drupal9
+recipe: drupal10
 config:
-  php: "8.1"
+  php: "8.2"
   xdebug: develop,debug
   drush: "*"
   webroot: web
@@ -17,7 +17,7 @@ services:
 tooling:
   drush:
     service: appserver
-    cmd: drush --root=/app/docroot
+    cmd: drush --root=/app/web
   xdebug-on:
     service: appserver
     description: Enable xdebug for apache.
