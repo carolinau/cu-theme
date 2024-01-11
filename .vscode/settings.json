@@ -1,0 +1,33 @@
+{
+  "editor.formatOnSave": false,
+  "phpcs.enable": true,
+  "editor.formatOnSaveMode": "modifications",
+  "eslint.workingDirectories": [
+    "./web/themes/custom",
+    "./web/modules/custom",
+  ],
+  "debug.allowBreakpointsEverywhere": true,
+  "debug.inlineValues": "on",
+  "search.useIgnoreFiles": false,
+  "cssVarriablesAutocomplete.files": [
+    "web/themes/custom/gutt/libraries/global/scss/_base.scss"
+  ],
+  "cssVarriablesAutocomplete.languageModes": [
+    "css",
+    "postcss",
+    "scss"
+  ],
+  "twig-language-2.indentStyle": "space",
+  "twig-language-2.bracePadding": true,
+  "twig-language-2.formatting": false,
+  "twig-language-2.tabSize": 2,
+  "cSpell.words": [
+    "ipsrh",
+    "psrh"
+  ],
+  "php.validate.executablePath": "/opt/homebrew/bin/php",
+  "workbench.editor.enablePreview": false,
+  "[json]": {
+    "editor.tabSize": 4
+  }
+}
