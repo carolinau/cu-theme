@@ -2,16 +2,16 @@
     "name": "carolinau/custom-upstream",
     "description": "Custom upstream for Carolina University sites on Pantheon.",
     "type": "project",
-    "version": "dev-main",
     "license": "MIT",
+    "version": "dev-main",
     "repositories": [
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
         {
-          "type": "path",
-          "url": "upstream-configuration"
+            "type": "path",
+            "url": "upstream-configuration"
         }
     ],
     "require": {

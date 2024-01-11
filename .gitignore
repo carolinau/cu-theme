@@ -29,7 +29,15 @@
 ## Allow files used in local development.
 !.lando/
 !.vscode/
+!.vscode/*
 
 ## Allow files needed for custom upstream functionality.
 !upstream-configuration
 !upstream-configuration/*
+
+## Allow the web/sites/default/config directory and all of its contents.
+!web
+!web/sites
+!web/sites/default
+!web/sites/default/config
+!web/sites/default/config/*

@@ -82,4 +82,4 @@ lando start
 
 This command will initialize the Lando environment based on the configurations specified in .lando/.lando.yml.
 
-Now you're ready to begin working on the Carolina University Drupal 9 project locally! Access your project at the specified local URL provided by Lando.
+Now you're ready to begin working on the Carolina University Drupal 9 project locally. Access your project at the specified local URL provided by Lando.
