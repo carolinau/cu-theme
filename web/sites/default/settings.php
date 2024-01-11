@@ -26,6 +26,11 @@ include __DIR__ . "/settings.pantheon.php";
 // $settings['skip_permissions_hardening'] = TRUE;
 
 /**
+ * Override Pantheon's default configuration sync directory.
+ */
+$settings['config_sync_directory'] = 'sites/default/config';
+
+/**
  * If there is a local settings file, then include it
  */
 $local_settings = __DIR__ . "/settings.local.php";
