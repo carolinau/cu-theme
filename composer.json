@@ -46,7 +46,7 @@
         "drupal/token_filter": "^2.1",
         "drupal/video_embed_field": "^2.4",
         "drupal/weight": "^3.4",
-        "drush/drush": "^11",
+        "drush/drush": "^12",
         "mglaman/composer-drupal-lenient": "^1.0",
         "pantheon-systems/drupal-integrations": "^9",
         "pantheon-upstreams/upstream-configuration": "dev-main"
