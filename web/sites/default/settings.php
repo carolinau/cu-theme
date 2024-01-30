@@ -34,6 +34,11 @@ if (file_exists($custom_pantheon_settings)) {
 }
 
 /**
+ * Override Pantheon's default configuration sync directory.
+ */
+$settings['config_sync_directory'] = 'sites/default/config';
+
+/**
  * Include settings.local.php if it exists.
  * Override Pantheon's default configuration sync directory.
  */
