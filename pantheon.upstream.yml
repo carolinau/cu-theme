@@ -1,5 +1,5 @@
 api_version: 1
-php_version: 8.1
+php_version: 8.2
 build_step: true
 web_docroot: true
 
