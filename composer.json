@@ -22,7 +22,7 @@
         "drupal/block_field": "^1.0@RC",
         "drupal/bootstrap": "^3.23",
         "drupal/bootstrap_layouts": "^5.2",
-        "drupal/collapse_text": "^2.0",
+        "drupal/collapse_text": "2.0.x-dev@dev",
         "drupal/core-composer-scaffold": "^10.2",
         "drupal/core-recommended": "^10.2",
         "drupal/ctools": "^3.9",
@@ -136,11 +136,7 @@
             "drupal/core": "-p2"
         },
         "enable-patching": true,
-        "patches": {
-            "drupal/collapse_text": {
-                "3296814: Automated Drupal 10 compatibility fixes": "https://www.drupal.org/files/issues/2023-05-15/collapse-text-3296814-3.patch"
-            }
-        },
+        "patches": { },
         "drupal-lenient": {
             "allowed-list": ["drupal/collapse_text"]
         }
