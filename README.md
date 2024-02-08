@@ -1,6 +1,6 @@
-# Carolina University Drupal 9 Custom Upstream
+# Carolina University Drupal 10 Custom Upstream
 
-The cu-theme repository serves as a custom upstream project for the following Carolina University websites built on Drupal 9:
+The cu-theme repository serves as a custom upstream project for the following Carolina University websites built on Drupal 10:
 
 1. e4
 1. John Wesley School of Leadership
