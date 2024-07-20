@@ -136,11 +136,6 @@
             "drupal/core": "-p2"
         },
         "enable-patching": true,
-        "patches": {
-            "drupal/bootstrap": {
-                "Fix Argument #9 ($kernel) must be of type ? (https://www.drupal.org/project/bootstrap/issues/3452819)": "https://www.drupal.org/files/issues/2024-06-21/bootstrap-argument-9-must-be-of-type-3452819-10.patch"
-            }
-        },
         "drupal-lenient": {
             "allowed-list": ["drupal/collapse_text"]
         }
