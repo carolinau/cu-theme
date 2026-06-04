@@ -1,5 +1,5 @@
 api_version: 1
-php_version: 8.4
+php_version: 8.2
 build_step: true
 web_docroot: true
 
@@ -9,7 +9,10 @@ database:
 
 # See https://pantheon.io/docs/pantheon-yml/#enforce-https--hsts for valid values.
 enforce_https: transitional
-
+database:
+  version: 10.4
+drush_version: 10
+build_step: true
 protected_web_paths:
   - /private/
   - /sites/default/files/private/
