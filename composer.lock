@@ -1302,7 +1302,7 @@
                 "reference": "a954e1c01afc2e84f120519d14d55f5318790dbf"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9 || ^10 || ^11"
+                "drupal/core": "^8 || ^9 || ^10 || ^11 || ^12"
             },
             "type": "drupal-module",
             "extra": {
