@@ -22,6 +22,7 @@
         "drupal/block_field": "^1.0@RC",
         "drupal/bootstrap": "^3.40",
         "drupal/bootstrap_layouts": "^5.7",
+        "drupal/classy_paragraphs": "^2.0",
         "drupal/collapse_text": "2.0.x-dev@dev",
         "drupal/core-composer-scaffold": "^11.3",
         "drupal/core-project-message": "^11.3",
