@@ -44,6 +44,11 @@ $settings['config_sync_directory'] = 'sites/default/config';
 $settings['state_cache'] = TRUE;
 
 /**
+ * Set SameSite attribute for PHP session cookies.
+ */
+ini_set('session.cookie_samesite', 'Lax');
+
+/**
  * Include settings.local.php if it exists.
  */
 $local_settings = __DIR__ . "/settings.local.php";
