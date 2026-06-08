@@ -39,9 +39,9 @@ if (file_exists($custom_pantheon_settings)) {
 $settings['config_sync_directory'] = 'sites/default/config';
 
 /**
- * Override Pantheon's default configuration sync directory.
+ * Enable Drupal state cache.
  */
-$settings['config_sync_directory'] = 'sites/default/config';
+$settings['state_cache'] = TRUE;
 
 /**
  * Include settings.local.php if it exists.
