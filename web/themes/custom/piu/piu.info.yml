@@ -1,6 +1,7 @@
 name: 'PIU'
 type: theme
 core_version_requirement: ^9 || ^10 || ^11
+base theme: bootstrap
 
 description: 'A Drupal Bootstrap 3 based sub-theme custom designed by Ian McIlwraith for Piedmont International University.'
 package: 'Bootstrap'
