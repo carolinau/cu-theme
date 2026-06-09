@@ -5,14 +5,11 @@ web_docroot: true
 
 # See https://pantheon.io/docs/pantheon-yml#specify-a-version-of-mariadb
 database:
-  version: 10.4
+  version: 10.6
 
 # See https://pantheon.io/docs/pantheon-yml/#enforce-https--hsts for valid values.
 enforce_https: transitional
-database:
-  version: 10.4
 drush_version: 10
-build_step: true
 protected_web_paths:
   - /private/
   - /sites/default/files/private/
